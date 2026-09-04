@@ -28,3 +28,7 @@ This is a static site. You can deploy the entire folder to Vercel, Netlify, GitH
 - Waitlist: `index.html` -> `page-waitlist`
 - Rules: `index.html` -> `page-rules`
 - Styling: `styles.css`
+
+
+## Season shame leaderboard
+The home page now counts each completed week's lowest-scoring manager and builds a season-long “You Suck” leaderboard. Exact weekly ties award one You Suck to each tied manager.

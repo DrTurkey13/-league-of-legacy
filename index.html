@@ -73,28 +73,41 @@
 
         <section class="legacy-board">
           <div class="section-head">
-            <div><span class="kicker">BRAGGING RIGHTS & PUBLIC SHAME</span><h2>League of Legacy Board</h2></div>
-            <span id="legacy-season" class="season-chip">Last season</span>
+            <div><span class="kicker">THIS WEEK</span><h2>Weekly Spotlight</h2></div>
           </div>
-          <div class="legacy-grid">
-            <article class="legacy-card champion-card">
-              <div class="legacy-icon">🏆</div>
-              <div class="legacy-label">REIGNING CHAMPION</div>
-              <div id="reigning-champ" class="legacy-name">Loading…</div>
-              <div id="reigning-champ-owner" class="legacy-sub">Pulling last season's bracket</div>
-            </article>
-            <article class="legacy-card loser-card">
-              <div class="legacy-icon">🚽</div>
-              <div class="legacy-label">LAST-PLACE LOSER</div>
-              <div id="last-place" class="legacy-name">Loading…</div>
-              <div id="last-place-owner" class="legacy-sub">Somebody has to wear it</div>
-            </article>
+          <div class="legacy-grid weekly-awards-grid">
             <article class="legacy-card score-card">
               <div class="legacy-icon">🔥</div>
               <div id="high-score-label" class="legacy-label">WEEKLY HIGH SCORE</div>
               <div id="weekly-high-score" class="legacy-name">Loading…</div>
               <div id="weekly-high-score-sub" class="legacy-sub">Checking the scoreboard</div>
             </article>
+            <article class="legacy-card division-card">
+              <div class="legacy-icon">⚡</div>
+              <div id="power-division-label" class="legacy-label">POWER DIVISION</div>
+              <div id="power-division" class="legacy-name">Loading…</div>
+              <div id="power-division-sub" class="legacy-sub">Ranking the divisions by weekly scoring average.</div>
+              <div id="division-rankings" class="division-rankings"></div>
+            </article>
+            <article class="legacy-card suck-card">
+              <div class="legacy-icon">🗑️</div>
+              <div id="you-suck-label" class="legacy-label">YOU SUCK</div>
+              <div id="you-suck-manager" class="legacy-name">Loading…</div>
+              <div id="you-suck-sub" class="legacy-sub">The weekly honor nobody wants.</div>
+            </article>
+            <article class="legacy-card idiot-card">
+              <div class="legacy-icon">🤡</div>
+              <div id="idiot-label" class="legacy-label">IDIOT OF THE WEEK</div>
+              <div id="idiot-manager" class="legacy-name">Loading…</div>
+              <div id="idiot-sub" class="legacy-sub">Rewarding elite production from the bench.</div>
+            </article>
+          </div>
+          <div class="panel suck-leaderboard-panel">
+            <div class="panel-head">
+              <div><span class="kicker">SEASON SHAME</span><h2>You Suck Leaderboard</h2></div>
+              <div id="you-suck-season-sub" class="leaderboard-note">Fewest points each completed week earns one You Suck.</div>
+            </div>
+            <div id="you-suck-leaderboard" class="suck-leaderboard"><div class="loading">Waiting for Week 1 to finish…</div></div>
           </div>
         </section>
 

@@ -51,61 +51,174 @@ function rosterLabel(ownerMap, rosterId){
   return { team: teamName(u,rosterId), owner: u?.display_name||u?.username||'' };
 }
 
-function placementFromBrackets(winners=[], losers=[], placement){
-  const all=[...(winners||[]),...(losers||[])];
-  const game=all.find(m=>Number(m.p)===Number(placement));
-  if(!game || game.w==null) return null;
-  if(Number(placement)%2===1){
-    return { [placement]: game.w, [placement+1]: game.l };
-  }
-  return null;
+function rosterDivision(roster){
+  const raw=roster?.settings?.division ?? roster?.metadata?.division;
+  const n=Number(raw);
+  return Number.isFinite(n) ? n : null;
 }
 
-async function loadLegacy(){
-  const prevId=state.league?.previous_league_id;
-  if(!prevId || prevId==='0'){ renderLegacyFallback(); return; }
-  try{
-    const [league,users,rosters,winners,losers] = await Promise.all([
-      getJSON(`${API}/league/${prevId}`),
-      getJSON(`${API}/league/${prevId}/users`),
-      getJSON(`${API}/league/${prevId}/rosters`),
-      getJSON(`${API}/league/${prevId}/winners_bracket`).catch(()=>[]),
-      getJSON(`${API}/league/${prevId}/losers_bracket`).catch(()=>[])
-    ]);
-    const byUser=Object.fromEntries(users.map(u=>[u.user_id,u]));
-    const ownerMap=Object.fromEntries(rosters.map(r=>[r.roster_id,byUser[r.owner_id]]));
-    state.previous={league,users,rosters,winners,losers,ownerMap};
-    $('#legacy-season').textContent=`${league.season||'Last'} season`;
+function divisionName(id){
+  if(id==null) return 'League';
+  const m=state.league?.metadata||{};
+  return m[`division_${id}`] || m[`division_${id}_name`] || `Division ${id}`;
+}
 
-    const champGame=placementFromBrackets(winners,losers,1);
-    const lastGame=placementFromBrackets(winners,losers,11);
-    if(champGame?.[1]){
-      const x=rosterLabel(ownerMap,champGame[1]);
-      $('#reigning-champ').textContent=x.team;
-      $('#reigning-champ-owner').textContent=x.owner?`${x.owner} · ${league.season} Champion`:`${league.season} Champion`;
-    }else{
-      $('#reigning-champ').textContent='Not available yet';
-      $('#reigning-champ-owner').textContent='Sleeper has not posted a completed championship result.';
+async function loadWeeklyAwards(){
+  try{
+    if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
+    const currentWeek=Math.max(1,Number(state.nflState?.week||1));
+    const week=currentWeek-1;
+    if(week<1){
+      $('#power-division-label').textContent='POWER DIVISION';
+      $('#power-division').textContent='Starts after Week 1';
+      $('#power-division-sub').textContent='The strongest division will be crowned after each completed week.';
+      $('#division-rankings').innerHTML='';
+      $('#you-suck-label').textContent='YOU SUCK';
+      $('#you-suck-manager').textContent='Nobody yet';
+      $('#you-suck-sub').textContent='Give it a week. Somebody will earn it.';
+      $('#idiot-label').textContent='IDIOT OF THE WEEK';
+      $('#idiot-manager').textContent='Nobody yet';
+      $('#idiot-sub').textContent='After Week 1, the highest-scoring benched player earns somebody the clown nose.';
+      return;
     }
-    if(lastGame?.[12]){
-      const x=rosterLabel(ownerMap,lastGame[12]);
-      $('#last-place').textContent=x.team;
-      $('#last-place-owner').textContent=x.owner?`${x.owner} · 12th place`:'12th place';
+
+    const matchups=await getJSON(`${API}/league/${LEAGUE_ID}/matchups/${week}`).catch(()=>[]);
+    const scoreByRoster=Object.fromEntries(matchups.map(m=>[Number(m.roster_id),Number(m.points||0)]));
+    const scored=state.rosters.map(r=>({roster:r,points:scoreByRoster[Number(r.roster_id)]})).filter(x=>Number.isFinite(x.points));
+    if(!scored.length) throw new Error('No completed-week scores');
+
+    $('#power-division-label').textContent=`WEEK ${week} POWER DIVISION`;
+    const grouped=new Map();
+    for(const x of scored){
+      const id=rosterDivision(x.roster);
+      if(id==null) continue;
+      if(!grouped.has(id)) grouped.set(id,[]);
+      grouped.get(id).push(x.points);
+    }
+    const divisions=[...grouped.entries()].map(([id,scores])=>({
+      id, name:divisionName(id), avg:scores.reduce((a,b)=>a+b,0)/scores.length, total:scores.reduce((a,b)=>a+b,0), teams:scores.length
+    })).sort((a,b)=>b.avg-a.avg);
+
+    if(divisions.length>1){
+      const champ=divisions[0];
+      $('#power-division').innerHTML=`${esc(champ.name)} <span class="score-points">${champ.avg.toFixed(2)}</span>`;
+      $('#power-division-sub').textContent=`Best average score per team in Week ${week}.`;
+      $('#division-rankings').innerHTML=divisions.map((d,i)=>`<div class="division-rank-row"><span>${i+1}. ${esc(d.name)}</span><strong>${d.avg.toFixed(2)}</strong></div>`).join('');
     }else{
-      $('#last-place').textContent='Not available yet';
-      $('#last-place-owner').textContent='No completed 11th/12th-place bracket result found.';
+      $('#power-division').textContent='No divisions found';
+      $('#power-division-sub').textContent='Sleeper is not returning division assignments for this league.';
+      $('#division-rankings').innerHTML='';
+    }
+
+    const worst=scored.reduce((a,b)=>b.points<a.points?b:a);
+    const who=rosterLabel(state.ownerByRoster,worst.roster.roster_id);
+    $('#you-suck-label').textContent=`WEEK ${week} YOU SUCK`;
+    $('#you-suck-manager').innerHTML=`${esc(who.owner||who.team)} <span class="suck-points">${worst.points.toFixed(2)}</span>`;
+    $('#you-suck-sub').textContent=who.owner?`${who.team} put up the fewest points in the league.`:'Fewest points in the league. Congratulations, I guess.';
+
+    // Idiot of the Week: manager who left the highest-scoring eligible bench player out of the starting lineup.
+    // Players in Sleeper reserve/IR or taxi slots are excluded; this is intended to measure an actual bench decision.
+    const benchCandidates=[];
+    for(const m of matchups){
+      const roster=state.rosters.find(r=>Number(r.roster_id)===Number(m.roster_id));
+      const starters=new Set((m.starters||[]).filter(Boolean));
+      const reserve=new Set([...(roster?.reserve||[]),...(roster?.taxi||[])]);
+      const playerIds=(m.players||Object.keys(m.players_points||{})).filter(Boolean);
+      for(const pid of playerIds){
+        if(starters.has(pid) || reserve.has(pid)) continue;
+        const p=Number(m.players_points?.[pid] ?? 0);
+        if(!Number.isFinite(p)) continue;
+        benchCandidates.push({rosterId:Number(m.roster_id),playerId:pid,points:p});
+      }
+    }
+    if(benchCandidates.length){
+      const maxBench=Math.max(...benchCandidates.map(x=>x.points));
+      const idiots=benchCandidates.filter(x=>Math.abs(x.points-maxBench)<0.001);
+      const first=idiots[0];
+      const idiotWho=rosterLabel(state.ownerByRoster,first.rosterId);
+      $('#idiot-label').textContent=`WEEK ${week} IDIOT OF THE WEEK`;
+      if(idiots.length===1){
+        $('#idiot-manager').innerHTML=`${esc(idiotWho.owner||idiotWho.team)} <span class="idiot-player">${maxBench.toFixed(2)}</span>`;
+        $('#idiot-sub').innerHTML=`Left <strong>${esc(playerName(first.playerId))}</strong> on the bench with ${maxBench.toFixed(2)} points. ${esc(idiotWho.team)} deserved better.`;
+      }else{
+        const names=[...new Set(idiots.map(x=>{const w=rosterLabel(state.ownerByRoster,x.rosterId);return w.owner||w.team;}))];
+        $('#idiot-manager').innerHTML=`${esc(names.join(' & '))} <span class="idiot-player">${maxBench.toFixed(2)}</span>`;
+        $('#idiot-sub').textContent=`Tie for the highest-scoring benched player at ${maxBench.toFixed(2)} points. Congratulations to all involved.`;
+      }
+    }else{
+      $('#idiot-label').textContent=`WEEK ${week} IDIOT OF THE WEEK`;
+      $('#idiot-manager').textContent='No eligible bench score';
+      $('#idiot-sub').textContent='Nobody qualified this week.';
     }
   }catch(e){
-    console.warn('Legacy data unavailable',e);
-    renderLegacyFallback();
+    console.warn('Weekly awards unavailable',e);
+    $('#power-division').textContent='Unavailable';
+    $('#power-division-sub').textContent='Could not calculate the latest completed week.';
+    $('#division-rankings').innerHTML='';
+    $('#you-suck-manager').textContent='Unavailable';
+    $('#you-suck-sub').textContent='Could not calculate the latest completed week.';
+    $('#idiot-manager').textContent='Unavailable';
+    $('#idiot-sub').textContent='Could not calculate the latest completed week.';
   }
 }
 
-function renderLegacyFallback(){
-  $('#reigning-champ').textContent='Awaiting history';
-  $('#reigning-champ-owner').textContent='Previous-season Sleeper history is unavailable.';
-  $('#last-place').textContent='Awaiting history';
-  $('#last-place-owner').textContent='Previous-season Sleeper history is unavailable.';
+
+async function loadYouSuckLeaderboard(){
+  try{
+    if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
+    const currentWeek=Math.max(1,Number(state.nflState?.week||1));
+    const completedWeeks=Math.max(0,currentWeek-1);
+    const el=$('#you-suck-leaderboard');
+    const sub=$('#you-suck-season-sub');
+    if(!el) return;
+    if(completedWeeks<1){
+      el.innerHTML='<div class="loading">Nobody has embarrassed themselves yet. Week 1 will fix that.</div>';
+      if(sub) sub.textContent='Fewest points each completed week earns one You Suck.';
+      return;
+    }
+
+    const weekly=await Promise.all(Array.from({length:completedWeeks},(_,i)=>i+1).map(async week=>{
+      const matchups=await getJSON(`${API}/league/${LEAGUE_ID}/matchups/${week}`).catch(()=>[]);
+      const scored=matchups.map(m=>({rosterId:Number(m.roster_id),points:Number(m.points)})).filter(x=>Number.isFinite(x.points));
+      if(!scored.length) return null;
+      const low=Math.min(...scored.map(x=>x.points));
+      const losers=scored.filter(x=>Math.abs(x.points-low)<0.001);
+      return {week,low,losers};
+    }));
+
+    const counts=new Map();
+    const history=[];
+    for(const w of weekly.filter(Boolean)){
+      for(const loser of w.losers){
+        counts.set(loser.rosterId,(counts.get(loser.rosterId)||0)+1);
+        history.push({week:w.week,rosterId:loser.rosterId,points:loser.points});
+      }
+    }
+
+    const rows=state.rosters.map(r=>{
+      const who=rosterLabel(state.ownerByRoster,r.roster_id);
+      const wins=counts.get(Number(r.roster_id))||0;
+      const worsts=history.filter(h=>h.rosterId===Number(r.roster_id));
+      const worstScore=worsts.length?Math.min(...worsts.map(h=>h.points)):null;
+      return {rosterId:Number(r.roster_id),manager:who.owner||who.team,team:who.team,wins,worstScore};
+    }).sort((a,b)=>b.wins-a.wins || ((a.worstScore??Infinity)-(b.worstScore??Infinity)) || a.manager.localeCompare(b.manager));
+
+    const leaders=rows.filter(r=>r.wins>0);
+    if(!leaders.length){
+      el.innerHTML='<div class="loading">No completed weekly low-score awards found yet.</div>';
+      return;
+    }
+    const max=leaders[0].wins;
+    if(sub){
+      const leadNames=leaders.filter(r=>r.wins===max).map(r=>r.manager);
+      sub.textContent=`${leadNames.join(' & ')} ${leadNames.length>1?'are':'is'} currently leading with ${max} You Suck${max===1?'':'s'}.`;
+    }
+    el.innerHTML=leaders.map((r,i)=>`<div class="suck-leader-row ${r.wins===max?'leader':''}"><div class="suck-rank">${i+1}</div><div class="suck-person"><strong>${esc(r.manager)}</strong><span>${esc(r.team)}</span></div><div class="suck-count"><strong>${r.wins}</strong><span>You Suck${r.wins===1?'':'s'}</span></div></div>`).join('');
+  }catch(e){
+    console.warn('You Suck leaderboard unavailable',e);
+    const el=$('#you-suck-leaderboard');
+    if(el) el.innerHTML='<div class="loading">Could not calculate the season shame standings.</div>';
+  }
 }
 
 async function loadWeeklyScore(){
@@ -194,11 +307,12 @@ async function boot(){
   try{
     await loadLeague();
     renderRankings();
-    const legacyPromise=loadLegacy();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
+    const awardsPromise=loadWeeklyAwards();
+    const suckBoardPromise=loadYouSuckLeaderboard();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
-    await Promise.allSettled([legacyPromise,scorePromise]);
+    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise]);
   }catch(e){
     console.error(e);
     const msg=`<div class="callout danger">Couldn't reach Sleeper from this browser. Check your connection and reload. League ID: ${LEAGUE_ID}</div>`;
