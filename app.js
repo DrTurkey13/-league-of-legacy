@@ -303,16 +303,89 @@ function renderHomeActivity(){
   $('#home-activity').innerHTML=recent.length?recent.map(t=>{const rid=(t.roster_ids||[])[0],u=state.ownerByRoster[rid];const label=t.type==='trade'?'Trade completed':t.type==='waiver'?'Waiver claim':'Free-agent move';return `<div class="activity-mini"><div><strong>${esc(label)}</strong><div><span>${esc(teamName(u,rid))}</span></div></div><span>${fmtDate(t.status_updated||t.created)}</span></div>`}).join(''):'<div class="loading">No recent activity found.</div>';
 }
 
+
+async function loadAllTime(){
+  const table=$('#alltime-table');
+  if(!table) return;
+  try{
+    const seasons=[];
+    let league=state.league;
+    const seen=new Set();
+    while(league?.league_id && !seen.has(league.league_id) && seasons.length<25){
+      seen.add(league.league_id);
+      const id=league.league_id;
+      const [users,rosters,bracket]=await Promise.all([
+        getJSON(`${API}/league/${id}/users`).catch(()=>[]),
+        getJSON(`${API}/league/${id}/rosters`).catch(()=>[]),
+        getJSON(`${API}/league/${id}/winners_bracket`).catch(()=>[])
+      ]);
+      seasons.push({league,users,rosters,bracket});
+      const prev=league.previous_league_id;
+      if(!prev || prev==='0' || prev===id) break;
+      league=await getJSON(`${API}/league/${prev}`).catch(()=>null);
+    }
+
+    const managers=new Map();
+    const ensure=(uid,u)=>{
+      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',team:u?.metadata?.team_name||'',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0});
+      const x=managers.get(uid);
+      if(u?.display_name||u?.username) x.name=u.display_name||u.username;
+      if(u?.metadata?.team_name) x.team=u.metadata.team_name;
+      return x;
+    };
+
+    for(const season of seasons){
+      const byUser=Object.fromEntries(season.users.map(u=>[u.user_id,u]));
+      const byRoster=Object.fromEntries(season.rosters.map(r=>[r.roster_id,r]));
+      for(const r of season.rosters){
+        if(!r.owner_id) continue;
+        const x=ensure(r.owner_id,byUser[r.owner_id]);
+        const st=r.settings||{};
+        x.seasons++; x.w+=Number(st.wins||0); x.l+=Number(st.losses||0); x.t+=Number(st.ties||0);
+        x.pf+=pts(st,'fpts'); x.pa+=pts(st,'fpts_against');
+      }
+      const final=season.bracket.find(g=>Number(g.p)===1);
+      const champRid=final?.w;
+      const champ=byRoster[champRid];
+      if(champ?.owner_id) ensure(champ.owner_id,byUser[champ.owner_id]).titles++;
+    }
+
+    const rows=[...managers.values()].sort((a,b)=>b.w-a.w || (b.pf-a.pf));
+    const games=x=>x.w+x.l+x.t;
+    const pct=x=>games(x)?(x.w+x.t*.5)/games(x):0;
+    const fmt=n=>Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    table.innerHTML=`<table><thead><tr><th>Manager</th><th>Seasons</th><th>Record</th><th>Win %</th><th>PF</th><th>PA</th><th>Titles</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td><strong>${esc(x.name)}</strong>${x.team?`<div class="team-sub">${esc(x.team)}</div>`:''}</td><td>${x.seasons}</td><td><strong>${x.w}-${x.l}${x.t?`-${x.t}`:''}</strong></td><td>${(pct(x)*100).toFixed(1)}%</td><td>${fmt(x.pf)}</td><td>${fmt(x.pa)}</td><td><strong>${x.titles}</strong></td></tr>`).join('')}</tbody></table>`;
+
+    const years=seasons.map(s=>s.league.season).filter(Boolean).sort();
+    const totalGames=rows.reduce((n,x)=>n+games(x),0)/2;
+    $('#alltime-summary').innerHTML=`<div class="stat-card"><span class="stat-label">Seasons</span><strong>${seasons.length}</strong></div><div class="stat-card"><span class="stat-label">History</span><strong>${esc(years.length?`${years[0]}–${years[years.length-1]}`:'Sleeper')}</strong></div><div class="stat-card"><span class="stat-label">Managers</span><strong>${rows.length}</strong></div><div class="stat-card"><span class="stat-label">Games Logged</span><strong>${Math.round(totalGames)}</strong></div>`;
+
+    const mostWins=[...rows].sort((a,b)=>b.w-a.w)[0], mostPF=[...rows].sort((a,b)=>b.pf-a.pf)[0], mostPA=[...rows].sort((a,b)=>b.pa-a.pa)[0];
+    const eligible=rows.filter(x=>games(x)>=10); const bestPct=[...eligible].sort((a,b)=>pct(b)-pct(a))[0];
+    const leaderItems=[
+      ['Most Wins',mostWins,mostWins?.w],['Best Win %',bestPct,bestPct?`${(pct(bestPct)*100).toFixed(1)}%`:null],['Most Points For',mostPF,mostPF?fmt(mostPF.pf):null],['Most Points Against',mostPA,mostPA?fmt(mostPA.pa):null]
+    ].filter(x=>x[1]);
+    $('#alltime-leaders').innerHTML=leaderItems.map(([label,x,val])=>`<div class="alltime-leader-row"><div><strong>${esc(label)}</strong><span>${esc(x.name)}</span></div><strong>${esc(val)}</strong></div>`).join('');
+
+    const champs=rows.filter(x=>x.titles).sort((a,b)=>b.titles-a.titles || b.w-a.w);
+    $('#alltime-champs').innerHTML=champs.length?champs.map(x=>`<div class="alltime-leader-row"><div><strong>${esc(x.name)}</strong><span>${x.titles===1?'League champion':'Multiple-time league champion'}</span></div><strong class="title-count">${'🏆'.repeat(Math.min(x.titles,5))}${x.titles>5?` ×${x.titles}`:''}</strong></div>`).join(''):'<div class="loading">No completed championship bracket found in the linked Sleeper history.</div>';
+  }catch(e){
+    console.warn('All-time history unavailable',e);
+    table.innerHTML='<div class="callout danger">Could not load the linked Sleeper league history.</div>';
+  }
+}
+
 async function boot(){
   try{
     await loadLeague();
     renderRankings();
+    const allTimePromise=loadAllTime();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
-    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise]);
+    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,allTimePromise]);
   }catch(e){
     console.error(e);
     const msg=`<div class="callout danger">Couldn't reach Sleeper from this browser. Check your connection and reload. League ID: ${LEAGUE_ID}</div>`;

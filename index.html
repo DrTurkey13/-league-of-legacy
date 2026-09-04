@@ -33,6 +33,7 @@
         <nav id="nav" class="nav">
           <button data-route="home" class="active">Home</button>
           <button data-route="rankings">Rankings</button>
+          <button data-route="alltime">All-Time</button>
           <button data-route="trades">Trades</button>
           <button data-route="waivers">Waivers</button>
           <button data-route="rules">Rules</button>
@@ -141,6 +142,16 @@
       <section id="page-rankings" class="page">
         <div class="page-heading"><div><div class="eyebrow">THE PECKING ORDER</div><h1>Power Rankings</h1><p>Currently ranked by record, then points scored. We can swap in a custom power formula later.</p></div></div>
         <div class="panel no-pad"><div id="rankings-table" class="table-wrap"><div class="loading padded">Loading standings…</div></div></div>
+      </section>
+
+      <section id="page-alltime" class="page">
+        <div class="page-heading"><div><div class="eyebrow">THE HISTORY BOOKS</div><h1>All-Time</h1><p>Every Sleeper season we can trace. Wins, losses, points, pain, and hardware — all rolled together by manager.</p></div></div>
+        <div id="alltime-summary" class="stats-grid alltime-summary"><div class="stat-card"><span class="stat-label">League History</span><strong>Loading…</strong></div></div>
+        <div class="panel no-pad"><div id="alltime-table" class="table-wrap"><div class="loading padded">Walking backward through league history…</div></div></div>
+        <div class="alltime-records-grid">
+          <div class="panel"><div class="panel-head"><div><span class="kicker">RECORD BOOK</span><h2>All-Time Leaders</h2></div></div><div id="alltime-leaders" class="list-stack"><div class="loading">Crunching the numbers…</div></div></div>
+          <div class="panel"><div class="panel-head"><div><span class="kicker">HARDWARE</span><h2>Championships</h2></div></div><div id="alltime-champs" class="list-stack"><div class="loading">Checking the trophy case…</div></div></div>
+        </div>
       </section>
 
       <section id="page-trades" class="page">

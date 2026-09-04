@@ -90,3 +90,13 @@ th{background:var(--table-head)}
 .suck-count strong{font-size:19px;color:var(--red);line-height:1}
 .suck-count span{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
 @media(max-width:700px){.leaderboard-note{display:none}.suck-leader-row{grid-template-columns:30px 1fr auto;padding:10px}.suck-person strong{font-size:13px}}
+
+/* All-time history */
+.alltime-summary{margin-bottom:18px}
+.alltime-records-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.alltime-leader-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--border)}
+.alltime-leader-row:last-child{border-bottom:0}
+.alltime-leader-row span{font-size:11px;color:var(--muted);display:block;margin-top:3px}
+.alltime-leader-row strong:last-child{text-align:right;white-space:nowrap}
+.title-count{font-size:20px;color:#f59e0b}
+@media(max-width:800px){.alltime-records-grid{grid-template-columns:1fr}.alltime-summary{grid-template-columns:repeat(2,1fr)}}
