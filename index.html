@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0f14" />
+  <title>League of Legacy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" data-route="home" aria-label="Home">
+        <div class="brand-logo-wrap"><img src="league-of-legacy-logo.png" alt="League of Legacy logo" class="brand-logo"></div>
+        <div>
+          <div id="league-name" class="brand-name">League of Legacy</div>
+          <div class="brand-sub">Powered by Sleeper</div>
+        </div>
+      </button>
+      <button id="menu-button" class="menu-button" aria-label="Open menu">☰</button>
+      <nav id="nav" class="nav">
+        <button data-route="home" class="active">Home</button>
+        <button data-route="rankings">Rankings</button>
+        <button data-route="trades">Trades</button>
+        <button data-route="waivers">Waivers</button>
+        <button data-route="rules">Rules</button>
+        <button data-route="waitlist">Waitlist</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="page-home" class="page active">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow">2026 SEASON</div>
+            <h1 id="hero-title">League of Legacy</h1>
+            <p>Standings, trades, waiver carnage, rules nobody can pretend they didn't read, and the line of degenerates waiting for a team.</p>
+            <div class="hero-actions">
+              <button class="primary" data-route="rankings">View Rankings</button>
+              <button class="secondary" data-route="rules">Read the Rules</button>
+            </div>
+          </div>
+          <div class="hero-identity"><img src="league-of-legacy-logo.png" alt="League of Legacy" class="hero-logo"></div>
+          <div class="hero-card">
+            <div class="trophy">🏆</div>
+            <div class="muted">CHAMPION PAYOUT</div>
+            <div class="mega">$980</div>
+            <div class="small">Plus a fresh trophy inscription.</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-label">Teams</span><strong id="stat-teams">12</strong></div>
+          <div class="stat-card"><span class="stat-label">1st Place</span><strong>$980</strong></div>
+          <div class="stat-card"><span class="stat-label">2nd Place</span><strong>$650</strong></div>
+          <div class="stat-card"><span class="stat-label">3rd Place</span><strong>$150</strong></div>
+        </div>
+
+        <section class="legacy-board">
+          <div class="section-head">
+            <div><span class="kicker">BRAGGING RIGHTS & PUBLIC SHAME</span><h2>League of Legacy Board</h2></div>
+            <span id="legacy-season" class="season-chip">Last season</span>
+          </div>
+          <div class="legacy-grid">
+            <article class="legacy-card champion-card">
+              <div class="legacy-icon">🏆</div>
+              <div class="legacy-label">REIGNING CHAMPION</div>
+              <div id="reigning-champ" class="legacy-name">Loading…</div>
+              <div id="reigning-champ-owner" class="legacy-sub">Pulling last season's bracket</div>
+            </article>
+            <article class="legacy-card loser-card">
+              <div class="legacy-icon">🚽</div>
+              <div class="legacy-label">LAST-PLACE LOSER</div>
+              <div id="last-place" class="legacy-name">Loading…</div>
+              <div id="last-place-owner" class="legacy-sub">Somebody has to wear it</div>
+            </article>
+            <article class="legacy-card score-card">
+              <div class="legacy-icon">🔥</div>
+              <div id="high-score-label" class="legacy-label">WEEKLY HIGH SCORE</div>
+              <div id="weekly-high-score" class="legacy-name">Loading…</div>
+              <div id="weekly-high-score-sub" class="legacy-sub">Checking the scoreboard</div>
+            </article>
+          </div>
+        </section>
+
+        <div class="home-feature-grid">
+          <div class="panel feature-trade-panel">
+            <div class="panel-head"><div><span class="kicker">LATEST DEAL</span><h2>Blockbuster Board</h2></div><button class="link-button" data-route="trades">Trade Center →</button></div>
+            <div id="featured-trade"><div class="loading">Loading the latest questionable decision…</div></div>
+          </div>
+          <div class="panel news-panel">
+            <div class="panel-head"><div><span class="kicker">FROM THE COMMISH</span><h2>League News</h2></div></div>
+            <div id="league-news" class="news-stack">
+              <article class="news-item"><div class="news-date">SEP 2026</div><div><strong>The constitution is live.</strong><p>Rules are now posted here so nobody gets to claim they “didn't know.”</p></div></article>
+              <article class="news-item"><div class="news-date">REMINDER</div><div><strong>Two strikes means two strikes.</strong><p>Start inactives twice in one season and you're out. No refund.</p></div></article>
+              <article class="news-item"><div class="news-date">WAITLIST</div><div><strong>Three degenerates are waiting.</strong><p>John Doyle is currently first in line if an approved opening becomes available.</p></div></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-head"><div><span class="kicker">LIVE</span><h2>Top of the Table</h2></div><button class="link-button" data-route="rankings">All rankings →</button></div>
+            <div id="home-rankings" class="list-stack"><div class="loading">Loading league…</div></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><span class="kicker">RECENT</span><h2>League Activity</h2></div></div>
+            <div id="home-activity" class="list-stack"><div class="loading">Loading transactions…</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-rankings" class="page">
+        <div class="page-heading"><div><div class="eyebrow">THE PECKING ORDER</div><h1>Power Rankings</h1><p>Currently ranked by record, then points scored. We can swap in a custom power formula later.</p></div></div>
+        <div class="panel no-pad"><div id="rankings-table" class="table-wrap"><div class="loading padded">Loading standings…</div></div></div>
+      </section>
+
+      <section id="page-trades" class="page">
+        <div class="page-heading"><div><div class="eyebrow">NO VETO. NO MERCY.</div><h1>Trade Center</h1><p>Completed trades pulled from Sleeper. If you accepted it, live with it.</p></div></div>
+        <div id="trades-feed" class="cards-feed"><div class="loading">Loading trades…</div></div>
+      </section>
+
+      <section id="page-waivers" class="page">
+        <div class="page-heading"><div><div class="eyebrow">FAAB VIOLENCE</div><h1>Waiver Wire</h1><p>Claims, drops, free-agent adds, and the money burned along the way.</p></div></div>
+        <div id="waivers-feed" class="cards-feed"><div class="loading">Loading waiver activity…</div></div>
+      </section>
+
+      <section id="page-rules" class="page">
+        <div class="page-heading"><div><div class="eyebrow">THE CONSTITUTION</div><h1>League Rules</h1><p>If it isn't explicitly prohibited, it's legal until the league changes the rule. Changes are not retroactive unless correcting an obvious platform or commissioner error.</p></div><div class="rule-badge">Last updated · Sep 2026</div></div>
+
+        <div class="rules-layout">
+          <aside class="rules-toc">
+            <a href="#payouts">Payouts</a><a href="#lineups">Active Lineups</a><a href="#keepers">Keepers</a><a href="#draft-order">Draft Order</a><a href="#trades-rule">Trades</a><a href="#vacancies">Vacant Teams</a>
+          </aside>
+          <div class="rules-content">
+            <article id="payouts" class="rule-section"><span class="rule-num">01</span><h2>Payouts</h2><div class="payout-grid"><div><b>1st</b><strong>$980</strong></div><div><b>2nd</b><strong>$650</strong></div><div><b>3rd</b><strong>$150</strong></div></div><p>$20 is reserved for the new champion's trophy inscription and shipping.</p></article>
+
+            <article id="lineups" class="rule-section"><span class="rule-num">02</span><h2>Active Lineups — Two-Strike Rule</h2><p><strong>Two strikes and you're out.</strong> Starting an inactive player counts as one strike. If an owner starts inactive players on two separate occasions in the same season, that owner is removed from the league.</p><div class="callout danger">An owner removed under the Two-Strike Rule receives <strong>no refund</strong> of league dues.</div></article>
+
+            <article id="keepers" class="rule-section"><span class="rule-num">03</span><h2>Keepers</h2><p>Each team may keep <strong>one player per season</strong>. Keeper cost is one round earlier than the player's draft position in the immediately preceding season.</p><div class="example"><span>EXAMPLE</span>A player drafted in Round 5 can be kept the next year for a Round 4 pick.</div><p>A keeper placed on the draft board counts as being drafted at that keeper position. The new draft position becomes the basis for the following season's keeper cost.</p><div class="example"><span>MULTI-YEAR EXAMPLE</span>2026: drafted in the 5th → 2027: kept for a 4th → 2028: kept for a 3rd → 2029: kept for a 2nd.</div>
+              <h3>First-Round Players</h3><p>Players drafted or kept in the 1st round are <strong>not eligible</strong> to be kept the following season. There is no 1st-round keeper option.</p>
+              <h3>Required Draft Pick</h3><p>If an owner does not possess a pick in the required keeper round, the cost moves to the next earlier round until an eligible pick is available. If no eligible pick exists before reaching Round 1, the player cannot be kept.</p><p>If an owner has multiple picks in the keeper round, the owner's original draft-position pick is used. If that pick was traded, the earliest pick owned in that round is used.</p>
+              <h3>Traded, Dropped & Waiver Players</h3><p>Keeper eligibility follows the player. A traded player retains his draft position. A drafted player who is dropped and later added—by any team—also retains his original draft position for keeper purposes. A player who was <strong>not drafted</strong> that season is not keeper-eligible.</p>
+              <h3>Keeper Deadline & Lock</h3><p>Keepers must be declared <strong>two weeks before the league draft</strong>. Once the deadline passes, all keeper declarations are final.</p><div class="callout">Injury, suspension, retirement, roster-status changes, or any other pre-draft disaster do not reopen the keeper decision. <strong>That sucks. He's still your keeper.</strong></div>
+            </article>
+
+            <article id="draft-order" class="rule-section"><span class="rule-num">04</span><h2>Draft Order</h2><p>Draft order is based on final <strong>playoff and consolation results</strong>, not regular-season standings.</p><p>To discourage tanking, the top three picks are awarded to the 10th-, 11th-, and 12th-place finishers—in that order. The remaining picks then proceed in reverse finishing order from 9th through 1st.</p><div class="draft-strip"><span>10th</span><span>11th</span><span>12th</span><span>9th</span><span>8th</span><span>7th</span><span>6th</span><span>5th</span><span>4th</span><span>3rd</span><span>2nd</span><span>1st</span></div><p class="muted">That produces picks 1.01 through 1.12 respectively.</p></article>
+
+            <article id="trades-rule" class="rule-section"><span class="rule-num">05</span><h2>Trades & Draft Picks</h2><p>Trades process without league or commissioner approval. There is <strong>no veto or review process</strong>. Owners are responsible for evaluating and accepting their own trades.</p><p>A trade is not reversed merely because it is unfair, lopsided, stupid, or regretted later.</p><h3>Future Picks</h3><p>Any owner may trade draft picks up to <strong>three future drafts in advance</strong>. There are no league-imposed limits on which rounds or how many picks may be traded, subject to Sleeper platform limitations.</p><p>Trading away the pick normally needed for a keeper does not reduce the keeper's cost. The cost moves to the next earlier available round under the keeper rules.</p></article>
+
+            <article id="vacancies" class="rule-section"><span class="rule-num">06</span><h2>Vacant Teams</h2><p>If an owner leaves the league for any reason, the orphaned team is offered first to existing co-managers.</p><p>If no co-manager takes over, the opening is offered <strong>first come, first served</strong> from the waitlist, subject to commissioner approval. The commissioner retains final approval over all new league members.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-waitlist" class="page">
+        <div class="page-heading"><div><div class="eyebrow">NEXT MAN UP</div><h1>Team Waitlist</h1><p>When a team opens, existing co-managers get first shot. After that, this line gets the call in order, subject to commissioner approval.</p></div></div>
+        <div class="waitlist-card">
+          <div class="waitlist-row top"><div class="position">1</div><div class="avatar-letter">JD</div><div class="wait-name"><strong>John Doyle</strong><span>Next up</span></div><div class="status next">NEXT</div></div>
+          <div class="waitlist-row"><div class="position">2</div><div class="avatar-letter">MP</div><div class="wait-name"><strong>Michael Pendergrass</strong><span>Waiting</span></div><div class="status">WAITING</div></div>
+          <div class="waitlist-row"><div class="position">3</div><div class="avatar-letter">PB</div><div class="wait-name"><strong>Phil Blair</strong><span>Waiting</span></div><div class="status">WAITING</div></div>
+        </div>
+      </section>
+    </main>
+
+    <footer><span id="footer-league">League of Legacy</span><span>League ID · 1312063787448139776</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
