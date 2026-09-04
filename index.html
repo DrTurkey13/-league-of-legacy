@@ -34,6 +34,7 @@
           <button data-route="home" class="active">Home</button>
           <button data-route="rankings">Rankings</button>
           <button data-route="alltime">All-Time</button>
+          <button data-route="champ">Champion</button>
           <button data-route="trades">Trades</button>
           <button data-route="waivers">Waivers</button>
           <button data-route="rules">Rules</button>
@@ -54,6 +55,8 @@
             <div class="hero-actions">
               <button class="primary" data-route="rankings">View Rankings</button>
               <button class="secondary" data-route="rules">Read the Rules</button>
+              <button class="secondary" data-route="alltime">All-Time</button>
+              <button class="secondary" data-route="champ">2025 Champion</button>
             </div>
           </div>
           <div class="hero-identity"><img src="league-of-legacy-logo.png" alt="League of Legacy" class="hero-logo"></div>
@@ -151,6 +154,17 @@
         <div class="alltime-records-grid">
           <div class="panel"><div class="panel-head"><div><span class="kicker">RECORD BOOK</span><h2>All-Time Leaders</h2></div></div><div id="alltime-leaders" class="list-stack"><div class="loading">Crunching the numbers…</div></div></div>
           <div class="panel"><div class="panel-head"><div><span class="kicker">HARDWARE</span><h2>Championships</h2></div></div><div id="alltime-champs" class="list-stack"><div class="loading">Checking the trophy case…</div></div></div>
+        </div>
+      </section>
+
+      <section id="page-champ" class="page">
+        <div class="champ-page">
+          <div class="confetti" aria-hidden="true"></div>
+          <div class="champ-trophy" aria-hidden="true">🏆</div>
+          <img src="league-of-legacy-logo.png" alt="League of Legacy" class="champ-logo">
+          <div class="eyebrow">2025 LEAGUE CHAMPION</div>
+          <h1 id="last-champ-name">Loading…</h1>
+          <p id="last-champ-owner" class="champ-owner">Checking the trophy case.</p>
         </div>
       </section>
 

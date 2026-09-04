@@ -100,3 +100,20 @@ th{background:var(--table-head)}
 .alltime-leader-row strong:last-child{text-align:right;white-space:nowrap}
 .title-count{font-size:20px;color:#f59e0b}
 @media(max-width:800px){.alltime-records-grid{grid-template-columns:1fr}.alltime-summary{grid-template-columns:repeat(2,1fr)}}
+
+/* Champion page */
+.champ-page{min-height:620px;border:1px solid var(--border);border-radius:28px;background:linear-gradient(145deg,var(--surface),#0d1319);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.champ-page:before{content:"";position:absolute;width:420px;height:420px;border:78px solid rgba(11,142,232,.06);border-radius:50%;top:-250px;right:-180px}
+.champ-page:after{content:"";position:absolute;width:320px;height:320px;border:58px solid rgba(242,13,25,.045);border-radius:50%;bottom:-210px;left:-150px}
+.champ-trophy{font-size:76px;line-height:1;margin-bottom:20px;filter:drop-shadow(0 12px 25px rgba(0,0,0,.25));position:relative;z-index:1}
+.champ-logo{width:min(280px,68vw);max-height:250px;object-fit:contain;margin-bottom:26px;filter:drop-shadow(0 18px 35px rgba(0,0,0,.32));position:relative;z-index:1}
+.champ-page .eyebrow{position:relative;z-index:1}
+.champ-page h1{font-size:clamp(48px,8vw,86px);margin:14px 0 8px;position:relative;z-index:1}
+.champ-owner{margin:0;color:var(--muted);font-size:16px;position:relative;z-index:1}
+@media(max-width:800px){.champ-page{min-height:540px;padding:38px 20px}.champ-trophy{font-size:64px}.champ-logo{width:220px}.champ-page h1{font-size:52px}}
+
+/* Champion celebration */
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.confetti i{position:absolute;top:-12%;width:9px;height:18px;border-radius:2px;opacity:.95;animation:confetti-fall var(--dur) linear infinite;animation-delay:var(--delay)}
+@keyframes confetti-fall{0%{transform:translate3d(0,-10vh,0) rotate(0deg)}100%{transform:translate3d(var(--drift),115vh,0) rotate(900deg)}}
+@media(prefers-reduced-motion:reduce){.confetti i{animation:none;opacity:.35}}

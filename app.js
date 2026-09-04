@@ -304,6 +304,39 @@ function renderHomeActivity(){
 }
 
 
+async function loadLastChampion(){
+  const nameEl=$('#last-champ-name');
+  const ownerEl=$('#last-champ-owner');
+  if(!nameEl || !ownerEl || !state.league) return;
+  try{
+    const prevId=state.league.previous_league_id;
+    if(!prevId || prevId==='0'){
+      nameEl.textContent='No linked champion yet';
+      ownerEl.textContent='Sleeper does not have a previous league linked to this season.';
+      return;
+    }
+    const [prevLeague,users,rosters,bracket]=await Promise.all([
+      getJSON(`${API}/league/${prevId}`).catch(()=>null),
+      getJSON(`${API}/league/${prevId}/users`).catch(()=>[]),
+      getJSON(`${API}/league/${prevId}/rosters`).catch(()=>[]),
+      getJSON(`${API}/league/${prevId}/winners_bracket`).catch(()=>[])
+    ]);
+    const final=bracket.find(g=>Number(g.p)===1);
+    const champRoster=rosters.find(r=>Number(r.roster_id)===Number(final?.w));
+    const champUser=users.find(u=>u.user_id===champRoster?.owner_id);
+    const owner=champUser?.display_name || champUser?.username || (champRoster?`Roster ${champRoster.roster_id}`:'Champion unavailable');
+    const season=prevLeague?.season || '2025';
+    const eyebrow=document.querySelector('#page-champ .eyebrow');
+    if(eyebrow) eyebrow.textContent=`${season} LEAGUE CHAMPION`;
+    nameEl.textContent=owner;
+    ownerEl.textContent='League of Legacy Champion';
+  }catch(e){
+    console.warn('Last champion unavailable',e);
+    nameEl.textContent='Champion unavailable';
+    ownerEl.textContent='Could not load the previous season championship bracket.';
+  }
+}
+
 async function loadAllTime(){
   const table=$('#alltime-table');
   if(!table) return;
@@ -380,12 +413,13 @@ async function boot(){
     await loadLeague();
     renderRankings();
     const allTimePromise=loadAllTime();
+    const champPromise=loadLastChampion();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
-    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,allTimePromise]);
+    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,allTimePromise,champPromise]);
   }catch(e){
     console.error(e);
     const msg=`<div class="callout danger">Couldn't reach Sleeper from this browser. Check your connection and reload. League ID: ${LEAGUE_ID}</div>`;
@@ -418,4 +452,17 @@ async function boot(){
   });
 })();
 
-boot();
+boot();function initChampionConfetti(){
+  const box=document.querySelector('#page-champ .confetti');
+  if(!box || box.children.length) return;
+  const colors=['#0b8ee8','#f20d19','#f6f8fb','#d8b44c'];
+  for(let i=0;i<54;i++){
+    const bit=document.createElement('i');
+    bit.style.left=`${Math.random()*100}%`; bit.style.background=colors[i%colors.length];
+    bit.style.setProperty('--dur',`${4.8+Math.random()*4.5}s`); bit.style.setProperty('--delay',`${-Math.random()*8}s`);
+    bit.style.setProperty('--drift',`${-80+Math.random()*160}px`); bit.style.setProperty('--rot',`${Math.random()*360}deg`);
+    box.appendChild(bit);
+  }
+}
+
+
