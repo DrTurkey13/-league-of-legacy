@@ -52,11 +52,35 @@
             <div class="eyebrow">2026 SEASON</div>
             <h1 id="hero-title">League of Legacy</h1>
             <p>Standings, trades, waiver carnage, rules nobody can pretend they didn't read, and the line of degenerates waiting for a team.</p>
-            <div class="hero-actions">
-              <button class="primary" data-route="rankings">View Rankings</button>
-              <button class="secondary" data-route="rules">Read the Rules</button>
-              <button class="secondary" data-route="alltime">All-Time</button>
-              <button class="secondary" data-route="champ">2025 Champion</button>
+            <div class="hero-actions hero-action-grid">
+              <button class="hero-action-tile hero-action-blue" data-route="rankings">
+                <span class="hero-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M4 20V10h4v10H4Zm6 0V4h4v16h-4Zm6 0v-7h4v7h-4Z"/></svg>
+                </span>
+                <span class="hero-action-copy"><strong>View Rankings</strong><small>Standings, matchups, more</small></span>
+                <span class="hero-action-arrow" aria-hidden="true">›</span>
+              </button>
+              <button class="hero-action-tile hero-action-white" data-route="alltime">
+                <span class="hero-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M4 20V12h4v8H4Zm6 0V8h4v12h-4Zm6 0V3h4v17h-4Z"/></svg>
+                </span>
+                <span class="hero-action-copy"><strong>All-Time</strong><small>League history &amp; records</small></span>
+                <span class="hero-action-arrow" aria-hidden="true">›</span>
+              </button>
+              <button class="hero-action-tile hero-action-white" data-route="rules">
+                <span class="hero-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M4 5.5c2.7-.8 5.3-.3 8 1.3v12c-2.7-1.6-5.3-2.1-8-1.3v-12Zm16 0c-2.7-.8-5.3-.3-8 1.3v12c2.7-1.6 5.3-2.1 8-1.3v-12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="hero-action-copy"><strong>Read the Rules</strong><small>Know before you complain</small></span>
+                <span class="hero-action-arrow" aria-hidden="true">›</span>
+              </button>
+              <button class="hero-action-tile hero-action-blue" data-route="champ">
+                <span class="hero-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M8 4h8v3.5c0 3.1-1.7 5.5-4 6.3-2.3-.8-4-3.2-4-6.3V4Zm0 1H4v2.2c0 2.5 1.7 4.6 4.2 5.1M16 5h4v2.2c0 2.5-1.7 4.6-4.2 5.1M12 14v3m-4 3h8m-6-3h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="hero-action-copy"><strong>2025 Champion</strong><small>Last year's legend</small></span>
+                <span class="hero-action-arrow" aria-hidden="true">›</span>
+              </button>
             </div>
           </div>
           <div class="hero-identity"><img src="league-of-legacy-logo.png" alt="League of Legacy" class="hero-logo"></div>
