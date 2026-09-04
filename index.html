@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b0f14" />
+  <meta name="theme-color" content="#0b0f14" id="theme-color-meta" />
+  <script>
+    (function(){
+      try {
+        const saved = localStorage.getItem("lol-theme");
+        const theme = saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.dataset.theme = theme;
+      } catch(e) {}
+    })();
+  </script>
   <title>League of Legacy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,15 +29,18 @@
           <div class="brand-sub">Powered by Sleeper</div>
         </div>
       </button>
-      <button id="menu-button" class="menu-button" aria-label="Open menu">☰</button>
-      <nav id="nav" class="nav">
-        <button data-route="home" class="active">Home</button>
-        <button data-route="rankings">Rankings</button>
-        <button data-route="trades">Trades</button>
-        <button data-route="waivers">Waivers</button>
-        <button data-route="rules">Rules</button>
-        <button data-route="waitlist">Waitlist</button>
-      </nav>
+      <div class="topbar-actions">
+        <nav id="nav" class="nav">
+          <button data-route="home" class="active">Home</button>
+          <button data-route="rankings">Rankings</button>
+          <button data-route="trades">Trades</button>
+          <button data-route="waivers">Waivers</button>
+          <button data-route="rules">Rules</button>
+          <button data-route="waitlist">Waitlist</button>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Switch to light mode" title="Switch theme"><span class="theme-icon" aria-hidden="true">☀︎</span></button>
+        <button id="menu-button" class="menu-button" aria-label="Open menu">☰</button>
+      </div>
     </header>
 
     <main>

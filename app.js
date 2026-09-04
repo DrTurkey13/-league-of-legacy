@@ -205,4 +205,30 @@ async function boot(){
     $('#home-rankings').innerHTML=msg; $('#home-activity').innerHTML=msg; $('#rankings-table').innerHTML=msg; $('#trades-feed').innerHTML=msg; $('#waivers-feed').innerHTML=msg;
   }
 }
+// Theme toggle
+(function initThemeToggle(){
+  const root=document.documentElement;
+  const btn=document.getElementById('theme-toggle');
+  const meta=document.getElementById('theme-color-meta');
+  if(!btn) return;
+
+  function applyTheme(theme, persist=false){
+    root.dataset.theme=theme;
+    const isLight=theme==='light';
+    btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    btn.setAttribute('title', isLight ? 'Dark mode' : 'Light mode');
+    const icon=btn.querySelector('.theme-icon');
+    if(icon) icon.textContent=isLight ? '☾' : '☀︎';
+    if(meta) meta.setAttribute('content', isLight ? '#f5f7fa' : '#0b0f14');
+    if(persist){
+      try{ localStorage.setItem('lol-theme',theme); }catch(e){}
+    }
+  }
+
+  applyTheme(root.dataset.theme || 'dark');
+  btn.addEventListener('click',()=>{
+    applyTheme(root.dataset.theme==='light' ? 'dark' : 'light', true);
+  });
+})();
+
 boot();
