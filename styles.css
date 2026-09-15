@@ -1358,3 +1358,97 @@ body::before{
   opacity:1!important;
   text-shadow:none!important;
 }
+
+/* === V14 — COMPLETE TEXT READABILITY PASS ===
+   V13 missed actual app classes such as .legacy-sub because those are divs,
+   not paragraphs. Cover the real secondary-copy selectors across the site.
+   No background, glass, layout, or division-accent changes in this patch.
+*/
+.legacy-sub,
+.leaderboard-note,
+.team-sub,
+.news-item p,
+.featured-assets,
+.featured-meta,
+.loading,
+.hero-action-copy small,
+.small,
+.muted,
+.rule-section p,
+.tx-card p,
+.waitlist-card p,
+.page-heading p,
+.hero-copy p {
+  font-size:clamp(1.02rem, 2.9vw, 1.16rem)!important;
+  line-height:1.5!important;
+}
+
+/* Supporting labels/ranking copy: readable, but still subordinate. */
+.legacy-label,
+.stat-label,
+.division-rank-row,
+.eyebrow,
+.kicker {
+  font-size:clamp(.88rem, 2.35vw, 1rem)!important;
+  line-height:1.4!important;
+}
+
+:root[data-theme="dark"] .legacy-sub,
+:root[data-theme="dark"] .leaderboard-note,
+:root[data-theme="dark"] .team-sub,
+:root[data-theme="dark"] .news-item p,
+:root[data-theme="dark"] .featured-assets,
+:root[data-theme="dark"] .featured-meta,
+:root[data-theme="dark"] .loading,
+:root[data-theme="dark"] .hero-action-copy small,
+:root[data-theme="dark"] .small,
+:root[data-theme="dark"] .muted,
+:root[data-theme="dark"] .rule-section p,
+:root[data-theme="dark"] .tx-card p,
+:root[data-theme="dark"] .waitlist-card p,
+:root[data-theme="dark"] .page-heading p,
+:root[data-theme="dark"] .hero-copy p,
+:root[data-theme="dark"] .division-rank-row {
+  color:rgba(244,249,255,.90)!important;
+  opacity:1!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.72)!important;
+}
+
+:root[data-theme="dark"] .legacy-label,
+:root[data-theme="dark"] .stat-label,
+:root[data-theme="dark"] .eyebrow,
+:root[data-theme="dark"] .kicker {
+  color:rgba(225,240,252,.92)!important;
+  opacity:1!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.72)!important;
+}
+
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .leaderboard-note,
+:root[data-theme="light"] .team-sub,
+:root[data-theme="light"] .news-item p,
+:root[data-theme="light"] .featured-assets,
+:root[data-theme="light"] .featured-meta,
+:root[data-theme="light"] .loading,
+:root[data-theme="light"] .hero-action-copy small,
+:root[data-theme="light"] .small,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .rule-section p,
+:root[data-theme="light"] .tx-card p,
+:root[data-theme="light"] .waitlist-card p,
+:root[data-theme="light"] .page-heading p,
+:root[data-theme="light"] .hero-copy p,
+:root[data-theme="light"] .division-rank-row {
+  color:rgba(7,27,45,.82)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+:root[data-theme="light"] .legacy-label,
+:root[data-theme="light"] .stat-label,
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker {
+  color:rgba(15,53,82,.88)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
