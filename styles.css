@@ -1267,3 +1267,94 @@ body::before{
   display:none!important;
   opacity:0!important;
 }
+
+/* === V13 — TYPOGRAPHY READABILITY ONLY ===
+   Preserve V12 backgrounds, glass, layout, logo, sizing, and division behavior.
+   Increase secondary/body text size in both themes; brighten dark-mode copy.
+*/
+
+/* Common secondary/body copy: same size in light + dark. */
+.hero-action-sub,
+.stat-label,
+.eyebrow,
+.kicker,
+.panel p,
+.legacy-card p,
+.rule-section p,
+.tx-card p,
+.waitlist-card p,
+.alltime-table td,
+.alltime-summary-card .label,
+.spotlight-card p,
+.spotlight-card .sub,
+.spotlight-card .meta,
+.spotlight-card .label,
+.spotlight-card .eyebrow,
+.payout-grid .label,
+.draft-strip span,
+.muted,
+.subtle {
+  font-size:clamp(1rem, 2.7vw, 1.12rem)!important;
+  line-height:1.48!important;
+}
+
+/* Small uppercase labels get a controlled bump without changing hierarchy. */
+.eyebrow,
+.kicker,
+.spotlight-card .eyebrow,
+.spotlight-card .label {
+  font-size:clamp(.82rem, 2.25vw, .94rem)!important;
+  line-height:1.35!important;
+}
+
+/* DARK: remove the muddy gray-on-stadium problem. */
+:root[data-theme="dark"] .hero-action-sub,
+:root[data-theme="dark"] .stat-label,
+:root[data-theme="dark"] .eyebrow,
+:root[data-theme="dark"] .kicker,
+:root[data-theme="dark"] .panel p,
+:root[data-theme="dark"] .legacy-card p,
+:root[data-theme="dark"] .rule-section p,
+:root[data-theme="dark"] .tx-card p,
+:root[data-theme="dark"] .waitlist-card p,
+:root[data-theme="dark"] .alltime-table td,
+:root[data-theme="dark"] .alltime-summary-card .label,
+:root[data-theme="dark"] .spotlight-card p,
+:root[data-theme="dark"] .spotlight-card .sub,
+:root[data-theme="dark"] .spotlight-card .meta,
+:root[data-theme="dark"] .spotlight-card .label,
+:root[data-theme="dark"] .spotlight-card .eyebrow,
+:root[data-theme="dark"] .payout-grid .label,
+:root[data-theme="dark"] .draft-strip span,
+:root[data-theme="dark"] .muted,
+:root[data-theme="dark"] .subtle {
+  color:rgba(255,255,255,.86)!important;
+  opacity:1!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.45)!important;
+}
+
+/* LIGHT: same sizing, solid dark secondary copy. */
+:root[data-theme="light"] .hero-action-sub,
+:root[data-theme="light"] .stat-label,
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker,
+:root[data-theme="light"] .panel p,
+:root[data-theme="light"] .legacy-card p,
+:root[data-theme="light"] .rule-section p,
+:root[data-theme="light"] .tx-card p,
+:root[data-theme="light"] .waitlist-card p,
+:root[data-theme="light"] .alltime-table td,
+:root[data-theme="light"] .alltime-summary-card .label,
+:root[data-theme="light"] .spotlight-card p,
+:root[data-theme="light"] .spotlight-card .sub,
+:root[data-theme="light"] .spotlight-card .meta,
+:root[data-theme="light"] .spotlight-card .label,
+:root[data-theme="light"] .spotlight-card .eyebrow,
+:root[data-theme="light"] .payout-grid .label,
+:root[data-theme="light"] .draft-strip span,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .subtle {
+  color:rgba(4,20,38,.82)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
