@@ -363,3 +363,21 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
   .hero-identity:after{width:92vw!important;height:52vw!important;max-height:290px!important}
   :root[data-theme="light"] .hero:before,:root[data-theme="light"] .hero:after{opacity:.20!important}
 }
+
+
+/* V4: real stadium artwork layer. Keep application markup/data intact. */
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(3,10,17,.42),rgba(3,10,17,.70)),url('stadium-blue.png');
+  background-size:cover;background-position:center 8%;background-repeat:no-repeat;
+  opacity:.62;mix-blend-mode:screen;
+}
+.hero > *{position:relative;z-index:2}
+.hero:after{z-index:1}
+:root[data-theme="light"] .hero::before{opacity:.22;mix-blend-mode:multiply;filter:saturate(.65) contrast(.9)}
+:root[data-theme="dark"] .hero::before{opacity:.72;mix-blend-mode:screen;filter:saturate(1.15) contrast(1.08)}
+@media(max-width:800px){
+ .hero::before{background-position:center top;opacity:.58}
+ :root[data-theme="light"] .hero::before{opacity:.18}
+ :root[data-theme="dark"] .hero::before{opacity:.70}
+}
