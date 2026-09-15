@@ -531,3 +531,38 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
 }
 .hero-copy h1{margin-bottom:22px!important}
 .hero-actions.hero-action-grid{margin-top:22px!important}
+
+
+/* === V10: TRANSPARENT 2x2 HOME ACTION TILES ===
+   Let the stadium/field show through every tile in both themes.
+   Preserve each tile's existing accent border and text treatment. */
+.hero-actions .action-card,
+.hero-actions .hero-action,
+.hero-action-grid .action-card,
+.hero-action-grid .hero-action,
+.hero-action-grid > a,
+.hero-action-grid > button {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Explicitly defeat theme-specific solid fills on the four tiles. */
+:root[data-theme="light"] .hero-action-grid > *,
+:root[data-theme="dark"] .hero-action-grid > * {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Keep the champion red as an outline/glow only — no red fill. */
+.hero-action-grid .champion,
+.hero-action-grid [class*="champ"],
+.hero-action-grid [data-action="champion"],
+.hero-action-grid [href*="champ"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
