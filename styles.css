@@ -381,3 +381,32 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
  :root[data-theme="light"] .hero::before{opacity:.18}
  :root[data-theme="dark"] .hero::before{opacity:.70}
 }
+
+/* === V5 VERIFIED STADIUM HERO ===
+   Intentionally CSS-rendered: stadium-blue.png is a reference screenshot, not a web background asset. */
+.hero{position:relative!important;isolation:isolate!important;overflow:hidden!important;background:linear-gradient(180deg,rgba(2,10,20,.96),rgba(1,7,14,.98))!important;border-color:rgba(var(--division-accent-rgb),.34)!important;box-shadow:0 0 34px rgba(var(--division-accent-rgb),.16),inset 0 0 70px rgba(var(--division-accent-rgb),.06)!important}
+/* stadium bowl / crowd bands */
+.hero>.hero-identity{position:relative!important;z-index:3!important}
+.hero>.hero-identity::before{content:""!important;display:block!important;position:absolute!important;left:50%!important;top:50%!important;width:min(760px,150vw)!important;height:min(360px,70vw)!important;transform:translate(-50%,-46%)!important;z-index:-2!important;border-radius:50%!important;background:radial-gradient(ellipse at center,rgba(var(--division-accent-rgb),.28) 0 18%,rgba(var(--division-accent-rgb),.10) 35%,transparent 64%),repeating-radial-gradient(ellipse at center,rgba(220,238,255,.11) 0 1px,transparent 2px 9px)!important;filter:drop-shadow(0 0 30px rgba(var(--division-accent-rgb),.35))!important;opacity:.95!important}
+/* bright field haze behind crest */
+.hero>.hero-identity::after{content:""!important;display:block!important;position:absolute!important;left:50%!important;top:56%!important;width:min(620px,120vw)!important;height:min(250px,48vw)!important;transform:translate(-50%,-50%)!important;z-index:-1!important;border-radius:50%!important;background:radial-gradient(ellipse,#fff 0 1%,rgba(var(--division-accent-rgb),.36) 12%,rgba(var(--division-accent-rgb),.16) 38%,transparent 70%)!important;filter:blur(12px)!important;opacity:.72!important}
+/* opposing floodlight beams */
+.hero::before,.hero::after{content:""!important;display:block!important;position:absolute!important;top:-18%!important;width:64%!important;height:72%!important;z-index:1!important;pointer-events:none!important;opacity:.82!important;filter:blur(8px)!important;border:0!important;box-shadow:none!important}
+.hero::before{left:-30%!important;transform:rotate(16deg)!important;background:linear-gradient(112deg,rgba(255,255,255,.82) 0 3%,rgba(var(--division-accent-rgb),.68) 9%,rgba(var(--division-accent-rgb),.23) 28%,rgba(var(--division-accent-rgb),.05) 50%,transparent 72%)!important;clip-path:polygon(0 0,30% 0,100% 100%,48% 100%)!important}
+.hero::after{right:-30%!important;transform:rotate(-16deg)!important;background:linear-gradient(248deg,rgba(255,255,255,.82) 0 3%,rgba(var(--division-accent-rgb),.68) 9%,rgba(var(--division-accent-rgb),.23) 28%,rgba(var(--division-accent-rgb),.05) 50%,transparent 72%)!important;clip-path:polygon(70% 0,100% 0,52% 100%,0 100%)!important}
+.hero-copy,.hero-card{position:relative!important;z-index:4!important}
+.hero-logo{position:relative!important;z-index:5!important;filter:drop-shadow(0 0 9px rgba(255,255,255,.22)) drop-shadow(0 0 22px rgba(var(--division-accent-rgb),.58))!important}
+/* retain light mode but keep a recognizable stadium atmosphere */
+:root[data-theme="light"] .hero{background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(239,246,252,.96))!important}
+:root[data-theme="light"] .hero::before,:root[data-theme="light"] .hero::after{opacity:.30!important}
+:root[data-theme="light"] .hero>.hero-identity::before{opacity:.30!important}
+:root[data-theme="light"] .hero>.hero-identity::after{opacity:.40!important}
+@media(max-width:800px){
+ .hero{padding:28px 20px 30px!important}
+ .hero>.hero-identity{min-height:255px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+ .hero-logo{width:min(290px,76vw)!important;max-height:245px!important}
+ .hero::before,.hero::after{top:-7%!important;width:92%!important;height:47%!important;opacity:.82!important;filter:blur(7px)!important}
+ .hero::before{left:-54%!important}.hero::after{right:-54%!important}
+ .hero>.hero-identity::before{width:150vw!important;height:58vw!important;top:52%!important}
+ .hero>.hero-identity::after{width:105vw!important;height:46vw!important;top:54%!important}
+}
