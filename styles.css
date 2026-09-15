@@ -1551,3 +1551,148 @@ body::before{
   line-height:1.45!important;
   opacity:1!important;
 }
+
+/* === V17 — TRUE LIGHT MODE + FINAL DARK LEADERBOARD MICROCOPY ===
+   Light mode keeps the exact same division stadium asset/position as dark mode,
+   but brightens it with a clean white wash (no extra frosting/blur).
+   Dark mode otherwise remains untouched.
+*/
+
+/* Final two dark-mode holdouts */
+:root[data-theme="dark"] .suck-person .team-sub,
+:root[data-theme="dark"] .suck-count span {
+  color:rgba(255,255,255,.98)!important;
+  opacity:1!important;
+  font-weight:600!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.95)!important;
+}
+
+/* Same stadium, same crop, same division color — simply make the environment light. */
+:root[data-theme="light"] body {
+  background:#edf4f9!important;
+  color:#061522!important;
+}
+:root[data-theme="light"] body::before {
+  opacity:1!important;
+  filter:brightness(1.28) saturate(.76) contrast(.78)!important;
+}
+:root[data-theme="light"] body::after {
+  background:
+    linear-gradient(180deg,
+      rgba(246,250,253,.48) 0%,
+      rgba(242,248,252,.54) 42%,
+      rgba(238,246,251,.62) 100%)!important;
+}
+
+/* Clear light glass: no fuzzy frosting. */
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .payout-grid > div,
+:root[data-theme="light"] .draft-strip span,
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  background:rgba(255,255,255,.16)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-color:rgba(20,50,74,.34)!important;
+  box-shadow:0 7px 20px rgba(20,45,67,.06),inset 0 0 0 1px rgba(255,255,255,.16)!important;
+}
+:root[data-theme="light"] .hero-action-blue {
+  border-color:var(--division-accent)!important;
+  box-shadow:0 0 14px rgba(var(--division-accent-rgb),.24)!important;
+}
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  border-color:#e51e31!important;
+  box-shadow:0 0 14px rgba(229,30,49,.18)!important;
+}
+
+/* Light mode typography: force a consistent ink color over the photography. */
+:root[data-theme="light"] .page,
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .hero-action-tile {
+  color:#061522!important;
+}
+:root[data-theme="light"] h1,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] .legacy-name,
+:root[data-theme="light"] .team-name,
+:root[data-theme="light"] .record,
+:root[data-theme="light"] .featured-team,
+:root[data-theme="light"] .suck-person strong,
+:root[data-theme="light"] .suck-count strong,
+:root[data-theme="light"] .activity-mini strong,
+:root[data-theme="light"] .news-item strong,
+:root[data-theme="light"] .hero-action-copy strong,
+:root[data-theme="light"] .hero-action-copy b,
+:root[data-theme="light"] .stat-card strong {
+  color:#061522!important;
+  opacity:1!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.60)!important;
+}
+:root[data-theme="light"] .small,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .leaderboard-note,
+:root[data-theme="light"] .team-sub,
+:root[data-theme="light"] .activity-mini span,
+:root[data-theme="light"] .activity-mini time,
+:root[data-theme="light"] .tx-date,
+:root[data-theme="light"] .featured-assets,
+:root[data-theme="light"] .featured-meta,
+:root[data-theme="light"] .news-item p,
+:root[data-theme="light"] .rule-section p,
+:root[data-theme="light"] .hero-action-copy small,
+:root[data-theme="light"] .division-rank-row,
+:root[data-theme="light"] footer {
+  color:#18364e!important;
+  opacity:1!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.58)!important;
+}
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker,
+:root[data-theme="light"] .legacy-label,
+:root[data-theme="light"] .stat-label {
+  color:#123650!important;
+  opacity:1!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.70)!important;
+}
+
+/* Keep the hero title white because it lives directly on the stadium artwork. */
+:root[data-theme="light"] .hero-copy h1,
+:root[data-theme="light"] #hero-title,
+:root[data-theme="light"] .hero-copy .eyebrow {
+  color:#fff!important;
+  text-shadow:0 2px 5px rgba(0,0,0,.70)!important;
+}
+
+/* The top navigation is intentionally a true light surface. */
+:root[data-theme="light"] .topbar {
+  background:rgba(247,250,253,.94)!important;
+  color:#061522!important;
+  border-bottom-color:rgba(20,50,74,.18)!important;
+}
+
+@media(max-width:800px){
+  :root[data-theme="light"] body::before{
+    background-size:auto 100vh!important;
+    background-position:center top!important;
+  }
+}
