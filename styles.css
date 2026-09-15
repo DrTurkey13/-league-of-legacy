@@ -482,7 +482,7 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
 /* === V8 EXACT GENERATED STADIUM BACKGROUND ===
    Uses the approved stadium artwork directly. No fake CSS stadium, no blur. */
 .hero{
-  background-image:linear-gradient(180deg,rgba(1,7,15,.04) 0%,rgba(1,7,15,.10) 42%,rgba(1,7,15,.68) 100%),url('stadium-hero.png')!important;
+  background-image:linear-gradient(180deg,rgba(1,7,15,.04) 0%,rgba(1,7,15,.10) 42%,rgba(1,7,15,.68) 100%),url('stadium-blue.png')!important;
   background-position:center top!important;
   background-size:cover!important;
   background-repeat:no-repeat!important;
@@ -491,7 +491,7 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
 .hero>.hero-identity::before,.hero>.hero-identity::after{display:none!important;content:none!important}
 :root[data-theme="dark"] .hero-identity,:root[data-theme="light"] .hero-identity{background-image:none!important}
 :root[data-theme="light"] .hero{
-  background-image:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.24) 47%,rgba(244,248,252,.78) 100%),url('stadium-hero.png')!important;
+  background-image:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.24) 47%,rgba(244,248,252,.78) 100%),url('stadium-blue.png')!important;
   background-blend-mode:normal!important;
 }
 @media(max-width:800px){
@@ -623,3 +623,57 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
 :root[data-theme="light"] .hero-action-grid [data-action="champion"] {
   color: #fff !important;
 }
+
+
+/* === V12: CHAMPION TILE = TRANSPARENT IN BOTH THEMES ===
+   Keep the red identity as border/glow ONLY.
+   Stadium/field must remain visible through the Champion tile. */
+
+.hero-action-grid .champion,
+.hero-action-grid [class*="champ"],
+.hero-action-grid [data-action="champion"],
+.hero-action-grid [href*="champ"],
+.hero-actions .champion,
+.hero-actions [class*="champ"],
+.hero-actions [data-action="champion"],
+.hero-actions [href*="champ"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Theme rules must not reintroduce a Champion fill. */
+:root[data-theme="light"] .hero-action-grid .champion,
+:root[data-theme="light"] .hero-action-grid [class*="champ"],
+:root[data-theme="light"] .hero-action-grid [data-action="champion"],
+:root[data-theme="light"] .hero-action-grid [href*="champ"],
+:root[data-theme="dark"] .hero-action-grid .champion,
+:root[data-theme="dark"] .hero-action-grid [class*="champ"],
+:root[data-theme="dark"] .hero-action-grid [data-action="champion"],
+:root[data-theme="dark"] .hero-action-grid [href*="champ"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Champion keeps its red outline/glow and readable white copy. */
+.hero-action-grid .champion,
+.hero-action-grid [class*="champ"],
+.hero-action-grid [data-action="champion"],
+.hero-action-grid [href*="champ"] {
+  border-color: #ff2638 !important;
+  color: #fff !important;
+  box-shadow:
+    0 0 0 1px rgba(255,38,56,.25),
+    0 0 18px rgba(255,38,56,.22) !important;
+}
+
+
+/* === V13 BACKGROUND CLEANUP ===
+   Only three Power Division stadium assets are used:
+   stadium-blue.png, stadium-red.png, stadium-white.png.
+   Blue is the safe default; division logic may switch to red or white.
+   Light/dark theme changes typography/UI treatment, not the selected division asset.
+*/
