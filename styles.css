@@ -677,3 +677,159 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
    Blue is the safe default; division logic may switch to red or white.
    Light/dark theme changes typography/UI treatment, not the selected division asset.
 */
+
+/* =========================================================
+   V5 — FULL-SITE STADIUM ENVIRONMENT
+   Stadium follows every route/page. Cards are glass, not boxes.
+   Power Division swaps blue / white / red stadium automatically.
+   ========================================================= */
+html{background:#020914;}
+body{
+  position:relative;
+  isolation:isolate;
+  background:#020914!important;
+  min-height:100vh;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  pointer-events:none;
+  background-image:
+    linear-gradient(180deg,rgba(1,8,18,.18) 0%,rgba(1,8,18,.30) 42%,rgba(1,7,15,.58) 100%),
+    url('stadium-blue.png');
+  background-size:cover;
+  background-position:center top;
+  background-repeat:no-repeat;
+  opacity:1;
+  transform:translateZ(0);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 5%,rgba(var(--division-accent-rgb),.10),transparent 38%),
+    linear-gradient(180deg,transparent 0%,rgba(1,7,15,.12) 58%,rgba(1,7,15,.42) 100%);
+}
+:root[data-power-division="red"] body::before{background-image:linear-gradient(180deg,rgba(15,2,6,.12),rgba(8,2,7,.34) 48%,rgba(7,1,5,.60)),url('stadium-red.png');}
+:root[data-power-division="white"] body::before{background-image:linear-gradient(180deg,rgba(4,9,14,.10),rgba(4,9,14,.28) 48%,rgba(3,8,14,.54)),url('stadium-white.png');}
+:root[data-power-division="blue"] body::before{background-image:linear-gradient(180deg,rgba(1,8,18,.14),rgba(1,8,18,.30) 48%,rgba(1,7,15,.58)),url('stadium-blue.png');}
+
+.app-shell,main,.page{background:transparent!important;}
+main{position:relative;z-index:1;}
+
+/* Hero now shares the SAME stadium as the rest of the site. */
+.hero{
+  background:linear-gradient(180deg,rgba(2,12,24,.06),rgba(2,10,20,.18))!important;
+  border:1px solid rgba(var(--division-accent-rgb),.30)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.hero::before{content:none!important;display:none!important;}
+.hero::after{content:none!important;display:none!important;}
+.hero-identity::after{opacity:.58!important;}
+
+/* Glass everywhere below the hero. */
+.stat-card,.panel,.legacy-card,.rule-section,.tx-card,.waitlist-card,.rules-toc,
+.alltime-summary-card,.alltime-table,.trade-side,.payout-grid>div,.draft-strip span{
+  background:linear-gradient(145deg,rgba(3,17,31,.62),rgba(2,10,20,.76))!important;
+  border-color:rgba(170,211,243,.24)!important;
+  box-shadow:inset 0 0 28px rgba(var(--division-accent-rgb),.035),0 12px 32px rgba(0,0,0,.18)!important;
+  backdrop-filter:blur(8px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(8px) saturate(115%)!important;
+}
+
+/* Home 2x2: field visible through every tile. */
+.hero-action-tile,
+.hero-action-blue,
+.hero-action-white,
+.hero-action-tile[data-route="champ"]{
+  background:linear-gradient(145deg,rgba(3,17,31,.28),rgba(2,10,20,.46))!important;
+  backdrop-filter:blur(3px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(3px) saturate(115%)!important;
+  color:#f7fbff!important;
+}
+.hero-action-blue{border-color:var(--division-accent)!important;box-shadow:0 0 18px rgba(var(--division-accent-rgb),.42),inset 0 0 24px rgba(var(--division-accent-rgb),.08)!important;}
+.hero-action-white{border-color:rgba(238,248,255,.92)!important;box-shadow:0 0 12px rgba(220,240,255,.14),inset 0 0 20px rgba(255,255,255,.025)!important;}
+.hero-action-tile[data-route="champ"]{
+  border-color:#ff2638!important;
+  box-shadow:0 0 19px rgba(255,38,56,.46),inset 0 0 24px rgba(255,38,56,.055)!important;
+}
+.hero-action-copy small,.hero-action-tile[data-route="champ"] .hero-action-copy small{color:#b9c9d8!important;}
+
+/* Champion PAGE: same stadium, red is an accent only. */
+.champ-page{
+  background:linear-gradient(145deg,rgba(18,5,10,.36),rgba(2,10,20,.66))!important;
+  border:2px solid #ff2638!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+}
+
+/* Dark mode copy stays high-contrast over photography. */
+:root[data-theme="dark"] .page-heading h1,
+:root[data-theme="dark"] .hero-copy h1,
+:root[data-theme="dark"] .section-head h2,
+:root[data-theme="dark"] .panel-head h2,
+:root[data-theme="dark"] .legacy-name{color:#fff!important;text-shadow:0 2px 2px rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.22)!important;}
+
+/* Light mode = lighter glass, but stadium remains continuous. */
+:root[data-theme="light"] body{background:#eaf1f7!important;color:#071522!important;}
+:root[data-theme="light"] body::before{
+  opacity:.58;
+  filter:saturate(.78) brightness(1.22) contrast(.84);
+}
+:root[data-theme="light"] body::after{
+  background:linear-gradient(180deg,rgba(242,248,253,.22),rgba(238,245,250,.44) 55%,rgba(235,242,248,.62));
+}
+:root[data-theme="light"] .hero{background:rgba(245,250,253,.10)!important;}
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table{
+  background:linear-gradient(145deg,rgba(255,255,255,.74),rgba(240,247,252,.64))!important;
+  color:#071522!important;
+  border-color:rgba(43,75,101,.20)!important;
+  backdrop-filter:blur(10px) saturate(90%)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(90%)!important;
+}
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"]{
+  background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(240,247,252,.24))!important;
+  color:#071522!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.55)!important;
+}
+:root[data-theme="light"] .hero-action-tile[data-route="champ"]{border-color:#e51e31!important;box-shadow:0 0 15px rgba(229,30,49,.24),inset 0 0 20px rgba(255,255,255,.10)!important;}
+:root[data-theme="light"] .hero-action-copy small,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-copy small{color:#40576b!important;}
+:root[data-theme="light"] .hero-copy h1,
+:root[data-theme="light"] .page-heading h1,
+:root[data-theme="light"] .section-head h2,
+:root[data-theme="light"] .panel-head h2,
+:root[data-theme="light"] .legacy-name{color:#071522!important;text-shadow:0 1px 1px rgba(255,255,255,.7)!important;}
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker,
+:root[data-theme="light"] .legacy-label{color:#183b58!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important;}
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .leaderboard-note,
+:root[data-theme="light"] .loading,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .small,
+:root[data-theme="light"] .news-item p,
+:root[data-theme="light"] .team-sub{color:#40576b!important;}
+
+@media(max-width:800px){
+  body::before{background-size:auto 100vh;background-position:center top;}
+  .hero{border-radius:24px!important;}
+  .stat-card,.panel,.legacy-card,.rule-section,.tx-card{backdrop-filter:blur(6px) saturate(110%)!important;-webkit-backdrop-filter:blur(6px) saturate(110%)!important;}
+}
