@@ -89,33 +89,34 @@ async function loadWeeklyAwards(){
 
     $('#power-division-label').textContent='STRONGEST DIVISION';
 
-    // Power Division uses every completed week of the season.
-    const completedWeeks=[...Array(week)].map((_,i)=>i+1);
-    const seasonMatchups=await Promise.all(
+    // Season-long Power Division: average points per team across every completed week.
+    const completedWeeks=Array.from({length:week},(_,i)=>i+1);
+    const allCompletedMatchups=await Promise.all(
       completedWeeks.map(w=>getJSON(`${API}/league/${LEAGUE_ID}/matchups/${w}`).catch(()=>[]))
     );
-    const seasonPointsByRoster=new Map();
-    for(const weekly of seasonMatchups){
-      for(const m of weekly){
-        const rid=Number(m.roster_id);
-        if(!Number.isFinite(rid)) continue;
-        if(!seasonPointsByRoster.has(rid)) seasonPointsByRoster.set(rid,[]);
-        seasonPointsByRoster.get(rid).push(Number(m.points||0));
+
+    const grouped=new Map();
+    for(const weeklyMatchups of allCompletedMatchups){
+      for(const m of weeklyMatchups){
+        const roster=state.rosters.find(r=>Number(r.roster_id)===Number(m.roster_id));
+        const id=rosterDivision(roster);
+        const points=Number(m.points);
+        if(id==null || !Number.isFinite(points)) continue;
+        if(!grouped.has(id)) grouped.set(id,[]);
+        grouped.get(id).push(points);
       }
     }
 
-    const grouped=new Map();
-    for(const roster of state.rosters){
-      const id=rosterDivision(roster);
-      const scores=seasonPointsByRoster.get(Number(roster.roster_id))||[];
-      if(id==null || !scores.length) continue;
-      if(!grouped.has(id)) grouped.set(id,[]);
-      grouped.get(id).push(...scores);
-    }
     const divisions=[...grouped.entries()].map(([id,scores])=>({
-      id, name:divisionName(id), avg:scores.reduce((a,b)=>a+b,0)/scores.length,
-      total:scores.reduce((a,b)=>a+b,0), scores:scores.length
+      id,
+      name:divisionName(id),
+      avg:scores.reduce((sum,p)=>sum+p,0)/scores.length
     })).sort((a,b)=>b.avg-a.avg);
+
+    const divisionCard=$('#power-division')?.closest('.division-card');
+    if(divisionCard){
+      divisionCard.classList.remove('power-blue','power-white','power-red');
+    }
 
     if(divisions.length>1){
       const champ=divisions[0];
@@ -123,11 +124,11 @@ async function loadWeeklyAwards(){
       $('#power-division-sub').textContent='Best average score per team this season.';
       $('#division-rankings').innerHTML=divisions.map((d,i)=>`<div class="division-rank-row"><span>${i+1}. ${esc(d.name)}</span><strong>${d.avg.toFixed(2)}</strong></div>`).join('');
 
-      const card=$('#power-division')?.closest('.award-card');
-      if(card){
-        card.classList.remove('power-blue','power-white','power-red');
-        const n=String(champ.name||'').toLowerCase();
-        card.classList.add(n.includes('red')?'power-red':n.includes('white')?'power-white':'power-blue');
+      if(divisionCard){
+        const winner=String(champ.name||'').toLowerCase();
+        if(winner.includes('red')) divisionCard.classList.add('power-red');
+        else if(winner.includes('white')) divisionCard.classList.add('power-white');
+        else divisionCard.classList.add('power-blue');
       }
     }else{
       $('#power-division').textContent='No divisions found';
