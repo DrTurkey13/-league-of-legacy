@@ -1218,3 +1218,52 @@ body::before{
   -webkit-backdrop-filter:none!important;
   box-shadow:none!important;
 }
+
+/* === V12 — TARGET THE ACTUAL TOP HOME CELL ===
+   The large rounded #page-home .hero must be glass/clear.
+   Keep its border/radius/layout; remove every private background layer.
+*/
+#page-home .hero,
+:root[data-theme="light"] #page-home .hero,
+:root[data-theme="dark"] #page-home .hero {
+  background:none!important;
+  background-color:rgba(255,255,255,.015)!important;
+  background-image:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+  isolation:auto!important;
+}
+
+/* Kill every old stadium/tint/lighting pseudo-layer attached to this cell. */
+#page-home .hero::before,
+#page-home .hero::after,
+:root[data-theme="light"] #page-home .hero::before,
+:root[data-theme="light"] #page-home .hero::after,
+:root[data-theme="dark"] #page-home .hero::before,
+:root[data-theme="dark"] #page-home .hero::after {
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  background-image:none!important;
+  opacity:0!important;
+  filter:none!important;
+}
+
+/* Also remove the old crest-area generated backdrop. */
+#page-home .hero > .hero-identity,
+#page-home .hero > .hero-identity::before,
+#page-home .hero > .hero-identity::after {
+  background:none!important;
+  background-image:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  filter:none!important;
+}
+#page-home .hero > .hero-identity::before,
+#page-home .hero > .hero-identity::after {
+  content:none!important;
+  display:none!important;
+  opacity:0!important;
+}
