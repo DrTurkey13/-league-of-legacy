@@ -834,15 +834,9 @@ main{position:relative;z-index:1;}
   .stat-card,.panel,.legacy-card,.rule-section,.tx-card{backdrop-filter:blur(6px) saturate(110%)!important;-webkit-backdrop-filter:blur(6px) saturate(110%)!important;}
 }
 
-/* =========================================================
-   V6 — STADIUM GLASS REFINEMENT
-   - Richer light-mode stadium (less washout)
-   - Champion tile = glass in BOTH themes; red outline only
-   - Weekly Spotlight / stats / panels show more stadium
-   - One continuous stadium environment remains intact
-   ========================================================= */
-
-/* Dark glass: transparent enough to see the stadium, dark enough to read. */
+/* === V6 APPROVED GLASS TUNING ===
+   Less light-mode frosting + more transparent glass in both themes.
+*/
 :root[data-theme="dark"] .stat-card,
 :root[data-theme="dark"] .panel,
 :root[data-theme="dark"] .legacy-card,
@@ -851,35 +845,22 @@ main{position:relative;z-index:1;}
 :root[data-theme="dark"] .waitlist-card,
 :root[data-theme="dark"] .rules-toc,
 :root[data-theme="dark"] .alltime-summary-card,
-:root[data-theme="dark"] .alltime-table {
-  background:linear-gradient(145deg,rgba(3,17,31,.46),rgba(2,10,20,.58))!important;
-  border-color:rgba(176,216,246,.28)!important;
-  backdrop-filter:blur(5px) saturate(118%)!important;
-  -webkit-backdrop-filter:blur(5px) saturate(118%)!important;
-  box-shadow:
-    inset 0 0 24px rgba(var(--division-accent-rgb),.025),
-    0 10px 28px rgba(0,0,0,.16)!important;
+:root[data-theme="dark"] .alltime-table,
+:root[data-theme="dark"] .trade-side,
+:root[data-theme="dark"] .payout-grid > div,
+:root[data-theme="dark"] .draft-strip span {
+  background:linear-gradient(145deg,rgba(3,17,31,.38),rgba(2,10,20,.50))!important;
+  backdrop-filter:blur(4px) saturate(108%)!important;
+  -webkit-backdrop-filter:blur(4px) saturate(108%)!important;
 }
 
-/* Weekly Spotlight gets the clearest glass treatment. */
-:root[data-theme="dark"] .legacy-card {
-  background:linear-gradient(145deg,rgba(3,17,31,.38),rgba(2,10,20,.52))!important;
-  backdrop-filter:blur(4px) saturate(120%)!important;
-  -webkit-backdrop-filter:blur(4px) saturate(120%)!important;
-}
-
-/* Light mode: keep the SAME stadium vivid instead of bleaching it out. */
 :root[data-theme="light"] body::before {
-  opacity:.88!important;
-  filter:saturate(.92) brightness(1.05) contrast(.94)!important;
+  opacity:.72!important;
+  filter:saturate(.88) brightness(1.08) contrast(.94)!important;
 }
 :root[data-theme="light"] body::after {
-  background:
-    radial-gradient(ellipse at 50% 7%,rgba(255,255,255,.12),transparent 34%),
-    linear-gradient(180deg,rgba(238,246,252,.10) 0%,rgba(238,246,252,.18) 55%,rgba(232,241,248,.26) 100%)!important;
+  background:linear-gradient(180deg,rgba(242,248,253,.10),rgba(238,245,250,.16) 55%,rgba(235,242,248,.22))!important;
 }
-
-/* Light glass cards — translucent, not white boxes. */
 :root[data-theme="light"] .stat-card,
 :root[data-theme="light"] .panel,
 :root[data-theme="light"] .legacy-card,
@@ -888,79 +869,149 @@ main{position:relative;z-index:1;}
 :root[data-theme="light"] .waitlist-card,
 :root[data-theme="light"] .rules-toc,
 :root[data-theme="light"] .alltime-summary-card,
-:root[data-theme="light"] .alltime-table {
-  background:linear-gradient(145deg,rgba(248,252,255,.62),rgba(232,242,249,.48))!important;
-  border-color:rgba(49,82,108,.24)!important;
-  backdrop-filter:blur(6px) saturate(102%)!important;
-  -webkit-backdrop-filter:blur(6px) saturate(102%)!important;
-  box-shadow:
-    inset 0 0 20px rgba(255,255,255,.18),
-    0 10px 26px rgba(20,45,67,.10)!important;
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .payout-grid > div,
+:root[data-theme="light"] .draft-strip span {
+  background:linear-gradient(145deg,rgba(255,255,255,.40),rgba(240,247,252,.27))!important;
+  border-color:rgba(43,75,101,.20)!important;
+  backdrop-filter:blur(4px) saturate(98%)!important;
+  -webkit-backdrop-filter:blur(4px) saturate(98%)!important;
 }
 
-/* Weekly cards are even clearer so the field/lights remain visible. */
-:root[data-theme="light"] .legacy-card {
-  background:linear-gradient(145deg,rgba(248,252,255,.52),rgba(229,240,248,.38))!important;
-  backdrop-filter:blur(5px) saturate(105%)!important;
-  -webkit-backdrop-filter:blur(5px) saturate(105%)!important;
+:root[data-theme="dark"] .hero-action-tile,
+:root[data-theme="dark"] .hero-action-blue,
+:root[data-theme="dark"] .hero-action-white,
+:root[data-theme="dark"] .hero-action-tile[data-route="champ"] {
+  background:linear-gradient(145deg,rgba(3,17,31,.16),rgba(2,10,20,.25))!important;
+  backdrop-filter:blur(2px) saturate(105%)!important;
+  -webkit-backdrop-filter:blur(2px) saturate(105%)!important;
 }
-
-/* All four hero navigation tiles use glass. Champion is RED OUTLINE ONLY. */
-.hero-action-tile,
-.hero-action-blue,
-.hero-action-white,
-.hero-action-tile[data-route="champ"] {
-  background:linear-gradient(145deg,rgba(3,17,31,.24),rgba(2,10,20,.38))!important;
-}
-
-.hero-action-tile[data-route="champ"] {
-  border:2px solid #ff2638!important;
-  background:linear-gradient(145deg,rgba(3,17,31,.24),rgba(2,10,20,.38))!important;
-  color:#f7fbff!important;
-  box-shadow:
-    0 0 0 1px rgba(255,38,56,.18),
-    0 0 18px rgba(255,38,56,.34),
-    inset 0 0 18px rgba(255,38,56,.035)!important;
-}
-
-/* Light-mode hero tiles stay glass instead of filling white/red. */
 :root[data-theme="light"] .hero-action-tile,
 :root[data-theme="light"] .hero-action-blue,
 :root[data-theme="light"] .hero-action-white,
 :root[data-theme="light"] .hero-action-tile[data-route="champ"] {
-  background:linear-gradient(145deg,rgba(247,251,254,.42),rgba(229,240,248,.26))!important;
-  color:#071522!important;
-  backdrop-filter:blur(4px) saturate(105%)!important;
-  -webkit-backdrop-filter:blur(4px) saturate(105%)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(240,247,252,.11))!important;
+  backdrop-filter:blur(2px) saturate(100%)!important;
+  -webkit-backdrop-filter:blur(2px) saturate(100%)!important;
 }
 
+/* Champion: transparent glass with red outline only */
+.hero-action-tile[data-route="champ"] {
+  background-color:transparent!important;
+  border-color:#ff2638!important;
+}
 :root[data-theme="light"] .hero-action-tile[data-route="champ"] {
-  border:2px solid #e51e31!important;
-  background:linear-gradient(145deg,rgba(247,251,254,.42),rgba(229,240,248,.26))!important;
-  color:#071522!important;
-  box-shadow:
-    0 0 0 1px rgba(229,30,49,.12),
-    0 0 17px rgba(229,30,49,.25),
-    inset 0 0 18px rgba(255,255,255,.10)!important;
-}
-:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-copy small {
-  color:#40576b!important;
-}
-
-/* Keep spotlight typography readable over the clearer glass. */
-:root[data-theme="dark"] .legacy-sub,
-:root[data-theme="dark"] .division-rank-row {
-  color:#c2d0dc!important;
-}
-:root[data-theme="light"] .legacy-sub,
-:root[data-theme="light"] .division-rank-row {
-  color:#314b60!important;
+  border-color:#e51e31!important;
+  box-shadow:0 0 15px rgba(229,30,49,.20),inset 0 0 14px rgba(255,255,255,.04)!important;
 }
 
 @media(max-width:800px){
+  :root[data-theme="dark"] .stat-card,
+  :root[data-theme="dark"] .panel,
   :root[data-theme="dark"] .legacy-card,
-  :root[data-theme="light"] .legacy-card {
-    backdrop-filter:blur(4px) saturate(110%)!important;
-    -webkit-backdrop-filter:blur(4px) saturate(110%)!important;
+  :root[data-theme="dark"] .rule-section,
+  :root[data-theme="dark"] .tx-card,
+  :root[data-theme="light"] .stat-card,
+  :root[data-theme="light"] .panel,
+  :root[data-theme="light"] .legacy-card,
+  :root[data-theme="light"] .rule-section,
+  :root[data-theme="light"] .tx-card {
+    backdrop-filter:blur(4px)!important;
+    -webkit-backdrop-filter:blur(4px)!important;
   }
+}
+
+/* === V7 LIGHT MODE CLEAR GLASS ===
+   Kill the fuzzy/frosted look. Light mode uses clear tinted glass:
+   1px blur, lower white opacity, crisp border. Dark mode unchanged.
+*/
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .payout-grid > div,
+:root[data-theme="light"] .draft-strip span {
+  background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(238,246,252,.12))!important;
+  border-color:rgba(42,73,98,.24)!important;
+  backdrop-filter:blur(1px) saturate(100%)!important;
+  -webkit-backdrop-filter:blur(1px) saturate(100%)!important;
+  box-shadow:0 8px 22px rgba(20,45,67,.07),inset 0 0 0 1px rgba(255,255,255,.08)!important;
+}
+
+/* Weekly Spotlight: clearest glass on the page */
+:root[data-theme="light"] .legacy-card {
+  background:linear-gradient(145deg,rgba(255,255,255,.17),rgba(238,246,252,.08))!important;
+}
+
+/* 2x2 hero tiles: essentially clear */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  background:rgba(255,255,255,.07)!important;
+  backdrop-filter:blur(1px)!important;
+  -webkit-backdrop-filter:blur(1px)!important;
+}
+
+/* Champion remains clear with red outline/glow only */
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  background:rgba(255,255,255,.07)!important;
+  border-color:#e51e31!important;
+  box-shadow:0 0 14px rgba(229,30,49,.20)!important;
+}
+
+/* Don't let the mobile rule restore stronger frosting */
+@media(max-width:800px){
+  :root[data-theme="light"] .stat-card,
+  :root[data-theme="light"] .panel,
+  :root[data-theme="light"] .legacy-card,
+  :root[data-theme="light"] .rule-section,
+  :root[data-theme="light"] .tx-card,
+  :root[data-theme="light"] .waitlist-card {
+    backdrop-filter:blur(1px)!important;
+    -webkit-backdrop-filter:blur(1px)!important;
+  }
+}
+
+/* V8 — clear light glass + division-colored stadium */
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .payout-grid > div,
+:root[data-theme="light"] .draft-strip span,
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white {
+ background:rgba(255,255,255,.10)!important;
+ backdrop-filter:none!important;
+ -webkit-backdrop-filter:none!important;
+}
+:root[data-theme="light"] .hero-action-tile[data-route="champ"]{
+ background:rgba(255,255,255,.08)!important;
+ backdrop-filter:none!important;
+ -webkit-backdrop-filter:none!important;
+ border-color:#e51e31!important;
+ box-shadow:0 0 14px rgba(229,30,49,.20)!important;
+}
+html.power-blue body::before{background-image:url("stadium-blue.png")!important}
+html.power-red body::before{background-image:url("stadium-red.png")!important}
+html.power-white body::before{background-image:url("stadium-white.png")!important}
+:root[data-theme="light"] body::before{opacity:.86!important;filter:none!important}
+:root[data-theme="dark"] body::before{opacity:.92!important}
+:root[data-theme="light"] body::after{
+ background:linear-gradient(180deg,rgba(238,246,252,.05),rgba(238,246,252,.08) 55%,rgba(230,240,248,.10))!important;
 }
