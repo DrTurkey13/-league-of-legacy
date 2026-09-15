@@ -1015,3 +1015,90 @@ html.power-white body::before{background-image:url("stadium-white.png")!importan
 :root[data-theme="light"] body::after{
  background:linear-gradient(180deg,rgba(238,246,252,.05),rgba(238,246,252,.08) 55%,rgba(230,240,248,.10))!important;
 }
+
+/* === V9 FIX: SAME DIVISION STADIUM IN LIGHT/DARK + TRUE CLEAR GLASS ===
+   Theme switching must NEVER select a different stadium image.
+   data-power-division is the single source of truth for the artwork.
+*/
+
+/* Division image is identical in both themes. */
+:root[data-power-division="blue"] body::before,
+:root[data-theme="light"][data-power-division="blue"] body::before,
+:root[data-theme="dark"][data-power-division="blue"] body::before {
+  background-image:url("stadium-blue.png")!important;
+}
+:root[data-power-division="red"] body::before,
+:root[data-theme="light"][data-power-division="red"] body::before,
+:root[data-theme="dark"][data-power-division="red"] body::before {
+  background-image:url("stadium-red.png")!important;
+}
+:root[data-power-division="white"] body::before,
+:root[data-theme="light"][data-power-division="white"] body::before,
+:root[data-theme="dark"][data-power-division="white"] body::before {
+  background-image:url("stadium-white.png")!important;
+}
+body::before{
+  background-position:center top!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+}
+
+/* Light mode changes UI contrast only, NOT stadium color/artwork. */
+:root[data-theme="light"] body::before{
+  opacity:1!important;
+  filter:none!important;
+}
+:root[data-theme="light"] body::after{
+  background:rgba(235,244,250,.035)!important;
+}
+
+/* TRUE CLEAR GLASS — no blur/frost. */
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .payout-grid>div,
+:root[data-theme="light"] .draft-strip span{
+  background:rgba(255,255,255,.055)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-color:rgba(255,255,255,.42)!important;
+  box-shadow:0 6px 18px rgba(5,20,34,.08)!important;
+}
+
+/* Hero navigation bubbles even clearer. */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"]{
+  background:rgba(255,255,255,.025)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Champion: clear panel, red outline only. */
+:root[data-theme="light"] .hero-action-tile[data-route="champ"]{
+  border-color:#e51e31!important;
+  box-shadow:0 0 14px rgba(229,30,49,.22)!important;
+}
+
+/* Dark mode glass is also more transparent, but remains readable. */
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .legacy-card,
+:root[data-theme="dark"] .rule-section,
+:root[data-theme="dark"] .tx-card,
+:root[data-theme="dark"] .waitlist-card,
+:root[data-theme="dark"] .rules-toc,
+:root[data-theme="dark"] .alltime-summary-card,
+:root[data-theme="dark"] .alltime-table{
+  background:rgba(2,12,23,.30)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}

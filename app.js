@@ -488,22 +488,3 @@ async function boot(){
 })();
 
 boot();
-
-/* V8 — automatically match stadium to current Power Division */
-(function(){
- function apply(){
-  const root=document.documentElement;
-  root.classList.remove("power-blue","power-red","power-white");
-  const nodes=[...document.querySelectorAll("*")];
-  const label=nodes.find(el=>el.children.length===0 && /STRONGEST DIVISION/i.test(el.textContent||""));
-  let node=label;
-  for(let i=0;node&&i<6;i++,node=node.parentElement){
-   const m=(node.textContent||"").toUpperCase().match(/\b(BLUE|RED|WHITE)\b/);
-   if(m){root.classList.add("power-"+m[1].toLowerCase());return;}
-  }
-  const m=(document.body?.innerText||"").toUpperCase().match(/STRONGEST DIVISION[\s\S]{0,160}\b(BLUE|RED|WHITE)\b/);
-  root.classList.add("power-"+(m?m[1].toLowerCase():"blue"));
- }
- if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",apply);else apply();
- setTimeout(apply,500);setTimeout(apply,1500);
-})();
