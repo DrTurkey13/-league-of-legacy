@@ -478,3 +478,25 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
   .hero{background-position:center top!important;background-size:auto 640px!important}
   :root[data-theme="light"] .hero{background-position:center top!important;background-size:auto 640px!important}
 }
+
+/* === V8 EXACT GENERATED STADIUM BACKGROUND ===
+   Uses the approved stadium artwork directly. No fake CSS stadium, no blur. */
+.hero{
+  background-image:linear-gradient(180deg,rgba(1,7,15,.04) 0%,rgba(1,7,15,.10) 42%,rgba(1,7,15,.68) 100%),url('stadium-hero.png')!important;
+  background-position:center top!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+}
+.hero::before,.hero::after{display:none!important;content:none!important}
+.hero>.hero-identity::before,.hero>.hero-identity::after{display:none!important;content:none!important}
+:root[data-theme="dark"] .hero-identity,:root[data-theme="light"] .hero-identity{background-image:none!important}
+:root[data-theme="light"] .hero{
+  background-image:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.24) 47%,rgba(244,248,252,.78) 100%),url('stadium-hero.png')!important;
+  background-blend-mode:normal!important;
+}
+@media(max-width:800px){
+  .hero,:root[data-theme="light"] .hero{
+    background-position:center top!important;
+    background-size:cover!important;
+  }
+}
