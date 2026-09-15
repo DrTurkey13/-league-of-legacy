@@ -1452,3 +1452,59 @@ body::before{
   opacity:1!important;
   text-shadow:none!important;
 }
+
+/* === V15 — DARK MODE FINAL SECONDARY-TEXT TOUCHUPS ===
+   Tight pass only: activity rows, leaderboard microcopy, trade assets/meta,
+   and footer. Keep stadium, glass transparency, layout and accent logic intact.
+*/
+:root[data-theme="dark"] .activity-mini span,
+:root[data-theme="dark"] .activity-mini .team-sub,
+:root[data-theme="dark"] .activity-mini time,
+:root[data-theme="dark"] .tx-date,
+:root[data-theme="dark"] .suck-person .team-sub,
+:root[data-theme="dark"] .suck-count span,
+:root[data-theme="dark"] .leaderboard-note,
+:root[data-theme="dark"] .featured-assets,
+:root[data-theme="dark"] .featured-meta,
+:root[data-theme="dark"] .trade-side li,
+:root[data-theme="dark"] footer {
+  color:rgba(244,249,255,.90)!important;
+  opacity:1!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.72)!important;
+}
+
+:root[data-theme="dark"] .activity-mini span,
+:root[data-theme="dark"] .activity-mini .team-sub,
+:root[data-theme="dark"] .activity-mini time,
+:root[data-theme="dark"] .tx-date,
+:root[data-theme="dark"] .suck-person .team-sub,
+:root[data-theme="dark"] .suck-count span,
+:root[data-theme="dark"] .featured-meta,
+:root[data-theme="dark"] footer {
+  font-size:clamp(.98rem,2.65vw,1.10rem)!important;
+  line-height:1.45!important;
+}
+
+:root[data-theme="dark"] .featured-assets,
+:root[data-theme="dark"] .trade-side li {
+  font-size:clamp(1.02rem,2.8vw,1.14rem)!important;
+  line-height:1.5!important;
+}
+
+/* Keep light mode the same readable sizing without altering its established colors. */
+:root[data-theme="light"] .activity-mini span,
+:root[data-theme="light"] .activity-mini .team-sub,
+:root[data-theme="light"] .activity-mini time,
+:root[data-theme="light"] .tx-date,
+:root[data-theme="light"] .suck-person .team-sub,
+:root[data-theme="light"] .suck-count span,
+:root[data-theme="light"] .featured-meta,
+:root[data-theme="light"] footer {
+  font-size:clamp(.98rem,2.65vw,1.10rem)!important;
+  line-height:1.45!important;
+}
+:root[data-theme="light"] .featured-assets,
+:root[data-theme="light"] .trade-side li {
+  font-size:clamp(1.02rem,2.8vw,1.14rem)!important;
+  line-height:1.5!important;
+}
