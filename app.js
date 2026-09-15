@@ -250,7 +250,8 @@ async function loadYouSuckLeaderboard(){
 async function loadWeeklyScore(){
   try{
     state.nflState=await getJSON(`${API}/state/nfl`);
-    const week=Math.max(1,Number(state.nflState?.week||1));
+    const currentWeek=Math.max(1,Number(state.nflState?.week||1));
+    const week=Math.max(1,currentWeek-1);
     $('#high-score-label').textContent=`WEEK ${week} HIGH SCORE`;
     const matchups=await getJSON(`${API}/league/${LEAGUE_ID}/matchups/${week}`).catch(()=>[]);
     state.currentMatchups=matchups;
@@ -263,11 +264,11 @@ async function loadWeeklyScore(){
     const best=scored.reduce((a,b)=>Number(b.points)>Number(a.points)?b:a);
     const x=rosterLabel(state.ownerByRoster,best.roster_id);
     $('#weekly-high-score').innerHTML=`${esc(x.team)} <span class="score-points">${Number(best.points).toFixed(2)}</span>`;
-    $('#weekly-high-score-sub').textContent=x.owner?`${x.owner} currently owns the week.`:'Currently owns the week.';
+    $('#weekly-high-score-sub').textContent=x.owner?`${x.owner} owned the week.`:'Owned the week.';
   }catch(e){
     console.warn('Weekly score unavailable',e);
     $('#weekly-high-score').textContent='Unavailable';
-    $('#weekly-high-score-sub').textContent='Could not load the current matchup board.';
+    $('#weekly-high-score-sub').textContent='Could not load the completed matchup board.';
   }
 }
 
