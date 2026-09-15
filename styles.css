@@ -177,3 +177,22 @@ th{background:var(--table-head)}
   .hero-action-copy strong{font-size:13px}
   .hero-action-copy small{font-size:8.5px}
 }
+
+/* ===== LOGO-ONLY FIX — DO NOT ALTER LAYOUT ===== */
+.brand img,
+.brand-logo,
+.hero-logo,
+.hero-identity img {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  object-fit: contain !important;
+}
+
+/* If the source logo itself has a dark rectangular background, visually blend it
+   while preserving all existing sizing/layout rules. */
+.hero-identity,
+.brand {
+  background: transparent;
+}
+
