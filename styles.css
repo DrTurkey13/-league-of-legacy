@@ -453,3 +453,28 @@ footer{color:#7891a8!important;border-color:rgba(var(--division-accent-rgb),.18)
  .hero>.hero-identity::after{width:104vw!important;height:43vw!important;top:53%!important}
  :root[data-theme="light"] .hero::before,:root[data-theme="light"] .hero::after{opacity:.16!important}
 }
+
+/* === V7 ACTUAL STADIUM ARTWORK ===
+   Real raster stadium scene behind the existing hero. Application markup and logic unchanged. */
+.hero{
+  background:
+    linear-gradient(180deg,rgba(1,8,17,.12) 0%,rgba(1,7,14,.38) 48%,rgba(1,7,14,.94) 100%),
+    url('stadium-hero.jpg') center top/cover no-repeat!important;
+}
+/* Disable V6's CSS fake lamps/beams; the artwork now supplies the stadium and lights. */
+.hero::before,.hero::after{display:none!important;content:none!important}
+.hero>.hero-identity::before{
+  background:radial-gradient(ellipse at center,rgba(var(--division-accent-rgb),.28),rgba(var(--division-accent-rgb),.09) 42%,transparent 72%)!important;
+  filter:blur(18px)!important;opacity:.78!important;
+}
+:root[data-theme="dark"] .hero-identity{background-image:none!important}
+:root[data-theme="light"] .hero{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(246,249,252,.72) 50%,rgba(241,247,252,.96) 100%),
+    url('stadium-hero.jpg') center top/cover no-repeat!important;
+  background-blend-mode:screen,normal!important;
+}
+@media(max-width:800px){
+  .hero{background-position:center top!important;background-size:auto 640px!important}
+  :root[data-theme="light"] .hero{background-position:center top!important;background-size:auto 640px!important}
+}
