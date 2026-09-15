@@ -1508,3 +1508,46 @@ body::before{
   font-size:clamp(1.02rem,2.8vw,1.14rem)!important;
   line-height:1.5!important;
 }
+
+/* === V16 — CIRCLED READABILITY FIXES ===
+   Target only the two remaining dim areas called out in screenshots.
+*/
+:root[data-theme="dark"] .division-card .legacy-sub {
+  color:rgba(248,251,255,.96)!important;
+  opacity:1!important;
+  font-size:clamp(1.02rem,2.9vw,1.16rem)!important;
+  line-height:1.5!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.88)!important;
+}
+:root[data-theme="dark"] .division-card .division-rank-row {
+  color:rgba(248,251,255,.96)!important;
+  opacity:1!important;
+  font-size:clamp(.98rem,2.7vw,1.08rem)!important;
+  line-height:1.45!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.88)!important;
+}
+:root[data-theme="dark"] .division-card .division-rank-row strong {
+  color:#fff!important;
+  font-size:inherit!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.9)!important;
+}
+:root[data-theme="dark"] .suck-person span,
+:root[data-theme="dark"] .suck-person .team-sub,
+:root[data-theme="dark"] .suck-count span {
+  color:rgba(248,251,255,.96)!important;
+  opacity:1!important;
+  font-size:clamp(.98rem,2.65vw,1.08rem)!important;
+  line-height:1.4!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.9)!important;
+}
+
+/* Match the new sizing in light mode, retaining dark text for contrast. */
+:root[data-theme="light"] .division-card .legacy-sub,
+:root[data-theme="light"] .division-card .division-rank-row,
+:root[data-theme="light"] .suck-person span,
+:root[data-theme="light"] .suck-person .team-sub,
+:root[data-theme="light"] .suck-count span {
+  font-size:clamp(.98rem,2.65vw,1.08rem)!important;
+  line-height:1.45!important;
+  opacity:1!important;
+}
