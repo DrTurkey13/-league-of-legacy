@@ -1,3 +1,4 @@
+document.documentElement.dataset.powerDivision="blue";
 const LEAGUE_ID = '1312063787448139776';
 const API = 'https://api.sleeper.app/v1';
 let state = { league:null, users:[], rosters:[], players:{}, transactions:[], ownerByRoster:{}, nflState:null, currentMatchups:[], previous:null };
