@@ -1102,3 +1102,90 @@ body::before{
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
+
+/* === V10: CLEARER GLASS + REMOVE DUPLICATE HERO BACKGROUND === */
+
+/* The stadium belongs to the PAGE only.
+   Hero shell itself gets no second stadium/image layer. */
+.hero,
+.hero-card,
+.hero-shell,
+.hero-wrap,
+.hero-inner,
+.hero::before,
+.hero::after,
+.hero-card::before,
+.hero-card::after {
+  background-image:none!important;
+}
+
+/* Keep the page-level Power Division stadium visible and unchanged by theme. */
+:root[data-power-division="blue"] body::before { background-image:url("stadium-blue.png")!important; }
+:root[data-power-division="red"] body::before { background-image:url("stadium-red.png")!important; }
+:root[data-power-division="white"] body::before { background-image:url("stadium-white.png")!important; }
+
+/* Hero container: just a subtle transparent boundary, not another dark panel. */
+.hero,
+.hero-card,
+.hero-shell,
+.hero-wrap {
+  background-color:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* LIGHT: much clearer glass, no frosting/blur. */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .payout-grid>div,
+:root[data-theme="light"] .draft-strip span {
+  background:rgba(255,255,255,.16)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:0 4px 14px rgba(0,18,35,.05)!important;
+}
+
+/* Hero 2x2 gets even less fill so the field/lights show through. */
+:root[data-theme="light"] .hero-action-tile {
+  background:rgba(255,255,255,.10)!important;
+}
+
+/* DARK: transparent smoked glass instead of opaque navy blocks. */
+:root[data-theme="dark"] .hero-action-tile,
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .legacy-card,
+:root[data-theme="dark"] .rule-section,
+:root[data-theme="dark"] .tx-card,
+:root[data-theme="dark"] .waitlist-card,
+:root[data-theme="dark"] .rules-toc,
+:root[data-theme="dark"] .alltime-summary-card,
+:root[data-theme="dark"] .alltime-table,
+:root[data-theme="dark"] .trade-side,
+:root[data-theme="dark"] .payout-grid>div,
+:root[data-theme="dark"] .draft-strip span {
+  background:rgba(1,10,20,.14)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Champion is glass too — red is border/glow only. */
+.hero-action-tile[data-route="champ"] {
+  background-color:transparent!important;
+  background-image:none!important;
+}
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  background:rgba(255,255,255,.10)!important;
+}
+:root[data-theme="dark"] .hero-action-tile[data-route="champ"] {
+  background:rgba(1,10,20,.14)!important;
+}
