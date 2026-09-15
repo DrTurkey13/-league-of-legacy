@@ -833,3 +833,134 @@ main{position:relative;z-index:1;}
   .hero{border-radius:24px!important;}
   .stat-card,.panel,.legacy-card,.rule-section,.tx-card{backdrop-filter:blur(6px) saturate(110%)!important;-webkit-backdrop-filter:blur(6px) saturate(110%)!important;}
 }
+
+/* =========================================================
+   V6 — STADIUM GLASS REFINEMENT
+   - Richer light-mode stadium (less washout)
+   - Champion tile = glass in BOTH themes; red outline only
+   - Weekly Spotlight / stats / panels show more stadium
+   - One continuous stadium environment remains intact
+   ========================================================= */
+
+/* Dark glass: transparent enough to see the stadium, dark enough to read. */
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .legacy-card,
+:root[data-theme="dark"] .rule-section,
+:root[data-theme="dark"] .tx-card,
+:root[data-theme="dark"] .waitlist-card,
+:root[data-theme="dark"] .rules-toc,
+:root[data-theme="dark"] .alltime-summary-card,
+:root[data-theme="dark"] .alltime-table {
+  background:linear-gradient(145deg,rgba(3,17,31,.46),rgba(2,10,20,.58))!important;
+  border-color:rgba(176,216,246,.28)!important;
+  backdrop-filter:blur(5px) saturate(118%)!important;
+  -webkit-backdrop-filter:blur(5px) saturate(118%)!important;
+  box-shadow:
+    inset 0 0 24px rgba(var(--division-accent-rgb),.025),
+    0 10px 28px rgba(0,0,0,.16)!important;
+}
+
+/* Weekly Spotlight gets the clearest glass treatment. */
+:root[data-theme="dark"] .legacy-card {
+  background:linear-gradient(145deg,rgba(3,17,31,.38),rgba(2,10,20,.52))!important;
+  backdrop-filter:blur(4px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(4px) saturate(120%)!important;
+}
+
+/* Light mode: keep the SAME stadium vivid instead of bleaching it out. */
+:root[data-theme="light"] body::before {
+  opacity:.88!important;
+  filter:saturate(.92) brightness(1.05) contrast(.94)!important;
+}
+:root[data-theme="light"] body::after {
+  background:
+    radial-gradient(ellipse at 50% 7%,rgba(255,255,255,.12),transparent 34%),
+    linear-gradient(180deg,rgba(238,246,252,.10) 0%,rgba(238,246,252,.18) 55%,rgba(232,241,248,.26) 100%)!important;
+}
+
+/* Light glass cards — translucent, not white boxes. */
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .legacy-card,
+:root[data-theme="light"] .rule-section,
+:root[data-theme="light"] .tx-card,
+:root[data-theme="light"] .waitlist-card,
+:root[data-theme="light"] .rules-toc,
+:root[data-theme="light"] .alltime-summary-card,
+:root[data-theme="light"] .alltime-table {
+  background:linear-gradient(145deg,rgba(248,252,255,.62),rgba(232,242,249,.48))!important;
+  border-color:rgba(49,82,108,.24)!important;
+  backdrop-filter:blur(6px) saturate(102%)!important;
+  -webkit-backdrop-filter:blur(6px) saturate(102%)!important;
+  box-shadow:
+    inset 0 0 20px rgba(255,255,255,.18),
+    0 10px 26px rgba(20,45,67,.10)!important;
+}
+
+/* Weekly cards are even clearer so the field/lights remain visible. */
+:root[data-theme="light"] .legacy-card {
+  background:linear-gradient(145deg,rgba(248,252,255,.52),rgba(229,240,248,.38))!important;
+  backdrop-filter:blur(5px) saturate(105%)!important;
+  -webkit-backdrop-filter:blur(5px) saturate(105%)!important;
+}
+
+/* All four hero navigation tiles use glass. Champion is RED OUTLINE ONLY. */
+.hero-action-tile,
+.hero-action-blue,
+.hero-action-white,
+.hero-action-tile[data-route="champ"] {
+  background:linear-gradient(145deg,rgba(3,17,31,.24),rgba(2,10,20,.38))!important;
+}
+
+.hero-action-tile[data-route="champ"] {
+  border:2px solid #ff2638!important;
+  background:linear-gradient(145deg,rgba(3,17,31,.24),rgba(2,10,20,.38))!important;
+  color:#f7fbff!important;
+  box-shadow:
+    0 0 0 1px rgba(255,38,56,.18),
+    0 0 18px rgba(255,38,56,.34),
+    inset 0 0 18px rgba(255,38,56,.035)!important;
+}
+
+/* Light-mode hero tiles stay glass instead of filling white/red. */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  background:linear-gradient(145deg,rgba(247,251,254,.42),rgba(229,240,248,.26))!important;
+  color:#071522!important;
+  backdrop-filter:blur(4px) saturate(105%)!important;
+  -webkit-backdrop-filter:blur(4px) saturate(105%)!important;
+}
+
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  border:2px solid #e51e31!important;
+  background:linear-gradient(145deg,rgba(247,251,254,.42),rgba(229,240,248,.26))!important;
+  color:#071522!important;
+  box-shadow:
+    0 0 0 1px rgba(229,30,49,.12),
+    0 0 17px rgba(229,30,49,.25),
+    inset 0 0 18px rgba(255,255,255,.10)!important;
+}
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-copy small {
+  color:#40576b!important;
+}
+
+/* Keep spotlight typography readable over the clearer glass. */
+:root[data-theme="dark"] .legacy-sub,
+:root[data-theme="dark"] .division-rank-row {
+  color:#c2d0dc!important;
+}
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .division-rank-row {
+  color:#314b60!important;
+}
+
+@media(max-width:800px){
+  :root[data-theme="dark"] .legacy-card,
+  :root[data-theme="light"] .legacy-card {
+    backdrop-filter:blur(4px) saturate(110%)!important;
+    -webkit-backdrop-filter:blur(4px) saturate(110%)!important;
+  }
+}
