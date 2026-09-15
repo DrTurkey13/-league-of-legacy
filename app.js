@@ -87,23 +87,48 @@ async function loadWeeklyAwards(){
     const scored=state.rosters.map(r=>({roster:r,points:scoreByRoster[Number(r.roster_id)]})).filter(x=>Number.isFinite(x.points));
     if(!scored.length) throw new Error('No completed-week scores');
 
-    $('#power-division-label').textContent=`WEEK ${week} POWER DIVISION`;
+    $('#power-division-label').textContent='STRONGEST DIVISION';
+
+    // Power Division uses every completed week of the season.
+    const completedWeeks=[...Array(week)].map((_,i)=>i+1);
+    const seasonMatchups=await Promise.all(
+      completedWeeks.map(w=>getJSON(`${API}/league/${LEAGUE_ID}/matchups/${w}`).catch(()=>[]))
+    );
+    const seasonPointsByRoster=new Map();
+    for(const weekly of seasonMatchups){
+      for(const m of weekly){
+        const rid=Number(m.roster_id);
+        if(!Number.isFinite(rid)) continue;
+        if(!seasonPointsByRoster.has(rid)) seasonPointsByRoster.set(rid,[]);
+        seasonPointsByRoster.get(rid).push(Number(m.points||0));
+      }
+    }
+
     const grouped=new Map();
-    for(const x of scored){
-      const id=rosterDivision(x.roster);
-      if(id==null) continue;
+    for(const roster of state.rosters){
+      const id=rosterDivision(roster);
+      const scores=seasonPointsByRoster.get(Number(roster.roster_id))||[];
+      if(id==null || !scores.length) continue;
       if(!grouped.has(id)) grouped.set(id,[]);
-      grouped.get(id).push(x.points);
+      grouped.get(id).push(...scores);
     }
     const divisions=[...grouped.entries()].map(([id,scores])=>({
-      id, name:divisionName(id), avg:scores.reduce((a,b)=>a+b,0)/scores.length, total:scores.reduce((a,b)=>a+b,0), teams:scores.length
+      id, name:divisionName(id), avg:scores.reduce((a,b)=>a+b,0)/scores.length,
+      total:scores.reduce((a,b)=>a+b,0), scores:scores.length
     })).sort((a,b)=>b.avg-a.avg);
 
     if(divisions.length>1){
       const champ=divisions[0];
       $('#power-division').innerHTML=`${esc(champ.name)} <span class="score-points">${champ.avg.toFixed(2)}</span>`;
-      $('#power-division-sub').textContent=`Best average score per team in Week ${week}.`;
+      $('#power-division-sub').textContent='Best average score per team this season.';
       $('#division-rankings').innerHTML=divisions.map((d,i)=>`<div class="division-rank-row"><span>${i+1}. ${esc(d.name)}</span><strong>${d.avg.toFixed(2)}</strong></div>`).join('');
+
+      const card=$('#power-division')?.closest('.award-card');
+      if(card){
+        card.classList.remove('power-blue','power-white','power-red');
+        const n=String(champ.name||'').toLowerCase();
+        card.classList.add(n.includes('red')?'power-red':n.includes('white')?'power-white':'power-blue');
+      }
     }else{
       $('#power-division').textContent='No divisions found';
       $('#power-division-sub').textContent='Sleeper is not returning division assignments for this league.';
