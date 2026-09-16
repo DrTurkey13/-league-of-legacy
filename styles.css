@@ -1536,3 +1536,103 @@ main{position:relative;z-index:1;}
   font-family: "Rajdhani","Inter",sans-serif !important;
   font-weight: 700 !important;
 }
+
+
+/* === V24: LIGHT MODE ONLY — CLEAN SCORE CONTRAST + SHARP 2x2 TYPE ===
+   Dark mode is intentionally untouched.
+*/
+
+/* Remove the V23 outline treatment in LIGHT mode only. */
+:root[data-theme="light"] .score-card .score-points,
+:root[data-theme="light"] .division-card .score-points,
+:root[data-theme="light"] .suck-card .suck-points,
+:root[data-theme="light"] .idiot-card .idiot-player {
+  -webkit-text-stroke: 0 !important;
+  paint-order: normal !important;
+  text-shadow: none !important;
+}
+
+/* Use deeper accent colors instead of black outlines. */
+:root[data-theme="light"] .score-card .score-points {
+  color:#006fbe !important;
+}
+
+:root[data-theme="light"][data-power-division="blue"] .division-card .score-points {
+  color:#006fbe !important;
+}
+:root[data-theme="light"][data-power-division="red"] .division-card .score-points {
+  color:#c81f37 !important;
+}
+:root[data-theme="light"][data-power-division="white"] .division-card .score-points {
+  color:#526577 !important;
+}
+
+:root[data-theme="light"] .suck-card .suck-points {
+  color:#d9253f !important;
+}
+:root[data-theme="light"] .idiot-card .idiot-player {
+  color:#d88900 !important;
+}
+
+/* 2x2 home buttons:
+   Use Inter in light mode for a crisper native iPhone/Safari rendering.
+   Keep the same layout and transparent glass.
+*/
+:root[data-theme="light"] .hero-action-copy strong,
+:root[data-theme="light"] .hero-action-copy small {
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+  -webkit-font-smoothing:auto !important;
+  text-rendering:auto !important;
+  filter:none !important;
+  text-shadow:none !important;
+  -webkit-text-stroke:0 !important;
+  opacity:1 !important;
+}
+
+:root[data-theme="light"] .hero-action-copy strong {
+  color:#06131f !important;
+  font-size:20px !important;
+  line-height:1.08 !important;
+  font-weight:900 !important;
+  letter-spacing:-.025em !important;
+  text-transform:uppercase !important;
+}
+
+:root[data-theme="light"] .hero-action-copy small {
+  color:#183247 !important;
+  font-size:13px !important;
+  line-height:1.28 !important;
+  font-weight:800 !important;
+  letter-spacing:-.01em !important;
+}
+
+/* Give the light-mode tiles a tiny bit more clean white behind the text,
+   without blur/frost and without changing dark mode. */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-blue,
+:root[data-theme="light"] .hero-action-white,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  background:rgba(255,255,255,.16) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* Preserve the identifying outlines only. */
+:root[data-theme="light"] .hero-action-blue {
+  border-color:var(--division-accent) !important;
+}
+:root[data-theme="light"] .hero-action-white {
+  border-color:rgba(73,95,113,.54) !important;
+}
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] {
+  border-color:#e51e31 !important;
+}
+
+/* Make icons/arrows crisp too. */
+:root[data-theme="light"] .hero-action-icon,
+:root[data-theme="light"] .hero-action-arrow {
+  color:#06131f !important;
+  filter:none !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+}
