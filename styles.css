@@ -1450,3 +1450,111 @@ html[data-theme="light"]{color-scheme:light;background:#dfe7ee}
   background-color:transparent!important;
   box-shadow:none!important;
 }
+
+
+/* ============================================================
+   V31 — WEEKLY SPOTLIGHT HEADER + DATA SIZE
+   Applies equally to light and dark mode.
+   - Emoji + small header label now share one line.
+   - Header label is larger.
+   - Primary award data is larger.
+   - Power Division ranking rows are larger/easier to read.
+   ============================================================ */
+
+.weekly-awards-grid .legacy-card{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  column-gap:12px;
+  row-gap:0;
+  align-items:center;
+}
+
+/* Emoji and award label on the same row */
+.weekly-awards-grid .legacy-icon{
+  grid-column:1;
+  grid-row:1;
+  font-size:30px;
+  line-height:1;
+  margin:0;
+  align-self:center;
+}
+
+.weekly-awards-grid .legacy-label{
+  grid-column:2;
+  grid-row:1;
+  align-self:center;
+  font-size:12px;
+  line-height:1.1;
+  font-weight:900;
+  letter-spacing:.12em;
+  margin:0;
+}
+
+/* All card data below the header spans the full card width */
+.weekly-awards-grid .legacy-name,
+.weekly-awards-grid .legacy-sub,
+.weekly-awards-grid .division-rankings{
+  grid-column:1 / -1;
+}
+
+/* Main weekly result */
+.weekly-awards-grid .legacy-name{
+  font-size:27px;
+  line-height:1.03;
+  margin-top:17px;
+}
+
+/* Supporting line */
+.weekly-awards-grid .legacy-sub{
+  font-size:13px;
+  line-height:1.42;
+  margin-top:10px;
+}
+
+/* Power Division breakdown */
+.weekly-awards-grid .division-rankings{
+  margin-top:17px;
+  padding-top:12px;
+  gap:10px;
+}
+
+.weekly-awards-grid .division-rank-row{
+  font-size:14px !important;
+  line-height:1.35 !important;
+}
+
+.weekly-awards-grid .division-rank-row strong{
+  font-size:15px !important;
+  line-height:1.35 !important;
+}
+
+/* Mobile keeps the same hierarchy without crowding long manager names. */
+@media(max-width:800px){
+  .weekly-awards-grid .legacy-card{
+    column-gap:11px;
+  }
+
+  .weekly-awards-grid .legacy-icon{
+    font-size:29px;
+  }
+
+  .weekly-awards-grid .legacy-label{
+    font-size:12px;
+  }
+
+  .weekly-awards-grid .legacy-name{
+    font-size:26px;
+  }
+
+  .weekly-awards-grid .legacy-sub{
+    font-size:13px;
+  }
+
+  .weekly-awards-grid .division-rank-row{
+    font-size:14px !important;
+  }
+
+  .weekly-awards-grid .division-rank-row strong{
+    font-size:15px !important;
+  }
+}
