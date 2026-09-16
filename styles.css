@@ -1792,3 +1792,36 @@ main{position:relative;z-index:1;}
    V26 dark mode is frozen. Light mode is intentionally disabled.
 */
 #theme-toggle { display:none !important; }
+
+
+/* === V28: NEUTRAL OFFSEASON STADIUM ===
+   Exact approved mockup:
+   green field + blue sky + white lights + red crowd.
+   Jan 30 -> completed Week 1 = neutral.
+   After Week 1, Power Division earns Blue / Red / White again.
+*/
+:root[data-power-division="neutral"] body::before{
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(1,7,12,.05) 0%,
+      rgba(1,7,12,.14) 45%,
+      rgba(1,6,11,.38) 100%
+    ),
+    url('stadium-neutral.png') !important;
+  background-size:cover !important;
+  background-position:center top !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Don't cast a division-colored wash over the neutral stadium. */
+:root[data-power-division="neutral"] body::after{
+  background:
+    radial-gradient(ellipse at 50% 5%,rgba(255,255,255,.055),transparent 38%),
+    linear-gradient(180deg,transparent 0%,rgba(1,7,15,.08) 58%,rgba(1,7,15,.34) 100%) !important;
+}
+
+/* Hero remains transparent so the approved neutral stadium stays continuous. */
+:root[data-power-division="neutral"] .hero{
+  background:linear-gradient(180deg,rgba(2,12,24,.035),rgba(2,10,20,.15)) !important;
+}

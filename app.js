@@ -100,9 +100,58 @@ async function loadChampion(){
   }
 }
 
+
+function setPowerDivisionTheme(name){
+  const root=document.documentElement;
+  const value=String(name||'').toLowerCase();
+  let key='blue';
+  if(value==='neutral' || value.includes('neutral')) key='neutral';
+  else if(value.includes('red')) key='red';
+  else if(value.includes('white')) key='white';
+  root.dataset.powerDivision=key;
+}
+
+function useNeutralPreseasonBackground(){
+  const now=new Date();
+  const resetDate=new Date(now.getFullYear(),0,30); // Jan 30, local browser time
+
+  // Keep the prior season's earned background through Jan 29.
+  if(now < resetDate) return false;
+
+  const leagueSeason=Number(state.league?.season||0);
+  const nflSeason=Number(state.nflState?.season||0);
+  const nflWeek=Number(state.nflState?.week||0);
+  const seasonType=String(state.nflState?.season_type||'').toLowerCase();
+
+  // Jan 30 onward stays neutral until the current fantasy season exists
+  // and Week 1 has actually completed (Sleeper advances to regular-season Week 2).
+  return (
+    leagueSeason < now.getFullYear() ||
+    nflSeason < now.getFullYear() ||
+    seasonType !== 'regular' ||
+    nflWeek < 2
+  );
+}
+
 async function loadWeeklyAwards(){
   try{
     if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
+
+    if(useNeutralPreseasonBackground()){
+      setPowerDivisionTheme('neutral');
+      $('#power-division-label').textContent='POWER DIVISION';
+      $('#power-division').textContent='Starts after Week 1';
+      $('#power-division-sub').textContent='The stadium stays neutral until the first fantasy week is complete.';
+      $('#division-rankings').innerHTML='';
+      $('#you-suck-label').textContent='YOU SUCK';
+      $('#you-suck-manager').textContent='Nobody yet';
+      $('#you-suck-sub').textContent='Give it a week. Somebody will earn it.';
+      $('#idiot-label').textContent='IDIOT OF THE WEEK';
+      $('#idiot-manager').textContent='Nobody yet';
+      $('#idiot-sub').textContent='After Week 1, the highest-scoring benched player earns somebody the clown nose.';
+      return;
+    }
+
     const currentWeek=Math.max(1,Number(state.nflState?.week||1));
     const week=currentWeek-1;
     if(week<1){
@@ -157,6 +206,7 @@ async function loadWeeklyAwards(){
 
     if(divisions.length>1){
       const champ=divisions[0];
+      setPowerDivisionTheme(champ.name);
       $('#power-division').innerHTML=`${esc(champ.name)} <span class="score-points">${champ.avg.toFixed(2)}</span>`;
       $('#power-division-sub').textContent='Best average score per team this season.';
       $('#division-rankings').innerHTML=divisions.map((d,i)=>`<div class="division-rank-row"><span>${i+1}. ${esc(d.name)}</span><strong>${d.avg.toFixed(2)}</strong></div>`).join('');
