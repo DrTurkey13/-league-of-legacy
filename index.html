@@ -6,8 +6,12 @@
   <meta name="theme-color" content="#0b0f14" id="theme-color-meta" />
   <script>
     (function(){
-      document.documentElement.dataset.theme = "dark";
-      try { localStorage.removeItem("lol-theme"); } catch(e) {}
+      try {
+        const saved = localStorage.getItem("lol-theme");
+        document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
+      } catch(e) {
+        document.documentElement.dataset.theme = "dark";
+      }
     })();
   </script>
   <title>League of Legacy</title>
@@ -37,6 +41,7 @@
           <button data-route="rules">Rules</button>
           <button data-route="waitlist">Waitlist</button>
         </nav>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Switch to light mode" title="Switch theme"><span class="theme-icon" aria-hidden="true">☀︎</span></button>
         <button id="menu-button" class="menu-button" aria-label="Open menu">☰</button>
       </div>
     </header>

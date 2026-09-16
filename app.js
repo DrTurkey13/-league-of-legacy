@@ -507,13 +507,31 @@ async function boot(){
     $('#home-rankings').innerHTML=msg; $('#home-activity').innerHTML=msg; $('#rankings-table').innerHTML=msg; $('#trades-feed').innerHTML=msg; $('#waivers-feed').innerHTML=msg;
   }
 }
-// Temporary dark-only production mode.
-// Light mode is intentionally disabled while it is rebuilt cleanly.
-(function lockDarkMode(){
-  document.documentElement.dataset.theme='dark';
-  try{ localStorage.removeItem('lol-theme'); }catch(e){}
+// Light/dark theme toggle. Dark remains the default unless the user saves light.
+(function initThemeToggle(){
+  const root=document.documentElement;
+  const btn=document.getElementById('theme-toggle');
+  const icon=btn?.querySelector('.theme-icon');
   const meta=document.getElementById('theme-color-meta');
-  if(meta) meta.setAttribute('content','#0b0f14');
+
+  function applyTheme(theme,save){
+    const next=theme==='light'?'light':'dark';
+    root.dataset.theme=next;
+    if(icon) icon.textContent=next==='dark'?'☀︎':'☾';
+    if(btn){
+      btn.setAttribute('aria-label',next==='dark'?'Switch to light mode':'Switch to dark mode');
+      btn.title=next==='dark'?'Switch to light mode':'Switch to dark mode';
+    }
+    if(meta) meta.setAttribute('content',next==='dark'?'#0b0f14':'#f4f7fa');
+    if(save){
+      try{ localStorage.setItem('lol-theme',next); }catch(e){}
+    }
+  }
+
+  applyTheme(root.dataset.theme==='light'?'light':'dark',false);
+  btn?.addEventListener('click',()=>{
+    applyTheme(root.dataset.theme==='dark'?'light':'dark',true);
+  });
 })();
 
 boot();
