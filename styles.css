@@ -1558,3 +1558,113 @@ html[data-theme="light"]{color-scheme:light;background:#dfe7ee}
     font-size:15px !important;
   }
 }
+
+
+/* ============================================================
+   V32 — SPOTLIGHT HEADER ROW + DARKER LIGHT-MODE TEXT
+   Explicit HTML header wrappers replace the earlier grid attempt.
+   Dark mode colors remain untouched.
+   ============================================================ */
+
+/* Return the award card body to normal flow. */
+.weekly-awards-grid .legacy-card{
+  display:block !important;
+}
+
+/* Emoji + small header are now a true one-line header. */
+.weekly-awards-grid .legacy-card-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:34px;
+  margin:0 0 18px;
+}
+
+.weekly-awards-grid .legacy-card-head .legacy-icon{
+  flex:0 0 auto;
+  font-size:30px;
+  line-height:1;
+  margin:0 !important;
+}
+
+.weekly-awards-grid .legacy-card-head .legacy-label{
+  flex:1 1 auto;
+  margin:0 !important;
+  font-size:13px !important;
+  line-height:1.15 !important;
+  font-weight:900 !important;
+  letter-spacing:.13em !important;
+}
+
+/* Larger card data under the new header row. */
+.weekly-awards-grid .legacy-name{
+  margin-top:0 !important;
+  font-size:28px !important;
+  line-height:1.03 !important;
+}
+
+.weekly-awards-grid .legacy-sub{
+  margin-top:11px !important;
+  font-size:14px !important;
+  line-height:1.45 !important;
+}
+
+.weekly-awards-grid .division-rankings{
+  margin-top:18px !important;
+  padding-top:13px !important;
+  gap:11px !important;
+}
+
+.weekly-awards-grid .division-rank-row,
+.weekly-awards-grid .division-rank-row strong{
+  font-size:16px !important;
+  line-height:1.35 !important;
+}
+
+/* LIGHT MODE ONLY — stronger ink against the light gray glass. */
+:root[data-theme="light"] .weekly-awards-grid .legacy-label{
+  color:#102c40 !important;
+}
+
+:root[data-theme="light"] .weekly-awards-grid .legacy-sub{
+  color:#18364b !important;
+  font-weight:600 !important;
+}
+
+:root[data-theme="light"] .weekly-awards-grid .division-rank-row{
+  color:#163247 !important;
+  font-weight:600 !important;
+}
+
+:root[data-theme="light"] .weekly-awards-grid .division-rank-row strong{
+  color:#071522 !important;
+  font-weight:800 !important;
+}
+
+@media(max-width:800px){
+  .weekly-awards-grid .legacy-card-head{
+    gap:11px;
+    margin-bottom:17px;
+  }
+
+  .weekly-awards-grid .legacy-card-head .legacy-icon{
+    font-size:29px;
+  }
+
+  .weekly-awards-grid .legacy-card-head .legacy-label{
+    font-size:13px !important;
+  }
+
+  .weekly-awards-grid .legacy-name{
+    font-size:27px !important;
+  }
+
+  .weekly-awards-grid .legacy-sub{
+    font-size:14px !important;
+  }
+
+  .weekly-awards-grid .division-rank-row,
+  .weekly-awards-grid .division-rank-row strong{
+    font-size:16px !important;
+  }
+}
