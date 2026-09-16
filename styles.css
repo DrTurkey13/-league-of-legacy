@@ -2152,3 +2152,320 @@ html[data-theme="light"]{color-scheme:light;background:#dfe7ee}
 }
 
 .champ-year{display:inline-block;margin-left:8px;white-space:nowrap}.title-count{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;font-size:16px}
+
+/* ============================================================
+   V43 — ALL-TIME PAGE LARGER TYPE
+   Scoped only to the All-Time tab. Landing page and other tabs
+   remain untouched. Applies to both light and dark mode.
+   ============================================================ */
+
+/* Summary cards */
+#page-alltime .stat-label{
+  font-size:14px !important;
+  line-height:1.2 !important;
+}
+#page-alltime .stat-card strong{
+  font-size:28px !important;
+  line-height:1.05 !important;
+}
+
+/* Section headers */
+#page-alltime .panel-head .kicker{
+  font-size:13px !important;
+  line-height:1.15 !important;
+}
+#page-alltime .panel-head h2{
+  font-size:30px !important;
+  line-height:1.05 !important;
+}
+
+/* Career leaders */
+#page-alltime .alltime-leader-row{
+  padding:18px 0 !important;
+  gap:18px !important;
+}
+#page-alltime .alltime-leader-row > div > strong{
+  font-size:19px !important;
+  line-height:1.15 !important;
+}
+#page-alltime .alltime-leader-row > div > span{
+  font-size:15px !important;
+  line-height:1.3 !important;
+  margin-top:6px !important;
+}
+#page-alltime .alltime-leader-row > strong:not(.title-count){
+  font-size:20px !important;
+  line-height:1.1 !important;
+}
+
+/* Championship trophy case */
+#page-alltime #alltime-champs .alltime-leader-row > div > strong{
+  font-size:20px !important;
+}
+#page-alltime #alltime-champs .alltime-leader-row > div > span{
+  font-size:14px !important;
+}
+#page-alltime .title-count{
+  font-size:18px !important;
+  line-height:1.2 !important;
+  gap:10px !important;
+}
+#page-alltime .champ-year{
+  font-size:18px !important;
+  line-height:1.2 !important;
+  margin-left:0 !important;
+}
+
+/* Full history table */
+#page-alltime table th{
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+#page-alltime table td{
+  font-size:15px !important;
+  line-height:1.3 !important;
+}
+#page-alltime table td strong{
+  font-size:16px !important;
+}
+
+/* Mobile: keep it clearly readable without blowing up the layout. */
+@media(max-width:800px){
+  #page-alltime .stat-label{font-size:14px !important}
+  #page-alltime .stat-card strong{font-size:26px !important}
+  #page-alltime .panel-head .kicker{font-size:13px !important}
+  #page-alltime .panel-head h2{font-size:28px !important}
+  #page-alltime .alltime-leader-row > div > strong{font-size:18px !important}
+  #page-alltime .alltime-leader-row > div > span{font-size:14px !important}
+  #page-alltime .alltime-leader-row > strong:not(.title-count){font-size:19px !important}
+  #page-alltime #alltime-champs .alltime-leader-row > div > strong{font-size:19px !important}
+  #page-alltime #alltime-champs .alltime-leader-row > div > span{font-size:14px !important}
+  #page-alltime .champ-year{font-size:17px !important}
+}
+
+
+/* ============================================================
+   V44 — SITEWIDE LARGER TYPE
+   Applies to both light and dark mode.
+   Typography only: no background, glass, color, or layout changes.
+   Tight home action buttons are intentionally left alone so they
+   do not spill again.
+   ============================================================ */
+
+/* Global small labels / descriptors */
+.eyebrow,
+.kicker{
+  font-size:13px !important;
+  line-height:1.2 !important;
+}
+
+.hero p,
+.page-heading p{
+  font-size:17px !important;
+  line-height:1.6 !important;
+}
+
+/* Stat cards */
+.stat-label{
+  font-size:14px !important;
+  line-height:1.2 !important;
+}
+.stat-card strong{
+  font-size:28px !important;
+  line-height:1.05 !important;
+}
+
+/* Common dashboard/list typography */
+.link-button{
+  font-size:14px !important;
+}
+.team-name{
+  font-size:16px !important;
+  line-height:1.2 !important;
+}
+.team-sub{
+  font-size:13px !important;
+  line-height:1.3 !important;
+}
+.record{
+  font-size:16px !important;
+}
+.activity-mini strong{
+  font-size:15px !important;
+  line-height:1.25 !important;
+}
+.activity-mini span{
+  font-size:13px !important;
+  line-height:1.35 !important;
+}
+.loading{
+  font-size:15px !important;
+  line-height:1.4 !important;
+}
+.small,
+.muted{
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* Tables across Rankings / All-Time */
+th{
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+td{
+  font-size:15px !important;
+  line-height:1.35 !important;
+}
+td strong{
+  font-size:16px !important;
+  line-height:1.25 !important;
+}
+
+/* Transaction / trade / waiver tabs */
+.tx-type{
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+.tx-date{
+  font-size:13px !important;
+  line-height:1.3 !important;
+}
+.trade-side h3{
+  font-size:18px !important;
+  line-height:1.2 !important;
+}
+.trade-side li{
+  font-size:15px !important;
+  line-height:1.4 !important;
+}
+.waiver-line{
+  font-size:15px !important;
+}
+.faab{
+  font-size:16px !important;
+}
+
+/* Rules */
+.rule-badge{
+  font-size:13px !important;
+}
+.rules-toc a{
+  font-size:14px !important;
+  line-height:1.3 !important;
+}
+.rule-num{
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+.rule-section p,
+.rule-section li{
+  font-size:16px !important;
+  line-height:1.65 !important;
+}
+.rule-section h3{
+  font-size:18px !important;
+  line-height:1.25 !important;
+}
+.payout-grid b{
+  font-size:13px !important;
+}
+.callout,
+.example{
+  font-size:15px !important;
+  line-height:1.55 !important;
+}
+.example span{
+  font-size:11px !important;
+}
+.draft-strip span{
+  font-size:12px !important;
+}
+
+/* Waitlist */
+.position{
+  font-size:26px !important;
+}
+.avatar-letter{
+  font-size:13px !important;
+}
+.wait-name strong{
+  font-size:16px !important;
+  line-height:1.2 !important;
+}
+.wait-name span{
+  font-size:13px !important;
+  line-height:1.3 !important;
+}
+.status{
+  font-size:11px !important;
+}
+
+/* Weekly Spotlight — slightly larger, preserving current card layout */
+.weekly-awards-grid .legacy-card-head .legacy-label{
+  font-size:14px !important;
+}
+.weekly-awards-grid .legacy-name{
+  font-size:29px !important;
+}
+.weekly-awards-grid .legacy-sub{
+  font-size:15px !important;
+}
+.weekly-awards-grid .division-rank-row,
+.weekly-awards-grid .division-rank-row strong{
+  font-size:17px !important;
+}
+
+/* News / supporting cards */
+.news-item strong{
+  font-size:17px !important;
+  line-height:1.25 !important;
+}
+.news-item p{
+  font-size:15px !important;
+  line-height:1.45 !important;
+}
+
+/* Footer */
+footer{
+  font-size:13px !important;
+  line-height:1.4 !important;
+}
+
+/* All-Time keeps the larger V43 hierarchy, with only small supporting
+   copy aligned to this new sitewide scale. */
+#page-alltime .alltime-leader-row > div > span{
+  font-size:15px !important;
+}
+#page-alltime #alltime-champs .alltime-leader-row > div > span{
+  font-size:15px !important;
+}
+#page-alltime .champ-year{
+  font-size:18px !important;
+}
+
+@media(max-width:800px){
+  .hero p,
+  .page-heading p{
+    font-size:16px !important;
+  }
+
+  .rule-section p,
+  .rule-section li{
+    font-size:15px !important;
+  }
+
+  .weekly-awards-grid .legacy-card-head .legacy-label{
+    font-size:14px !important;
+  }
+  .weekly-awards-grid .legacy-name{
+    font-size:28px !important;
+  }
+  .weekly-awards-grid .legacy-sub{
+    font-size:15px !important;
+  }
+  .weekly-awards-grid .division-rank-row,
+  .weekly-awards-grid .division-rank-row strong{
+    font-size:17px !important;
+  }
+}
