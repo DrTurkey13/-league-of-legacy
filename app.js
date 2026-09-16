@@ -63,6 +63,43 @@ function divisionName(id){
   return m[`division_${id}`] || m[`division_${id}_name`] || `Division ${id}`;
 }
 
+
+async function loadChampion(){
+  const nameEl=$('#last-champ-name');
+  const ownerEl=$('#last-champ-owner');
+  if(!nameEl || !ownerEl) return;
+
+  try{
+    const prevId=state.league?.previous_league_id;
+    if(!prevId || prevId==='0') throw new Error('No previous league linked');
+
+    const [league,users,rosters,bracket]=await Promise.all([
+      getJSON(`${API}/league/${prevId}`),
+      getJSON(`${API}/league/${prevId}/users`),
+      getJSON(`${API}/league/${prevId}/rosters`),
+      getJSON(`${API}/league/${prevId}/winners_bracket`)
+    ]);
+
+    const final=bracket.find(g=>Number(g.p)===1);
+    if(!final || final.w==null) throw new Error('Championship result not found');
+
+    const roster=rosters.find(r=>Number(r.roster_id)===Number(final.w));
+    if(!roster) throw new Error('Champion roster not found');
+
+    const user=users.find(u=>String(u.user_id)===String(roster.owner_id));
+    if(!user) throw new Error('Champion owner not found');
+
+    // User wanted the champion page to show the Sleeper username/display name.
+    const username=user.display_name || user.username || 'League Champion';
+    nameEl.textContent=username;
+    ownerEl.textContent=`${league.season || '2025'} League Champion`;
+  }catch(e){
+    console.warn('Champion unavailable',e);
+    nameEl.textContent='Champion unavailable';
+    ownerEl.textContent='Could not load the previous season champion from Sleeper.';
+  }
+}
+
 async function loadWeeklyAwards(){
   try{
     if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
@@ -407,12 +444,13 @@ async function boot(){
     await loadLeague();
     renderRankings();
     const allTimePromise=loadAllTime();
+    const championPromise=loadChampion();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
-    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,allTimePromise]);
+    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,allTimePromise,championPromise]);
   }catch(e){
     console.error(e);
     const msg=`<div class="callout danger">Couldn't reach Sleeper from this browser. Check your connection and reload. League ID: ${LEAGUE_ID}</div>`;
