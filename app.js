@@ -366,10 +366,41 @@ function sortedRosters(){
   });
 }
 
+
+function rosterTransactionCount(rosterId){
+  const rid=Number(rosterId);
+  return state.transactions.filter(t=>{
+    if(t.status!=='complete') return false;
+    if((t.roster_ids||[]).some(x=>Number(x)===rid)) return true;
+    if(Object.values(t.adds||{}).some(x=>Number(x)===rid)) return true;
+    if(Object.values(t.drops||{}).some(x=>Number(x)===rid)) return true;
+    if((t.waiver_budget||[]).some(x=>Number(x.sender)===rid || Number(x.receiver)===rid)) return true;
+    return false;
+  }).length;
+}
+
+function rosterFaabLeft(roster){
+  // Prefer Sleeper's direct team-level FAAB balance if the live roster payload provides it.
+  const direct=roster.settings?.waiver_budget ?? roster.waiver_budget;
+  if(direct!==undefined && direct!==null && Number.isFinite(Number(direct))){
+    return Number(direct);
+  }
+
+  // Public Sleeper roster payloads commonly expose the league budget + this roster's
+  // budget-used value. Use those native Sleeper fields only; do not rebuild FAAB from trades.
+  const starting=Number(state.league?.settings?.waiver_budget ?? 100);
+  const used=Number(roster.settings?.waiver_budget_used ?? 0);
+  return Math.max(0,starting-used);
+}
+
+function renderRankingsTable(rows=sortedRosters()){
+  $('#rankings-table').innerHTML=`<table><thead><tr><th>Rank</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Moves</th><th>FAAB Left</th></tr></thead><tbody>${rows.map((r,i)=>{const u=state.ownerByRoster[r.roster_id],s=r.settings||{};return `<tr><td><div class="rank-pill ${i===0?'top':''}">${i+1}</div></td><td><strong>${esc(teamName(u,r.roster_id))}</strong><div class="team-sub">${esc(u?.display_name||u?.username||'')}</div></td><td><strong>${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</strong></td><td>${pts(s,'fpts').toFixed(2)}</td><td>${pts(s,'fpts_against').toFixed(2)}</td><td>${rosterTransactionCount(r.roster_id)}</td><td>$${rosterFaabLeft(r)}</td></tr>`}).join('')}</tbody></table>`;
+}
+
 function renderRankings(){
   const rows=sortedRosters();
   $('#home-rankings').innerHTML=rows.slice(0,5).map((r,i)=>{const u=state.ownerByRoster[r.roster_id];const s=r.settings||{};return `<div class="rank-mini"><div class="rank-number">${i+1}</div><div><div class="team-name">${esc(teamName(u,r.roster_id))}</div><div class="team-sub">${pts(s,'fpts').toFixed(2)} PF</div></div><div class="record">${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</div></div>`}).join('') || '<div class="loading">No standings yet.</div>';
-  $('#rankings-table').innerHTML=`<table><thead><tr><th>Rank</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Moves</th><th>FAAB Used</th></tr></thead><tbody>${rows.map((r,i)=>{const u=state.ownerByRoster[r.roster_id],s=r.settings||{};return `<tr><td><div class="rank-pill ${i===0?'top':''}">${i+1}</div></td><td><strong>${esc(teamName(u,r.roster_id))}</strong><div class="team-sub">${esc(u?.display_name||u?.username||'')}</div></td><td><strong>${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</strong></td><td>${pts(s,'fpts').toFixed(2)}</td><td>${pts(s,'fpts_against').toFixed(2)}</td><td>${s.total_moves||0}</td><td>${s.waiver_budget_used||0}</td></tr>`}).join('')}</tbody></table>`;
+  renderRankingsTable(rows);
 }
 
 function assetsForRoster(t,rosterId){
@@ -497,6 +528,7 @@ async function boot(){
     const championPromise=loadChampion();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
+    renderRankingsTable();
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
