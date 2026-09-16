@@ -472,10 +472,9 @@ async function loadAllTime(){
 
     const managers=new Map();
     const ensure=(uid,u)=>{
-      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',team:u?.metadata?.team_name||'',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0});
+      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0});
       const x=managers.get(uid);
       if(u?.display_name||u?.username) x.name=u.display_name||u.username;
-      if(u?.metadata?.team_name) x.team=u.metadata.team_name;
       return x;
     };
 
@@ -499,7 +498,7 @@ async function loadAllTime(){
     const games=x=>x.w+x.l+x.t;
     const pct=x=>games(x)?(x.w+x.t*.5)/games(x):0;
     const fmt=n=>Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-    table.innerHTML=`<table><thead><tr><th>Manager</th><th>Seasons</th><th>Record</th><th>Win %</th><th>PF</th><th>PA</th><th>Titles</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td><strong>${esc(x.name)}</strong>${x.team?`<div class="team-sub">${esc(x.team)}</div>`:''}</td><td>${x.seasons}</td><td><strong>${x.w}-${x.l}${x.t?`-${x.t}`:''}</strong></td><td>${(pct(x)*100).toFixed(1)}%</td><td>${fmt(x.pf)}</td><td>${fmt(x.pa)}</td><td><strong>${x.titles}</strong></td></tr>`).join('')}</tbody></table>`;
+    table.innerHTML=`<table><thead><tr><th>Manager</th><th>Seasons</th><th>Record</th><th>Win %</th><th>PF</th><th>PA</th><th>Titles</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td><strong>${esc(x.name)}</strong></td><td>${x.seasons}</td><td><strong>${x.w}-${x.l}${x.t?`-${x.t}`:''}</strong></td><td>${(pct(x)*100).toFixed(1)}%</td><td>${fmt(x.pf)}</td><td>${fmt(x.pa)}</td><td><strong>${x.titles}</strong></td></tr>`).join('')}</tbody></table>`;
 
     const years=seasons.map(s=>s.league.season).filter(Boolean).sort();
     const totalGames=rows.reduce((n,x)=>n+games(x),0)/2;
