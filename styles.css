@@ -928,3 +928,391 @@ main{position:relative;z-index:1;}
 @media(max-width:800px){
   :root[data-theme="light"] body::before{background-size:auto 100vh!important;background-position:center top!important;}
 }
+
+/* === V18 DARK GLASS RESTORE ===
+   V17 restored the light stadium, but older shared glass rules were still making
+   dark mode look like solid navy cards. Keep the same readable text, restore
+   the stadium-through-glass look only in dark mode. */
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .legacy-card,
+:root[data-theme="dark"] .rule-section,
+:root[data-theme="dark"] .tx-card,
+:root[data-theme="dark"] .waitlist-card,
+:root[data-theme="dark"] .rules-toc,
+:root[data-theme="dark"] .alltime-summary-card,
+:root[data-theme="dark"] .alltime-table,
+:root[data-theme="dark"] .payout-grid > div,
+:root[data-theme="dark"] .draft-strip span {
+  background:linear-gradient(145deg,rgba(3,17,31,.16),rgba(2,10,20,.25))!important;
+  border-color:rgba(170,211,243,.24)!important;
+  backdrop-filter:blur(2px) saturate(105%)!important;
+  -webkit-backdrop-filter:blur(2px) saturate(105%)!important;
+  box-shadow:inset 0 0 24px rgba(var(--division-accent-rgb),.025),0 10px 28px rgba(0,0,0,.12)!important;
+}
+:root[data-theme="dark"] .hero-action-tile,
+:root[data-theme="dark"] .hero-action-blue,
+:root[data-theme="dark"] .hero-action-white,
+:root[data-theme="dark"] .hero-action-tile[data-route="champ"] {
+  background:linear-gradient(145deg,rgba(3,17,31,.12),rgba(2,10,20,.20))!important;
+  backdrop-filter:blur(1px) saturate(105%)!important;
+  -webkit-backdrop-filter:blur(1px) saturate(105%)!important;
+}
+@media(max-width:800px){
+  :root[data-theme="dark"] .stat-card,
+  :root[data-theme="dark"] .panel,
+  :root[data-theme="dark"] .legacy-card,
+  :root[data-theme="dark"] .rule-section,
+  :root[data-theme="dark"] .tx-card,
+  :root[data-theme="dark"] .waitlist-card {
+    backdrop-filter:blur(2px) saturate(105%)!important;
+    -webkit-backdrop-filter:blur(2px) saturate(105%)!important;
+  }
+}
+
+/* === V19 LIGHT MODE TYPOGRAPHY PASS ===
+   Light-mode font/readability only. Dark mode and all stadium/glass/background
+   behavior are intentionally untouched. */
+:root[data-theme="light"]{
+  --light-ink:#071522;
+  --light-body:#213b51;
+  --light-muted:#38536a;
+  --light-soft:#50687b;
+}
+
+/* Core headings and important values */
+:root[data-theme="light"] .section-head h2,
+:root[data-theme="light"] .panel-head h2,
+:root[data-theme="light"] .page-heading h1,
+:root[data-theme="light"] .legacy-name,
+:root[data-theme="light"] .team-name,
+:root[data-theme="light"] .record,
+:root[data-theme="light"] .activity-mini strong,
+:root[data-theme="light"] .news-item strong,
+:root[data-theme="light"] .featured-side strong,
+:root[data-theme="light"] .wait-name strong,
+:root[data-theme="light"] .suck-person strong,
+:root[data-theme="light"] .suck-count strong,
+:root[data-theme="light"] .stat-card strong,
+:root[data-theme="light"] .champ-page h1 {
+  color:var(--light-ink)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+/* Small all-caps labels stay clearly secondary, but never washed out. */
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker,
+:root[data-theme="light"] .legacy-label,
+:root[data-theme="light"] .news-date,
+:root[data-theme="light"] .tx-type,
+:root[data-theme="light"] .rule-num,
+:root[data-theme="light"] .stat-label,
+:root[data-theme="light"] .leaderboard-note {
+  color:#173f5e!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+/* General body/support copy */
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .team-sub,
+:root[data-theme="light"] .news-item p,
+:root[data-theme="light"] .featured-meta,
+:root[data-theme="light"] .featured-assets,
+:root[data-theme="light"] .list-sub,
+:root[data-theme="light"] .activity-mini span,
+:root[data-theme="light"] .loading,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .small,
+:root[data-theme="light"] .champ-owner,
+:root[data-theme="light"] footer {
+  color:var(--light-body)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+/* Weekly spotlight cards */
+:root[data-theme="light"] .legacy-card .legacy-sub {
+  color:#29475f!important;
+  font-weight:500!important;
+}
+:root[data-theme="light"] .division-rank-row {
+  color:#29475f!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .division-rank-row strong {
+  color:var(--light-ink)!important;
+  opacity:1!important;
+}
+
+/* Season-shame leaderboard — force both team and count labels readable. */
+:root[data-theme="light"] .suck-person span,
+:root[data-theme="light"] .suck-count span {
+  color:#29475f!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+:root[data-theme="light"] .suck-count span {
+  font-weight:700!important;
+}
+
+/* Home 2x2 action tiles: dark ink on the brighter stadium, not old white dark-mode text. */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-tile * {
+  text-shadow:none!important;
+}
+:root[data-theme="light"] .hero-action-copy strong,
+:root[data-theme="light"] .hero-action-icon,
+:root[data-theme="light"] .hero-action-arrow,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-copy strong,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-icon,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-arrow {
+  color:var(--light-ink)!important;
+  fill:currentColor!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .hero-action-copy small,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-copy small {
+  color:#304d65!important;
+  opacity:1!important;
+  font-weight:650!important;
+}
+
+/* League activity rows */
+:root[data-theme="light"] .activity-mini > span,
+:root[data-theme="light"] .activity-mini div span {
+  color:#365269!important;
+  opacity:1!important;
+}
+
+/* Rules / tables / miscellaneous text */
+:root[data-theme="light"] .rule-section p,
+:root[data-theme="light"] .trade-side li,
+:root[data-theme="light"] td,
+:root[data-theme="light"] .wait-name span,
+:root[data-theme="light"] .status {
+  color:#29475f!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] th {
+  color:#36546c!important;
+  opacity:1!important;
+}
+
+/* Champion page: keep the light glass, but make every line legible. */
+:root[data-theme="light"] .champ-page .eyebrow {
+  color:#173f5e!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+:root[data-theme="light"] .champ-page h1 {
+  color:#071522!important;
+  -webkit-text-stroke:0!important;
+  filter:none!important;
+}
+:root[data-theme="light"] .champ-owner {
+  color:#29475f!important;
+  font-weight:500!important;
+}
+
+/* Mobile: slightly larger supporting text, matching the readable dark-mode scale. */
+@media(max-width:800px){
+  :root[data-theme="light"] .legacy-sub,
+  :root[data-theme="light"] .news-item p,
+  :root[data-theme="light"] .team-sub,
+  :root[data-theme="light"] .featured-assets,
+  :root[data-theme="light"] .activity-mini span,
+  :root[data-theme="light"] .champ-owner {
+    font-size:15px!important;
+    line-height:1.45!important;
+  }
+  :root[data-theme="light"] .division-rank-row {
+    font-size:14px!important;
+    line-height:1.7!important;
+  }
+  :root[data-theme="light"] .division-rank-row strong {
+    font-size:14px!important;
+  }
+  :root[data-theme="light"] .suck-person span,
+  :root[data-theme="light"] .suck-count span {
+    font-size:13px!important;
+  }
+  :root[data-theme="light"] .hero-action-copy small {
+    font-size:13px!important;
+    line-height:1.28!important;
+  }
+}
+
+/* === V20 LIGHT MODE OPACITY CONSISTENCY ===
+   Keep the same clear stadium-through-glass look below Weekly Spotlight.
+   Light mode only; dark mode intentionally untouched. */
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .suck-leaderboard-panel,
+:root[data-theme="light"] .feature-trade-panel,
+:root[data-theme="light"] .news-panel,
+:root[data-theme="light"] .dashboard-grid .panel,
+:root[data-theme="light"] .home-feature-grid .panel {
+  background:rgba(255,255,255,.16)!important;
+  border-color:rgba(43,75,101,.22)!important;
+  backdrop-filter:blur(1px) saturate(100%)!important;
+  -webkit-backdrop-filter:blur(1px) saturate(100%)!important;
+  box-shadow:0 8px 22px rgba(20,45,67,.06),inset 0 0 0 1px rgba(255,255,255,.06)!important;
+}
+
+/* Inner trade boxes should read as glass too, not solid white cards. */
+:root[data-theme="light"] .featured-side,
+:root[data-theme="light"] .trade-side {
+  background:rgba(255,255,255,.28)!important;
+  border-color:rgba(43,75,101,.20)!important;
+  backdrop-filter:blur(1px) saturate(100%)!important;
+  -webkit-backdrop-filter:blur(1px) saturate(100%)!important;
+  box-shadow:none!important;
+}
+
+/* Keep the leaderboard row itself clear and readable. */
+:root[data-theme="light"] .suck-row,
+:root[data-theme="light"] .suck-leaderboard > * {
+  background:rgba(255,255,255,.08)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+@media(max-width:800px){
+  :root[data-theme="light"] .panel,
+  :root[data-theme="light"] .stat-card,
+  :root[data-theme="light"] .suck-leaderboard-panel,
+  :root[data-theme="light"] .feature-trade-panel,
+  :root[data-theme="light"] .news-panel,
+  :root[data-theme="light"] .dashboard-grid .panel,
+  :root[data-theme="light"] .home-feature-grid .panel {
+    backdrop-filter:blur(1px)!important;
+    -webkit-backdrop-filter:blur(1px)!important;
+  }
+}
+
+/* === V21 LIGHT MODE FINAL READABILITY SWEEP ===
+   Darken the remaining washed-out light-mode text without touching dark mode,
+   stadium artwork, glass opacity, layout, or division accents. */
+:root[data-theme="light"] {
+  --light-ink:#071522;
+  --light-body:#172a3a;
+  --light-muted:#2d4355;
+  --light-soft:#3f5567;
+}
+
+/* Supporting copy across the home dashboard */
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .news-item p,
+:root[data-theme="light"] .team-sub,
+:root[data-theme="light"] .featured-assets,
+:root[data-theme="light"] .featured-meta,
+:root[data-theme="light"] .list-sub,
+:root[data-theme="light"] .activity-mini span,
+:root[data-theme="light"] .loading,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .small,
+:root[data-theme="light"] .champ-owner,
+:root[data-theme="light"] .rule-section p,
+:root[data-theme="light"] .trade-side li,
+:root[data-theme="light"] .wait-name span,
+:root[data-theme="light"] .status,
+:root[data-theme="light"] footer {
+  color:var(--light-body)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+/* Weekly spotlight descriptions and division rows */
+:root[data-theme="light"] .legacy-card .legacy-sub,
+:root[data-theme="light"] #power-division-sub,
+:root[data-theme="light"] #you-suck-sub,
+:root[data-theme="light"] #idiot-sub {
+  color:#22394b!important;
+  opacity:1!important;
+  font-weight:550!important;
+}
+:root[data-theme="light"] .division-rank-row,
+:root[data-theme="light"] .division-rank-row span {
+  color:#263c4f!important;
+  opacity:1!important;
+}
+:root[data-theme="light"] .division-rank-row strong {
+  color:#071522!important;
+  opacity:1!important;
+}
+
+/* You Suck leaderboard */
+:root[data-theme="light"] .suck-person span,
+:root[data-theme="light"] .suck-count span,
+:root[data-theme="light"] .leaderboard-note {
+  color:#2a4052!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+:root[data-theme="light"] .suck-count span {
+  font-weight:700!important;
+}
+
+/* Small uppercase/kicker labels should be dark slate, not washed blue-gray */
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker,
+:root[data-theme="light"] .legacy-label,
+:root[data-theme="light"] .news-date,
+:root[data-theme="light"] .tx-type,
+:root[data-theme="light"] .rule-num,
+:root[data-theme="light"] .stat-label {
+  color:#17384f!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+/* Hero 2x2 secondary text */
+:root[data-theme="light"] .hero-action-copy small,
+:root[data-theme="light"] .hero-action-tile[data-route="champ"] .hero-action-copy small {
+  color:#263f53!important;
+  opacity:1!important;
+  font-weight:650!important;
+}
+
+/* Activity / news / rankings supporting text */
+:root[data-theme="light"] .activity-mini > span,
+:root[data-theme="light"] .activity-mini div span,
+:root[data-theme="light"] td,
+:root[data-theme="light"] th {
+  color:#2b4356!important;
+  opacity:1!important;
+}
+
+/* Inner Blockbuster Board asset text */
+:root[data-theme="light"] .featured-side,
+:root[data-theme="light"] .featured-side p,
+:root[data-theme="light"] .featured-side span,
+:root[data-theme="light"] .trade-side,
+:root[data-theme="light"] .trade-side p,
+:root[data-theme="light"] .trade-side span {
+  color:#20374a!important;
+}
+
+/* Champion page text */
+:root[data-theme="light"] .champ-page .eyebrow {
+  color:#17384f!important;
+}
+:root[data-theme="light"] .champ-owner {
+  color:#294155!important;
+  font-weight:550!important;
+}
+
+@media(max-width:800px){
+  :root[data-theme="light"] .legacy-sub,
+  :root[data-theme="light"] .news-item p,
+  :root[data-theme="light"] .team-sub,
+  :root[data-theme="light"] .featured-assets,
+  :root[data-theme="light"] .activity-mini span,
+  :root[data-theme="light"] .champ-owner,
+  :root[data-theme="light"] .leaderboard-note {
+    font-size:15px!important;
+    line-height:1.45!important;
+  }
+}
