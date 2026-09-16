@@ -1316,3 +1316,163 @@ main{position:relative;z-index:1;}
     line-height:1.45!important;
   }
 }
+
+
+/* === V22: SHARP, FULLER LIGHT-MODE TYPE ===
+   Typography only. Do not alter stadium, glass opacity, layout, or dark mode.
+*/
+
+/* Core light-mode type palette */
+:root[data-theme="light"] {
+  --v22-ink: #06131f;
+  --v22-body: #172b3b;
+  --v22-muted: #243b4d;
+  --v22-soft: #31495b;
+}
+
+/* Make general supporting copy darker and fuller */
+:root[data-theme="light"] p,
+:root[data-theme="light"] small,
+:root[data-theme="light"] .legacy-sub,
+:root[data-theme="light"] .leaderboard-note,
+:root[data-theme="light"] .news-item p,
+:root[data-theme="light"] .team-sub,
+:root[data-theme="light"] .list-sub,
+:root[data-theme="light"] .featured-assets,
+:root[data-theme="light"] .featured-meta,
+:root[data-theme="light"] .activity-mini span,
+:root[data-theme="light"] .champ-owner,
+:root[data-theme="light"] .rule-section p,
+:root[data-theme="light"] .trade-side li,
+:root[data-theme="light"] .wait-name span,
+:root[data-theme="light"] .status,
+:root[data-theme="light"] .loading,
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .small,
+:root[data-theme="light"] footer {
+  color: var(--v22-body) !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+
+/* Tiny labels / kickers */
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .kicker,
+:root[data-theme="light"] .legacy-label,
+:root[data-theme="light"] .news-date,
+:root[data-theme="light"] .tx-type,
+:root[data-theme="light"] .rule-num,
+:root[data-theme="light"] .stat-label {
+  color: #17364d !important;
+  opacity: 1 !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+/* Main card titles/names should be crisp black-navy */
+:root[data-theme="light"] .legacy-name,
+:root[data-theme="light"] .panel-head h2,
+:root[data-theme="light"] .section-head h2,
+:root[data-theme="light"] .news-item strong,
+:root[data-theme="light"] .team-name,
+:root[data-theme="light"] .featured-side strong,
+:root[data-theme="light"] .trade-side strong {
+  color: var(--v22-ink) !important;
+  opacity: 1 !important;
+  font-weight: 850 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Division ranking rows */
+:root[data-theme="light"] .division-rank-row,
+:root[data-theme="light"] .division-rank-row span {
+  color: #1f3445 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] .division-rank-row strong {
+  color: var(--v22-ink) !important;
+  opacity: 1 !important;
+  font-weight: 800 !important;
+}
+
+/* You Suck leaderboard secondary text */
+:root[data-theme="light"] .suck-person span,
+:root[data-theme="light"] .suck-count span {
+  color: #1e3446 !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+
+/* 2x2 tiles: remove every softening effect from the TYPE itself */
+:root[data-theme="light"] .hero-action-tile,
+:root[data-theme="light"] .hero-action-tile * {
+  text-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+:root[data-theme="light"] .hero-action-copy strong {
+  color: #05121d !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: auto;
+}
+
+:root[data-theme="light"] .hero-action-copy small {
+  color: #193247 !important;
+  font-weight: 750 !important;
+  letter-spacing: 0 !important;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: auto;
+}
+
+:root[data-theme="light"] .hero-action-arrow {
+  color: #06131f !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Stat cards */
+:root[data-theme="light"] .stat-card .stat-label {
+  color: #19364c !important;
+  font-weight: 800 !important;
+}
+:root[data-theme="light"] .stat-card strong {
+  color: #06131f !important;
+  font-weight: 900 !important;
+}
+
+/* Keep hero headline white over the stadium */
+:root[data-theme="light"] .hero-copy h1,
+:root[data-theme="light"] #hero-title,
+:root[data-theme="light"] .hero .eyebrow {
+  color: #fff !important;
+}
+
+/* Mobile: slightly fuller supporting type without changing layout */
+@media(max-width:800px){
+  :root[data-theme="light"] .legacy-sub,
+  :root[data-theme="light"] .news-item p,
+  :root[data-theme="light"] .team-sub,
+  :root[data-theme="light"] .featured-assets,
+  :root[data-theme="light"] .activity-mini span,
+  :root[data-theme="light"] .champ-owner,
+  :root[data-theme="light"] .leaderboard-note {
+    font-weight: 600 !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy strong {
+    font-weight: 900 !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy small {
+    font-weight: 750 !important;
+  }
+}
