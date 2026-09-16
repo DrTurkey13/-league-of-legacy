@@ -1636,3 +1636,153 @@ main{position:relative;z-index:1;}
   text-shadow:none !important;
   opacity:1 !important;
 }
+
+
+/* === V25: LIGHT-MODE 2x2 BUTTON FIT ===
+   Keep the sharper V24 text, but fit all copy cleanly inside each tile.
+   Dark mode untouched.
+*/
+@media(max-width:800px){
+  :root[data-theme="light"] .hero-action-tile,
+  :root[data-theme="light"] .hero-action-blue,
+  :root[data-theme="light"] .hero-action-white,
+  :root[data-theme="light"] .hero-action-tile[data-route="champ"]{
+    min-height:112px !important;
+    padding:12px 10px !important;
+    grid-template-columns:30px minmax(0,1fr) 12px !important;
+    gap:7px !important;
+    overflow:hidden !important;
+  }
+
+  :root[data-theme="light"] .hero-action-icon{
+    width:30px !important;
+    height:30px !important;
+  }
+
+  :root[data-theme="light"] .hero-action-icon svg{
+    width:27px !important;
+    height:27px !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy{
+    min-width:0 !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy strong{
+    display:block !important;
+    max-width:100% !important;
+    font-size:17px !important;
+    line-height:1.08 !important;
+    font-weight:900 !important;
+    letter-spacing:-.025em !important;
+    white-space:normal !important;
+    overflow-wrap:normal !important;
+    word-break:normal !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy small{
+    display:block !important;
+    max-width:100% !important;
+    font-size:11px !important;
+    line-height:1.25 !important;
+    font-weight:800 !important;
+    letter-spacing:-.01em !important;
+    white-space:normal !important;
+    overflow-wrap:normal !important;
+    word-break:normal !important;
+    margin-top:5px !important;
+  }
+
+  :root[data-theme="light"] .hero-action-arrow{
+    font-size:22px !important;
+    line-height:1 !important;
+    justify-self:end !important;
+  }
+}
+
+@media(max-width:380px){
+  :root[data-theme="light"] .hero-action-tile,
+  :root[data-theme="light"] .hero-action-blue,
+  :root[data-theme="light"] .hero-action-white,
+  :root[data-theme="light"] .hero-action-tile[data-route="champ"]{
+    grid-template-columns:27px minmax(0,1fr) !important;
+    padding:11px 9px !important;
+    gap:6px !important;
+  }
+
+  :root[data-theme="light"] .hero-action-arrow{
+    display:none !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy strong{
+    font-size:16px !important;
+  }
+
+  :root[data-theme="light"] .hero-action-copy small{
+    font-size:10.5px !important;
+  }
+}
+
+
+/* === V26: MATCH DARK-MODE TYPE SIZE TO LIGHT MODE ===
+   Font sizing/line-height only. Preserve each theme's colors, glass,
+   stadium, font treatment, and layout.
+*/
+
+/* Supporting/dashboard copy uses the same readable scale in both themes. */
+:root[data-theme="dark"] .legacy-sub,
+:root[data-theme="dark"] .news-item p,
+:root[data-theme="dark"] .team-sub,
+:root[data-theme="dark"] .featured-assets,
+:root[data-theme="dark"] .activity-mini span,
+:root[data-theme="dark"] .champ-owner,
+:root[data-theme="dark"] .leaderboard-note {
+  font-size:15px !important;
+  line-height:1.45 !important;
+}
+
+/* Power Division ranking rows */
+:root[data-theme="dark"] .division-rank-row,
+:root[data-theme="dark"] .division-rank-row strong {
+  font-size:14px !important;
+}
+:root[data-theme="dark"] .division-rank-row {
+  line-height:1.7 !important;
+}
+
+/* You Suck leaderboard supporting labels */
+:root[data-theme="dark"] .suck-person span,
+:root[data-theme="dark"] .suck-count span {
+  font-size:13px !important;
+}
+
+/* Match 2x2 button TYPE SIZE to the fitted light-mode version.
+   Keep dark mode's existing font family/colors. */
+@media(max-width:800px){
+  :root[data-theme="dark"] .hero-action-copy strong {
+    font-size:17px !important;
+    line-height:1.08 !important;
+  }
+
+  :root[data-theme="dark"] .hero-action-copy small {
+    font-size:11px !important;
+    line-height:1.25 !important;
+  }
+
+  :root[data-theme="dark"] .hero-action-arrow {
+    font-size:22px !important;
+    line-height:1 !important;
+  }
+}
+
+@media(max-width:380px){
+  :root[data-theme="dark"] .hero-action-copy strong {
+    font-size:16px !important;
+  }
+
+  :root[data-theme="dark"] .hero-action-copy small {
+    font-size:10.5px !important;
+  }
+}
