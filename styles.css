@@ -1786,3 +1786,9 @@ main{position:relative;z-index:1;}
     font-size:10.5px !important;
   }
 }
+
+
+/* === V27 TEMPORARY DARK-ONLY PRODUCTION MODE ===
+   V26 dark mode is frozen. Light mode is intentionally disabled.
+*/
+#theme-toggle { display:none !important; }
