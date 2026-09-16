@@ -1431,3 +1431,22 @@ html[data-theme="light"]{color-scheme:light;background:#dfe7ee}
   :root[data-theme="light"] .hero-action-copy strong{font-size:16px!important}
   :root[data-theme="light"] .hero-action-copy small{font-size:10.5px!important}
 }
+
+
+/* ============================================================
+   V30 — DARK HERO BACKGROUND FIX
+   The old Power Division hero-specific background rules were
+   winning on specificity and drawing a second stadium inside
+   the hero. Dark mode should use ONLY the page-wide stadium.
+   Light mode is intentionally untouched.
+   ============================================================ */
+
+:root[data-theme="dark"][data-power-division="blue"] .hero,
+:root[data-theme="dark"][data-power-division="red"] .hero,
+:root[data-theme="dark"][data-power-division="white"] .hero,
+:root[data-theme="dark"][data-power-division="neutral"] .hero{
+  background:transparent!important;
+  background-image:none!important;
+  background-color:transparent!important;
+  box-shadow:none!important;
+}
