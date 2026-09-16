@@ -2150,3 +2150,5 @@ html[data-theme="light"]{color-scheme:light;background:#dfe7ee}
 :root[data-theme="light"][data-power-division="neutral"] .legacy-board > .section-head .kicker{
   color:#e7eef4 !important;
 }
+
+.champ-year{display:inline-block;margin-left:8px;white-space:nowrap}.title-count{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;font-size:16px}

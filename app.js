@@ -472,9 +472,10 @@ async function loadAllTime(){
 
     const managers=new Map();
     const ensure=(uid,u)=>{
-      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0});
+      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0,titleYears:[]});
       const x=managers.get(uid);
       if(u?.display_name||u?.username) x.name=u.display_name||u.username;
+      if(!Array.isArray(x.titleYears)) x.titleYears=[];
       return x;
     };
 
@@ -491,7 +492,11 @@ async function loadAllTime(){
       const final=season.bracket.find(g=>Number(g.p)===1);
       const champRid=final?.w;
       const champ=byRoster[champRid];
-      if(champ?.owner_id) ensure(champ.owner_id,byUser[champ.owner_id]).titles++;
+      if(champ?.owner_id){
+        const champEntry=ensure(champ.owner_id,byUser[champ.owner_id]);
+        champEntry.titles++;
+        if(season.league?.season) champEntry.titleYears.push(String(season.league.season));
+      }
     }
 
     const rows=[...managers.values()].sort((a,b)=>b.w-a.w || (b.pf-a.pf));
@@ -512,7 +517,11 @@ async function loadAllTime(){
     $('#alltime-leaders').innerHTML=leaderItems.map(([label,x,val])=>`<div class="alltime-leader-row"><div><strong>${esc(label)}</strong><span>${esc(x.name)}</span></div><strong>${esc(val)}</strong></div>`).join('');
 
     const champs=rows.filter(x=>x.titles).sort((a,b)=>b.titles-a.titles || b.w-a.w);
-    $('#alltime-champs').innerHTML=champs.length?champs.map(x=>`<div class="alltime-leader-row"><div><strong>${esc(x.name)}</strong><span>${x.titles===1?'League champion':'Multiple-time league champion'}</span></div><strong class="title-count">${'🏆'.repeat(Math.min(x.titles,5))}${x.titles>5?` ×${x.titles}`:''}</strong></div>`).join(''):'<div class="loading">No completed championship bracket found in the linked Sleeper history.</div>';
+    $('#alltime-champs').innerHTML=champs.length?champs.map(x=>{
+      const years=(x.titleYears||[]).slice().sort((a,b)=>Number(a)-Number(b));
+      const yearMarkup=years.length ? years.map(y=>`<span class="champ-year">🏆 ${esc(y)}</span>`).join(' ') : `<span class="champ-year">🏆 ${x.titles}</span>`;
+      return `<div class="alltime-leader-row"><div><strong>${esc(x.name)}</strong><span>${x.titles===1?'League champion':'Multiple-time league champion'}</span></div><strong class="title-count">${yearMarkup}</strong></div>`;
+    }).join(''):'<div class="loading">No completed championship bracket found in the linked Sleeper history.</div>';
   }catch(e){
     console.warn('All-time history unavailable',e);
     table.innerHTML='<div class="callout danger">Could not load the linked Sleeper league history.</div>';
