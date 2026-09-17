@@ -2469,3 +2469,72 @@ footer{
     font-size:17px !important;
   }
 }
+
+/* ============================================================
+   V37 — 8 APPROVED STADIUM BACKGROUNDS
+   Built on the current user-provided app.js / index.html / styles.css.
+   No layout, typography, glass, rankings, rules, or award-card fixes changed.
+
+   DARK:  mixed / blue / red / white nighttime stadiums
+   LIGHT: mixed / blue / red / white daytime stadiums
+   Existing "neutral" offseason state maps to the mixed stadium.
+   ============================================================ */
+
+/* Default/loading state before Sleeper resolves the Power Division. */
+body::before{
+  background-image:
+    linear-gradient(180deg,rgba(1,8,18,.10) 0%,rgba(1,8,18,.24) 46%,rgba(1,7,15,.48) 100%),
+    url("stadium-night-mixed.webp") !important;
+}
+
+/* ----- DARK MODE ----- */
+:root[data-theme="dark"][data-power-division="neutral"] body::before,
+:root[data-theme="dark"][data-power-division="mixed"] body::before{
+  background-image:
+    linear-gradient(180deg,rgba(1,8,18,.10) 0%,rgba(1,8,18,.24) 46%,rgba(1,7,15,.48) 100%),
+    url("stadium-night-mixed.webp") !important;
+}
+
+:root[data-theme="dark"][data-power-division="blue"] body::before{
+  background-image:
+    linear-gradient(180deg,rgba(1,8,18,.10) 0%,rgba(1,8,18,.24) 46%,rgba(1,7,15,.50) 100%),
+    url("stadium-night-blue.webp") !important;
+}
+
+:root[data-theme="dark"][data-power-division="red"] body::before{
+  background-image:
+    linear-gradient(180deg,rgba(14,1,5,.09) 0%,rgba(10,1,5,.23) 46%,rgba(7,1,5,.52) 100%),
+    url("stadium-night-red.webp") !important;
+}
+
+:root[data-theme="dark"][data-power-division="white"] body::before{
+  background-image:
+    linear-gradient(180deg,rgba(3,7,12,.08) 0%,rgba(3,7,12,.20) 46%,rgba(2,6,11,.46) 100%),
+    url("stadium-night-white.webp") !important;
+}
+
+/* ----- LIGHT MODE -----
+   Keep the current V29 light-mode presentation intact: full-strength artwork,
+   no filter. body::after continues to provide the existing light wash. */
+:root[data-theme="light"] body::before{
+  opacity:1 !important;
+  filter:none !important;
+  background-image:url("stadium-day-mixed.webp") !important;
+}
+
+:root[data-theme="light"][data-power-division="neutral"] body::before,
+:root[data-theme="light"][data-power-division="mixed"] body::before{
+  background-image:url("stadium-day-mixed.webp") !important;
+}
+
+:root[data-theme="light"][data-power-division="blue"] body::before{
+  background-image:url("stadium-day-blue.webp") !important;
+}
+
+:root[data-theme="light"][data-power-division="red"] body::before{
+  background-image:url("stadium-day-red.webp") !important;
+}
+
+:root[data-theme="light"][data-power-division="white"] body::before{
+  background-image:url("stadium-day-white.webp") !important;
+}
