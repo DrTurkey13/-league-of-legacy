@@ -1,21 +1,23 @@
-LEAGUE OF LEGACY — STADIUM BACKGROUND UPDATE
+LEAGUE OF LEGACY — 8 STADIUM BACKGROUNDS + HERO CONTINUITY FIX
 
-Upload/replace these files in the site root:
-- styles.css
+Replace in repo root:
+- index.html
 - app.js
-- stadium-night-red.webp
-- stadium-night-blue.webp
-- stadium-night-mixed.webp
-- stadium-night-white.webp
-- stadium-day-red.webp
+- styles.css
+
+Add these 8 images to repo root:
 - stadium-day-blue.webp
-- stadium-day-mixed.webp
+- stadium-day-red.webp
 - stadium-day-white.webp
+- stadium-day-mixed.webp
+- stadium-night-blue.webp
+- stadium-night-red.webp
+- stadium-night-white.webp
+- stadium-night-mixed.webp
 
-index.html is included only as the current reference copy; it does not need to change for this background update.
+Old stadium PNG files and old alternate CSS files are no longer needed.
 
-Behavior:
-- Dark mode: nighttime stadium images
-- Light mode: daytime stadium images
-- Power Division blue/red/white automatically selects matching color
-- Mixed image is shown while Sleeper data is loading / as neutral default
+Important fix:
+The stadium is rendered once as the full-site body background. The hero is
+explicitly transparent in every theme/division state so it cannot restart the
+old stadium image inside a rounded hero panel.

@@ -884,3 +884,40 @@ body::before{
 @media(max-width:800px){
   body::before{background-size:auto 100vh !important;background-position:center top !important;}
 }
+
+/* === V15 HERO CONTINUITY FIX ===
+   The stadium exists ONLY on body::before. The hero must never restart or
+   duplicate a stadium image inside its rounded container. */
+.hero,
+:root[data-theme="light"] .hero,
+:root[data-theme="dark"] .hero,
+:root[data-power-division="mixed"] .hero,
+:root[data-power-division="blue"] .hero,
+:root[data-power-division="red"] .hero,
+:root[data-power-division="white"] .hero,
+:root[data-theme="light"][data-power-division="mixed"] .hero,
+:root[data-theme="light"][data-power-division="blue"] .hero,
+:root[data-theme="light"][data-power-division="red"] .hero,
+:root[data-theme="light"][data-power-division="white"] .hero,
+:root[data-theme="dark"][data-power-division="mixed"] .hero,
+:root[data-theme="dark"][data-power-division="blue"] .hero,
+:root[data-theme="dark"][data-power-division="red"] .hero,
+:root[data-theme="dark"][data-power-division="white"] .hero {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.hero::before,
+.hero::after,
+.hero > .hero-identity::before,
+.hero > .hero-identity::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+}
