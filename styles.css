@@ -3013,3 +3013,69 @@ footer{font-size:17px!important}
 :root[data-theme="light"] .rule-badge {
   background: rgba(243,248,252,.72) !important;
 }
+
+/* ============================================================
+   V49 — RULES READING CONTRAST + ALL-TIME STAT WEIGHT
+   Two targeted polish changes only:
+   1) Light-mode Rules page gets darker reading copy and slightly
+      calmer/stronger glass for long-form reading.
+   2) All-Time summary values get a heavier visual weight.
+   Dark mode layout/backgrounds and all other pages stay untouched.
+   ============================================================ */
+
+/* Rules page: long-form copy should read like ink, not gray UI text. */
+:root[data-theme="light"] #page-rules .rule-section{
+  background:linear-gradient(
+    145deg,
+    rgba(249,252,254,.78),
+    rgba(232,240,247,.81)
+  )!important;
+  border-color:rgba(27,55,77,.26)!important;
+}
+
+:root[data-theme="light"] #page-rules .rule-section p,
+:root[data-theme="light"] #page-rules .rule-section li{
+  color:#0b2131!important;
+  font-weight:700!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+:root[data-theme="light"] #page-rules .rule-section p strong,
+:root[data-theme="light"] #page-rules .rule-section li strong,
+:root[data-theme="light"] #page-rules .rule-section h2,
+:root[data-theme="light"] #page-rules .rule-section h3{
+  color:#04131f!important;
+  font-weight:900!important;
+}
+
+:root[data-theme="light"] #page-rules .muted,
+:root[data-theme="light"] #page-rules .example,
+:root[data-theme="light"] #page-rules .callout{
+  color:#102c40!important;
+  font-weight:700!important;
+}
+
+/* All-Time summary: thicken the big values (Seasons, History, Managers, Games). */
+#page-alltime .alltime-summary .stat-card strong{
+  font-weight:900!important;
+  letter-spacing:-.035em!important;
+  -webkit-text-stroke:.28px currentColor;
+  paint-order:stroke fill;
+}
+
+:root[data-theme="light"] #page-alltime .alltime-summary .stat-card strong{
+  color:#04131f!important;
+  text-shadow:none!important;
+}
+
+@media(max-width:800px){
+  :root[data-theme="light"] #page-rules .rule-section p,
+  :root[data-theme="light"] #page-rules .rule-section li{
+    font-weight:700!important;
+  }
+
+  #page-alltime .alltime-summary .stat-card strong{
+    -webkit-text-stroke:.34px currentColor;
+  }
+}

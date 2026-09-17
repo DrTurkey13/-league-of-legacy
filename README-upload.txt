@@ -24,3 +24,7 @@ The existing offseason "neutral" state automatically uses the mixed image.
 Blue / Red / White Power Division continues to be controlled by the existing app.js.
 
 After this is live, the old stadium PNG files are no longer needed by the final background rules.
+
+V4 polish:
+- Light-mode Rules page uses darker, heavier reading text and slightly stronger glass.
+- All-Time summary values are heavier for better legibility.
