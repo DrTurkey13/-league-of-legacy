@@ -2538,3 +2538,143 @@ body::before{
 :root[data-theme="light"][data-power-division="white"] body::before{
   background-image:url("stadium-day-white.webp") !important;
 }
+
+/* ============================================================
+   V45 — SITEWIDE XL TYPE PASS
+   Both themes. Typography only; backgrounds/glass/layout preserved.
+   Raises the readable floor across the entire site, including mobile.
+   ============================================================ */
+
+/* Header / navigation */
+.brand-name{font-size:1.72rem!important;line-height:1!important}
+.brand-sub{font-size:13px!important;line-height:1.2!important}
+.nav button{font-size:15px!important}
+.theme-toggle,.menu-button{font-size:21px!important}
+
+/* Hero + page headers */
+.eyebrow,.kicker{font-size:15px!important;line-height:1.2!important}
+.hero-copy h1,#hero-title{font-size:clamp(52px,7vw,82px)!important;line-height:.96!important}
+.page-heading h1{font-size:clamp(48px,6.5vw,76px)!important;line-height:.98!important}
+.hero p,.page-heading p{font-size:19px!important;line-height:1.55!important}
+
+/* 2x2 home action tiles */
+.hero-action-copy strong{font-size:20px!important;line-height:1.08!important}
+.hero-action-copy small{font-size:13px!important;line-height:1.28!important}
+.hero-action-arrow{font-size:28px!important}
+.hero-action-icon svg{width:36px!important;height:36px!important}
+
+/* Section / panel headings */
+.section-head h2,.panel-head h2,.rule-section h2{font-size:clamp(30px,3.3vw,38px)!important;line-height:1!important}
+.legacy-name{font-size:28px!important;line-height:1.06!important}
+.legacy-sub{font-size:17px!important;line-height:1.45!important}
+
+/* Stat cards */
+.stat-label{font-size:16px!important;line-height:1.2!important}
+.stat-card strong{font-size:32px!important;line-height:1.05!important}
+
+/* Rankings / activity / common lists */
+.link-button{font-size:16px!important}
+.rank-number{font-size:18px!important}
+.team-name{font-size:18px!important;line-height:1.2!important}
+.team-sub{font-size:15px!important;line-height:1.35!important}
+.record{font-size:18px!important}
+.activity-mini strong{font-size:17px!important;line-height:1.25!important}
+.activity-mini span{font-size:15px!important;line-height:1.35!important}
+.loading{font-size:17px!important;line-height:1.4!important}
+.small,.muted{font-size:16px!important;line-height:1.45!important}
+
+/* Weekly Spotlight */
+.weekly-awards-grid .legacy-card-head .legacy-label{font-size:16px!important;line-height:1.15!important}
+.weekly-awards-grid .legacy-card-head .legacy-icon{font-size:32px!important}
+.weekly-awards-grid .legacy-name{font-size:32px!important;line-height:1.03!important}
+.weekly-awards-grid .legacy-sub{font-size:17px!important;line-height:1.45!important}
+.weekly-awards-grid .division-rank-row,.weekly-awards-grid .division-rank-row strong{font-size:18px!important;line-height:1.4!important}
+
+/* Season shame leaderboard */
+.leaderboard-note{font-size:15px!important;line-height:1.4!important}
+.suck-person strong{font-size:17px!important}
+.suck-person span{font-size:15px!important}
+.suck-count strong{font-size:22px!important}
+.suck-count span{font-size:12px!important}
+
+/* Tables */
+th{font-size:14px!important;line-height:1.2!important}
+td{font-size:17px!important;line-height:1.35!important}
+td strong{font-size:18px!important;line-height:1.25!important}
+.rank-pill{font-size:15px!important}
+
+/* Trades / waivers */
+.tx-type{font-size:14px!important;line-height:1.2!important}
+.tx-date{font-size:15px!important;line-height:1.3!important}
+.trade-side h3{font-size:20px!important;line-height:1.2!important}
+.trade-side li,.featured-assets{font-size:17px!important;line-height:1.45!important}
+.featured-side strong{font-size:18px!important}
+.featured-meta{font-size:13px!important}
+.waiver-line{font-size:17px!important;line-height:1.4!important}
+.faab{font-size:18px!important}
+
+/* League news */
+.news-date{font-size:12px!important}
+.news-item strong{font-size:18px!important;line-height:1.25!important}
+.news-item p{font-size:17px!important;line-height:1.45!important}
+
+/* Rules */
+.rule-badge{font-size:15px!important}
+.rules-toc a{font-size:16px!important;line-height:1.35!important}
+.rule-num{font-size:14px!important;line-height:1.2!important}
+.rule-section p,.rule-section li{font-size:18px!important;line-height:1.65!important}
+.rule-section h3{font-size:21px!important;line-height:1.25!important}
+.payout-grid b{font-size:15px!important}
+.payout-grid strong{font-size:34px!important}
+.callout,.example{font-size:17px!important;line-height:1.55!important}
+.example span{font-size:13px!important}
+.draft-strip span{font-size:14px!important}
+
+/* Waitlist */
+.position{font-size:28px!important}
+.avatar-letter{font-size:15px!important}
+.wait-name strong{font-size:18px!important;line-height:1.2!important}
+.wait-name span{font-size:15px!important;line-height:1.35!important}
+.status{font-size:12px!important}
+
+/* All-Time / champion */
+.alltime-leader-row > div > strong{font-size:20px!important}
+.alltime-leader-row > div > span{font-size:17px!important}
+.alltime-leader-row > strong:not(.title-count){font-size:20px!important}
+#page-alltime .champ-year{font-size:20px!important}
+.champ-owner{font-size:18px!important}
+
+/* Footer */
+footer{font-size:15px!important;line-height:1.4!important}
+
+@media(max-width:800px){
+  .brand-name{font-size:1.5rem!important}
+  .hero-copy h1,#hero-title{font-size:clamp(50px,14vw,70px)!important}
+  .page-heading h1{font-size:52px!important}
+  .hero p,.page-heading p{font-size:18px!important}
+
+  .hero-action-copy strong{font-size:18px!important;line-height:1.08!important}
+  .hero-action-copy small{font-size:12px!important;line-height:1.25!important}
+  .hero-action-arrow{font-size:24px!important}
+
+  .section-head h2,.panel-head h2,.rule-section h2{font-size:30px!important}
+  .stat-label{font-size:15px!important}
+  .stat-card strong{font-size:30px!important}
+
+  .weekly-awards-grid .legacy-card-head .legacy-label{font-size:15px!important}
+  .weekly-awards-grid .legacy-name{font-size:31px!important}
+  .weekly-awards-grid .legacy-sub{font-size:16px!important}
+  .weekly-awards-grid .division-rank-row,.weekly-awards-grid .division-rank-row strong{font-size:18px!important}
+
+  .rule-section p,.rule-section li{font-size:17px!important}
+  .news-item p,.featured-assets,.trade-side li{font-size:16px!important}
+  th{font-size:13px!important}
+  td{font-size:16px!important}
+  td strong{font-size:17px!important}
+}
+
+@media(max-width:380px){
+  .hero-action-copy strong{font-size:17px!important}
+  .hero-action-copy small{font-size:11.5px!important}
+  .brand-name{font-size:1.38rem!important}
+}
