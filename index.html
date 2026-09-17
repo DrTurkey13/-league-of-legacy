@@ -8,9 +8,10 @@
     (function(){
       try {
         const saved = localStorage.getItem("lol-theme");
-        const theme = saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-        document.documentElement.dataset.theme = theme;
-      } catch(e) {}
+        document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
+      } catch(e) {
+        document.documentElement.dataset.theme = "dark";
+      }
     })();
   </script>
   <title>League of Legacy</title>
@@ -105,27 +106,35 @@
           </div>
           <div class="legacy-grid weekly-awards-grid">
             <article class="legacy-card score-card">
-              <div class="legacy-icon">🔥</div>
-              <div id="high-score-label" class="legacy-label">WEEKLY HIGH SCORE</div>
+              <div class="legacy-card-head">
+                <div class="legacy-icon">🔥</div>
+                <div id="high-score-label" class="legacy-label">WEEKLY HIGH SCORE</div>
+              </div>
               <div id="weekly-high-score" class="legacy-name">Loading…</div>
               <div id="weekly-high-score-sub" class="legacy-sub">Checking the scoreboard</div>
             </article>
             <article class="legacy-card division-card">
-              <div class="legacy-icon">⚡</div>
-              <div id="power-division-label" class="legacy-label">POWER DIVISION</div>
+              <div class="legacy-card-head">
+                <div class="legacy-icon">⚡</div>
+                <div id="power-division-label" class="legacy-label">POWER DIVISION</div>
+              </div>
               <div id="power-division" class="legacy-name">Loading…</div>
               <div id="power-division-sub" class="legacy-sub">Ranking the divisions by weekly scoring average.</div>
               <div id="division-rankings" class="division-rankings"></div>
             </article>
             <article class="legacy-card suck-card">
-              <div class="legacy-icon">🗑️</div>
-              <div id="you-suck-label" class="legacy-label">YOU SUCK</div>
+              <div class="legacy-card-head">
+                <div class="legacy-icon">🗑️</div>
+                <div id="you-suck-label" class="legacy-label">YOU SUCK</div>
+              </div>
               <div id="you-suck-manager" class="legacy-name">Loading…</div>
               <div id="you-suck-sub" class="legacy-sub">The weekly honor nobody wants.</div>
             </article>
             <article class="legacy-card idiot-card">
-              <div class="legacy-icon">🤡</div>
-              <div id="idiot-label" class="legacy-label">IDIOT OF THE WEEK</div>
+              <div class="legacy-card-head">
+                <div class="legacy-icon">🤡</div>
+                <div id="idiot-label" class="legacy-label">IDIOT OF THE WEEK</div>
+              </div>
               <div id="idiot-manager" class="legacy-name">Loading…</div>
               <div id="idiot-sub" class="legacy-sub">Rewarding elite production from the bench.</div>
             </article>
@@ -167,7 +176,7 @@
       </section>
 
       <section id="page-rankings" class="page">
-        <div class="page-heading"><div><div class="eyebrow">THE PECKING ORDER</div><h1>Power Rankings</h1><p>Currently ranked by record, then points scored. We can swap in a custom power formula later.</p></div></div>
+        <div class="page-heading"><div><div class="eyebrow">THE PECKING ORDER</div><h1>Power Rankings</h1><p>Ranked by record, then points scored.</p></div></div>
         <div class="panel no-pad"><div id="rankings-table" class="table-wrap"><div class="loading padded">Loading standings…</div></div></div>
       </section>
 
