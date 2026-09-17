@@ -1,3 +1,4 @@
+document.documentElement.dataset.powerDivision="mixed";
 const LEAGUE_ID = '1312063787448139776';
 const API = 'https://api.sleeper.app/v1';
 let state = { league:null, users:[], rosters:[], players:{}, transactions:[], ownerByRoster:{}, nflState:null, currentMatchups:[], previous:null };
@@ -63,34 +64,36 @@ function divisionName(id){
   return m[`division_${id}`] || m[`division_${id}_name`] || `Division ${id}`;
 }
 
+function applyDivisionTheme(name){
+  const n=String(name||'').toLowerCase();
+  let hex='#168cff', rgb='22,140,255';
+  if(n.includes('red')){ hex='#ff2535'; rgb='255,37,53'; }
+  else if(n.includes('white')){ hex='#e9f5ff'; rgb='233,245,255'; }
+  document.documentElement.style.setProperty('--division-accent',hex);
+  document.documentElement.style.setProperty('--division-accent-rgb',rgb);
+  document.documentElement.style.setProperty('--stadium-glow',`rgba(${rgb},.42)`);
+  document.documentElement.dataset.powerDivision=n.includes('red')?'red':n.includes('white')?'white':'blue';
+}
 
 async function loadChampion(){
   const nameEl=$('#last-champ-name');
   const ownerEl=$('#last-champ-owner');
   if(!nameEl || !ownerEl) return;
-
   try{
     const prevId=state.league?.previous_league_id;
     if(!prevId || prevId==='0') throw new Error('No previous league linked');
-
     const [league,users,rosters,bracket]=await Promise.all([
       getJSON(`${API}/league/${prevId}`),
       getJSON(`${API}/league/${prevId}/users`),
       getJSON(`${API}/league/${prevId}/rosters`),
       getJSON(`${API}/league/${prevId}/winners_bracket`)
     ]);
-
     const final=bracket.find(g=>Number(g.p)===1);
-    if(!final || final.w==null) throw new Error('Championship result not found');
-
-    const roster=rosters.find(r=>Number(r.roster_id)===Number(final.w));
-    if(!roster) throw new Error('Champion roster not found');
-
-    const user=users.find(u=>String(u.user_id)===String(roster.owner_id));
-    if(!user) throw new Error('Champion owner not found');
-
-    // User wanted the champion page to show the Sleeper username/display name.
-    const username=user.display_name || user.username || 'League Champion';
+    const roster=rosters.find(r=>Number(r.roster_id)===Number(final?.w));
+    const user=users.find(u=>u.user_id===roster?.owner_id);
+    if(!user) throw new Error('Champion not found');
+    // Champion page intentionally shows the Sleeper username/display name, not the team name.
+    const username=user.display_name || user.username || '2025 Champion';
     nameEl.textContent=username;
     ownerEl.textContent=`${league.season || '2025'} League Champion`;
   }catch(e){
@@ -100,58 +103,9 @@ async function loadChampion(){
   }
 }
 
-
-function setPowerDivisionTheme(name){
-  const root=document.documentElement;
-  const value=String(name||'').toLowerCase();
-  let key='blue';
-  if(value==='neutral' || value.includes('neutral')) key='neutral';
-  else if(value.includes('red')) key='red';
-  else if(value.includes('white')) key='white';
-  root.dataset.powerDivision=key;
-}
-
-function useNeutralPreseasonBackground(){
-  const now=new Date();
-  const resetDate=new Date(now.getFullYear(),0,30); // Jan 30, local browser time
-
-  // Keep the prior season's earned background through Jan 29.
-  if(now < resetDate) return false;
-
-  const leagueSeason=Number(state.league?.season||0);
-  const nflSeason=Number(state.nflState?.season||0);
-  const nflWeek=Number(state.nflState?.week||0);
-  const seasonType=String(state.nflState?.season_type||'').toLowerCase();
-
-  // Jan 30 onward stays neutral until the current fantasy season exists
-  // and Week 1 has actually completed (Sleeper advances to regular-season Week 2).
-  return (
-    leagueSeason < now.getFullYear() ||
-    nflSeason < now.getFullYear() ||
-    seasonType !== 'regular' ||
-    nflWeek < 2
-  );
-}
-
 async function loadWeeklyAwards(){
   try{
     if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
-
-    if(useNeutralPreseasonBackground()){
-      setPowerDivisionTheme('neutral');
-      $('#power-division-label').textContent='POWER DIVISION';
-      $('#power-division').textContent='Starts after Week 1';
-      $('#power-division-sub').textContent='The stadium stays neutral until the first fantasy week is complete.';
-      $('#division-rankings').innerHTML='';
-      $('#you-suck-label').textContent='YOU SUCK';
-      $('#you-suck-manager').textContent='Nobody yet';
-      $('#you-suck-sub').textContent='Give it a week. Somebody will earn it.';
-      $('#idiot-label').textContent='IDIOT OF THE WEEK';
-      $('#idiot-manager').textContent='Nobody yet';
-      $('#idiot-sub').textContent='After Week 1, the highest-scoring benched player earns somebody the clown nose.';
-      return;
-    }
-
     const currentWeek=Math.max(1,Number(state.nflState?.week||1));
     const week=currentWeek-1;
     if(week<1){
@@ -206,9 +160,9 @@ async function loadWeeklyAwards(){
 
     if(divisions.length>1){
       const champ=divisions[0];
-      setPowerDivisionTheme(champ.name);
       $('#power-division').innerHTML=`${esc(champ.name)} <span class="score-points">${champ.avg.toFixed(2)}</span>`;
       $('#power-division-sub').textContent='Best average score per team this season.';
+      applyDivisionTheme(champ.name);
       $('#division-rankings').innerHTML=divisions.map((d,i)=>`<div class="division-rank-row"><span>${i+1}. ${esc(d.name)}</span><strong>${d.avg.toFixed(2)}</strong></div>`).join('');
 
       if(divisionCard){
@@ -366,41 +320,10 @@ function sortedRosters(){
   });
 }
 
-
-function rosterTransactionCount(rosterId){
-  const rid=Number(rosterId);
-  return state.transactions.filter(t=>{
-    if(t.status!=='complete') return false;
-    if((t.roster_ids||[]).some(x=>Number(x)===rid)) return true;
-    if(Object.values(t.adds||{}).some(x=>Number(x)===rid)) return true;
-    if(Object.values(t.drops||{}).some(x=>Number(x)===rid)) return true;
-    if((t.waiver_budget||[]).some(x=>Number(x.sender)===rid || Number(x.receiver)===rid)) return true;
-    return false;
-  }).length;
-}
-
-function rosterFaabLeft(roster){
-  // Prefer Sleeper's direct team-level FAAB balance if the live roster payload provides it.
-  const direct=roster.settings?.waiver_budget ?? roster.waiver_budget;
-  if(direct!==undefined && direct!==null && Number.isFinite(Number(direct))){
-    return Number(direct);
-  }
-
-  // Public Sleeper roster payloads commonly expose the league budget + this roster's
-  // budget-used value. Use those native Sleeper fields only; do not rebuild FAAB from trades.
-  const starting=Number(state.league?.settings?.waiver_budget ?? 100);
-  const used=Number(roster.settings?.waiver_budget_used ?? 0);
-  return Math.max(0,starting-used);
-}
-
-function renderRankingsTable(rows=sortedRosters()){
-  $('#rankings-table').innerHTML=`<table><thead><tr><th>Rank</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Moves</th><th>FAAB Left</th></tr></thead><tbody>${rows.map((r,i)=>{const u=state.ownerByRoster[r.roster_id],s=r.settings||{};return `<tr><td><div class="rank-pill ${i===0?'top':''}">${i+1}</div></td><td><strong>${esc(teamName(u,r.roster_id))}</strong><div class="team-sub">${esc(u?.display_name||u?.username||'')}</div></td><td><strong>${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</strong></td><td>${pts(s,'fpts').toFixed(2)}</td><td>${pts(s,'fpts_against').toFixed(2)}</td><td>${rosterTransactionCount(r.roster_id)}</td><td>$${rosterFaabLeft(r)}</td></tr>`}).join('')}</tbody></table>`;
-}
-
 function renderRankings(){
   const rows=sortedRosters();
   $('#home-rankings').innerHTML=rows.slice(0,5).map((r,i)=>{const u=state.ownerByRoster[r.roster_id];const s=r.settings||{};return `<div class="rank-mini"><div class="rank-number">${i+1}</div><div><div class="team-name">${esc(teamName(u,r.roster_id))}</div><div class="team-sub">${pts(s,'fpts').toFixed(2)} PF</div></div><div class="record">${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</div></div>`}).join('') || '<div class="loading">No standings yet.</div>';
-  renderRankingsTable(rows);
+  $('#rankings-table').innerHTML=`<table><thead><tr><th>Rank</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Moves</th><th>FAAB Used</th></tr></thead><tbody>${rows.map((r,i)=>{const u=state.ownerByRoster[r.roster_id],s=r.settings||{};return `<tr><td><div class="rank-pill ${i===0?'top':''}">${i+1}</div></td><td><strong>${esc(teamName(u,r.roster_id))}</strong><div class="team-sub">${esc(u?.display_name||u?.username||'')}</div></td><td><strong>${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</strong></td><td>${pts(s,'fpts').toFixed(2)}</td><td>${pts(s,'fpts_against').toFixed(2)}</td><td>${s.total_moves||0}</td><td>${s.waiver_budget_used||0}</td></tr>`}).join('')}</tbody></table>`;
 }
 
 function assetsForRoster(t,rosterId){
@@ -472,10 +395,10 @@ async function loadAllTime(){
 
     const managers=new Map();
     const ensure=(uid,u)=>{
-      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0,titleYears:[]});
+      if(!managers.has(uid)) managers.set(uid,{uid,name:u?.display_name||u?.username||'Unknown Manager',team:u?.metadata?.team_name||'',seasons:0,w:0,l:0,t:0,pf:0,pa:0,titles:0});
       const x=managers.get(uid);
       if(u?.display_name||u?.username) x.name=u.display_name||u.username;
-      if(!Array.isArray(x.titleYears)) x.titleYears=[];
+      if(u?.metadata?.team_name) x.team=u.metadata.team_name;
       return x;
     };
 
@@ -492,18 +415,14 @@ async function loadAllTime(){
       const final=season.bracket.find(g=>Number(g.p)===1);
       const champRid=final?.w;
       const champ=byRoster[champRid];
-      if(champ?.owner_id){
-        const champEntry=ensure(champ.owner_id,byUser[champ.owner_id]);
-        champEntry.titles++;
-        if(season.league?.season) champEntry.titleYears.push(String(season.league.season));
-      }
+      if(champ?.owner_id) ensure(champ.owner_id,byUser[champ.owner_id]).titles++;
     }
 
     const rows=[...managers.values()].sort((a,b)=>b.w-a.w || (b.pf-a.pf));
     const games=x=>x.w+x.l+x.t;
     const pct=x=>games(x)?(x.w+x.t*.5)/games(x):0;
     const fmt=n=>Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-    table.innerHTML=`<table><thead><tr><th>Manager</th><th>Seasons</th><th>Record</th><th>Win %</th><th>PF</th><th>PA</th><th>Titles</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td><strong>${esc(x.name)}</strong></td><td>${x.seasons}</td><td><strong>${x.w}-${x.l}${x.t?`-${x.t}`:''}</strong></td><td>${(pct(x)*100).toFixed(1)}%</td><td>${fmt(x.pf)}</td><td>${fmt(x.pa)}</td><td><strong>${x.titles}</strong></td></tr>`).join('')}</tbody></table>`;
+    table.innerHTML=`<table><thead><tr><th>Manager</th><th>Seasons</th><th>Record</th><th>Win %</th><th>PF</th><th>PA</th><th>Titles</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td><strong>${esc(x.name)}</strong>${x.team?`<div class="team-sub">${esc(x.team)}</div>`:''}</td><td>${x.seasons}</td><td><strong>${x.w}-${x.l}${x.t?`-${x.t}`:''}</strong></td><td>${(pct(x)*100).toFixed(1)}%</td><td>${fmt(x.pf)}</td><td>${fmt(x.pa)}</td><td><strong>${x.titles}</strong></td></tr>`).join('')}</tbody></table>`;
 
     const years=seasons.map(s=>s.league.season).filter(Boolean).sort();
     const totalGames=rows.reduce((n,x)=>n+games(x),0)/2;
@@ -517,11 +436,7 @@ async function loadAllTime(){
     $('#alltime-leaders').innerHTML=leaderItems.map(([label,x,val])=>`<div class="alltime-leader-row"><div><strong>${esc(label)}</strong><span>${esc(x.name)}</span></div><strong>${esc(val)}</strong></div>`).join('');
 
     const champs=rows.filter(x=>x.titles).sort((a,b)=>b.titles-a.titles || b.w-a.w);
-    $('#alltime-champs').innerHTML=champs.length?champs.map(x=>{
-      const years=(x.titleYears||[]).slice().sort((a,b)=>Number(a)-Number(b));
-      const yearMarkup=years.length ? years.map(y=>`<span class="champ-year">🏆 ${esc(y)}</span>`).join(' ') : `<span class="champ-year">🏆 ${x.titles}</span>`;
-      return `<div class="alltime-leader-row"><div><strong>${esc(x.name)}</strong><span>${x.titles===1?'League champion':'Multiple-time league champion'}</span></div><strong class="title-count">${yearMarkup}</strong></div>`;
-    }).join(''):'<div class="loading">No completed championship bracket found in the linked Sleeper history.</div>';
+    $('#alltime-champs').innerHTML=champs.length?champs.map(x=>`<div class="alltime-leader-row"><div><strong>${esc(x.name)}</strong><span>${x.titles===1?'League champion':'Multiple-time league champion'}</span></div><strong class="title-count">${'🏆'.repeat(Math.min(x.titles,5))}${x.titles>5?` ×${x.titles}`:''}</strong></div>`).join(''):'<div class="loading">No completed championship bracket found in the linked Sleeper history.</div>';
   }catch(e){
     console.warn('All-time history unavailable',e);
     table.innerHTML='<div class="callout danger">Could not load the linked Sleeper league history.</div>';
@@ -536,7 +451,6 @@ async function boot(){
     const championPromise=loadChampion();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
-    renderRankingsTable();
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
@@ -547,30 +461,29 @@ async function boot(){
     $('#home-rankings').innerHTML=msg; $('#home-activity').innerHTML=msg; $('#rankings-table').innerHTML=msg; $('#trades-feed').innerHTML=msg; $('#waivers-feed').innerHTML=msg;
   }
 }
-// Light/dark theme toggle. Dark remains the default unless the user saves light.
+// Theme toggle
 (function initThemeToggle(){
   const root=document.documentElement;
   const btn=document.getElementById('theme-toggle');
-  const icon=btn?.querySelector('.theme-icon');
   const meta=document.getElementById('theme-color-meta');
+  if(!btn) return;
 
-  function applyTheme(theme,save){
-    const next=theme==='light'?'light':'dark';
-    root.dataset.theme=next;
-    if(icon) icon.textContent=next==='dark'?'☀︎':'☾';
-    if(btn){
-      btn.setAttribute('aria-label',next==='dark'?'Switch to light mode':'Switch to dark mode');
-      btn.title=next==='dark'?'Switch to light mode':'Switch to dark mode';
-    }
-    if(meta) meta.setAttribute('content',next==='dark'?'#0b0f14':'#f4f7fa');
-    if(save){
-      try{ localStorage.setItem('lol-theme',next); }catch(e){}
+  function applyTheme(theme, persist=false){
+    root.dataset.theme=theme;
+    const isLight=theme==='light';
+    btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    btn.setAttribute('title', isLight ? 'Dark mode' : 'Light mode');
+    const icon=btn.querySelector('.theme-icon');
+    if(icon) icon.textContent=isLight ? '☾' : '☀︎';
+    if(meta) meta.setAttribute('content', isLight ? '#f5f7fa' : '#0b0f14');
+    if(persist){
+      try{ localStorage.setItem('lol-theme',theme); }catch(e){}
     }
   }
 
-  applyTheme(root.dataset.theme==='light'?'light':'dark',false);
-  btn?.addEventListener('click',()=>{
-    applyTheme(root.dataset.theme==='dark'?'light':'dark',true);
+  applyTheme(root.dataset.theme || 'dark');
+  btn.addEventListener('click',()=>{
+    applyTheme(root.dataset.theme==='light' ? 'dark' : 'light', true);
   });
 })();
 
