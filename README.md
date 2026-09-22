@@ -1,3 +1,6 @@
 League of Legacy — confirmed Strikes page. Upload all files to the site root. Only managers with confirmed strikes are shown. The supplied commissioner-confirmed worthybrownrice strike is included, without inventing a week or player. Future weeks are never scanned. IMPORTANT: Sleeper does not expose historical pre-kickoff injury-designation timestamps in its public player feed; this static-site version cannot automatically verify or add historical strikes. Add corroborated violations to CONFIRMED_STRIKES in app.js, or implement a persistent server-side collector with authoritative historical inactive reports for genuine automatic verification.
 
 Confirmed strike: worthybrownrice started Puka Nacua; ruled out at 5:45 PM Central (commissioner supplied). Week remains unspecified. No progress/status meter. Only completed weeks are considered for any future automated checks. This release does not independently verify historical injury announcements or automatically award new strikes.
+
+
+Strikes page: high-contrast light/dark readability fix. The existing confirmed Puka entry is retained. This static site does NOT automatically verify future strikes: historical pre-kickoff inactive data, scheduled server checks and durable storage must be configured before auto-enforcement is possible. Do not infer strikes from current player status.
