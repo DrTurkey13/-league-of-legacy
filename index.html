@@ -38,6 +38,7 @@
           <button data-route="champ">Champion</button>
           <button data-route="trades">Trades</button>
           <button data-route="waivers">Waivers</button>
+          <button data-route="strikes">Strikes</button>
           <button data-route="rules">Rules</button>
           <button data-route="waitlist">Waitlist</button>
         </nav>
@@ -239,6 +240,13 @@
         </div>
       </section>
 
+      <section id="page-strikes" class="page">
+        <div class="page-heading"><div><div class="eyebrow">THE TWO-STRIKE RULE</div><h1>Strikes</h1><p>One strike maximum per manager per week. Two confirmed weeks and you're out.</p></div></div>
+        <div class="strikes-note">Live Sleeper availability can identify <strong>possible</strong> inactive starters. Sleeper does not supply historical designation timestamps in this feed, so the site will not automatically declare an official strike or eliminate a manager without pre-kickoff verification. The time below is the time checked, not the time ruled out.</div>
+        <div id="strikes-summary" class="strikes-summary" aria-live="polite">Loading league lineups…</div>
+        <div id="strikes-board" class="strikes-board" aria-live="polite"><div class="loading">Checking Sleeper…</div></div>
+        <p class="strikes-footnote">A player scoring zero is not itself an inactive-starter violation. Multiple flagged players in one week count as only one potential strike. This page refreshes while open; a persistent server-side monitor and verified history are needed for automatic official strike counts.</p>
+      </section>
       <section id="page-waitlist" class="page">
         <div class="page-heading"><div><div class="eyebrow">NEXT MAN UP</div><h1>Team Waitlist</h1><p>When a team opens, existing co-managers get first shot. After that, this line gets the call in order, subject to commissioner approval.</p></div></div>
         <div class="waitlist-card">

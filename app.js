@@ -528,6 +528,37 @@ async function loadAllTime(){
   }
 }
 
+// Live potential violations only: a public player snapshot cannot establish when a
+// designation changed, and browser-local state cannot serve as a league-wide ledger.
+let strikeRefreshInProgress=false;
+async function loadStrikes(){
+  const board=$('#strikes-board'), summary=$('#strikes-summary');
+  if(!board || !summary || strikeRefreshInProgress || !state.rosters.length) return;
+  strikeRefreshInProgress=true;
+  try{
+    if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
+    const week=Math.max(1,Math.min(18,Number(state.nflState?.week)||1));
+    const matchups=await getJSON(`${API}/league/${LEAGUE_ID}/matchups/${week}`);
+    const byRoster=new Map(matchups.map(m=>[Number(m.roster_id),m]));
+    // Refresh the current player snapshot instead of trusting the 24h cache.
+    // This is an observation, NOT proof of designation at kickoff.
+    let players=state.players;
+    try{players=await getJSON(`${API}/players/nfl`);state.players=players;}catch(e){if(!Object.keys(players).length)throw e;}
+    const checked=new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
+    const rows=state.rosters.map(r=>{
+      const u=state.ownerByRoster[r.roster_id];
+      const m=byRoster.get(Number(r.roster_id));
+      const starters=(m?.starters||[]).filter(Boolean).filter(id=>id!=='0');
+      const flagged=starters.map(id=>({id,p:players[id]})).filter(({p})=>p && (String(p.injury_status||'').toLowerCase()==='out' || String(p.injury_status||'').toLowerCase()==='doubtful' || String(p.status||'').toLowerCase()==='inactive'));
+      return {name:u?.display_name||u?.username||`Roster ${r.roster_id}`,team:teamName(u,r.roster_id),flagged,hasLineup:!!m};
+    }).sort((a,b)=>b.flagged.length-a.flagged.length||a.name.localeCompare(b.name));
+    const flaggedCount=rows.filter(r=>r.flagged.length).length;
+    summary.textContent=`Week ${week} · ${flaggedCount} manager${flaggedCount===1?'':'s'} flagged for review · Checked ${checked}`;
+    board.innerHTML=rows.map(r=>`<article class="strike-card ${r.flagged.length?'flagged':''}"><div class="strike-card-head"><h2>${esc(r.name)}</h2><span class="strike-count">${r.flagged.length?'REVIEW':'0 VERIFIED'}</span></div><div class="strike-sub">${esc(r.team)} · Week ${week}</div><div class="strike-meter"><span></span><span></span></div>${r.flagged.length?`<div class="strike-alert"><strong>${r.flagged.length} potential inactive starter${r.flagged.length===1?'':'s'} · max 1 strike this week</strong>${r.flagged.map(({id,p})=>`<div>${esc(playerName(id))} — ${esc(p.injury_status||p.status||'Unknown')} <small>(current status; kickoff timing unverified)</small></div>`).join('')}<small>Observed ${esc(checked)}. Verify the designation preceded kickoff before assigning a strike.</small></div>`:`<div class="strike-alert">${r.hasLineup?'No currently flagged starters.':'No lineup returned for this week.'}<br><small>Historical strike total not available from this live feed.</small></div>`}</article>`).join('');
+  }catch(e){console.warn('Strikes unavailable',e);summary.textContent='Strikes data unavailable';board.innerHTML='<div class="callout danger">Could not load live player availability or weekly lineups. No strikes have been assigned.</div>';}
+  finally{strikeRefreshInProgress=false;}
+}
+
 async function boot(){
   try{
     await loadLeague();
@@ -539,8 +570,9 @@ async function boot(){
     renderRankingsTable();
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
+    const strikesPromise=loadStrikes();
     renderTrades(); renderWaivers(); renderHomeActivity(); renderFeaturedTrade();
-    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,allTimePromise,championPromise]);
+    await Promise.allSettled([scorePromise,awardsPromise,suckBoardPromise,strikesPromise,allTimePromise,championPromise]);
   }catch(e){
     console.error(e);
     const msg=`<div class="callout danger">Couldn't reach Sleeper from this browser. Check your connection and reload. League ID: ${LEAGUE_ID}</div>`;
@@ -575,3 +607,7 @@ async function boot(){
 })();
 
 boot();
+
+// Refresh potential violations when the Strikes page is open; this does not
+// create a historical log or verify the designation time.
+setInterval(()=>{if($('#page-strikes')?.classList.contains('active'))loadStrikes();},300000);
