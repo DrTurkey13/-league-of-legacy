@@ -528,35 +528,39 @@ async function loadAllTime(){
   }
 }
 
-// Live potential violations only: a public player snapshot cannot establish when a
-// designation changed, and browser-local state cannot serve as a league-wide ledger.
-let strikeRefreshInProgress=false;
+// Official strike ledger: only verified violations are displayed. Sleeper's current
+// player snapshot cannot prove a past pre-kickoff designation; never infer historical
+// strikes from today's injury status. Add independently verified entries here as
+// {username, week, players:[{name, designatedAt}], note} once corroborated.
+const CONFIRMED_STRIKES = [
+  {username:'worthybrownrice', week:null, players:[{name:'Puka Nacua', designatedAt:'5:45 PM Central'}], note:'Commissioner-confirmed strike; week not specified.'}
+];
 async function loadStrikes(){
   const board=$('#strikes-board'), summary=$('#strikes-summary');
-  if(!board || !summary || strikeRefreshInProgress || !state.rosters.length) return;
-  strikeRefreshInProgress=true;
+  if(!board || !summary) return;
   try{
     if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
-    const week=Math.max(1,Math.min(18,Number(state.nflState?.week)||1));
-    const matchups=await getJSON(`${API}/league/${LEAGUE_ID}/matchups/${week}`);
-    const byRoster=new Map(matchups.map(m=>[Number(m.roster_id),m]));
-    // Refresh the current player snapshot instead of trusting the 24h cache.
-    // This is an observation, NOT proof of designation at kickoff.
-    let players=state.players;
-    try{players=await getJSON(`${API}/players/nfl`);state.players=players;}catch(e){if(!Object.keys(players).length)throw e;}
-    const checked=new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
-    const rows=state.rosters.map(r=>{
-      const u=state.ownerByRoster[r.roster_id];
-      const m=byRoster.get(Number(r.roster_id));
-      const starters=(m?.starters||[]).filter(Boolean).filter(id=>id!=='0');
-      const flagged=starters.map(id=>({id,p:players[id]})).filter(({p})=>p && (String(p.injury_status||'').toLowerCase()==='out' || String(p.injury_status||'').toLowerCase()==='doubtful' || String(p.status||'').toLowerCase()==='inactive'));
-      return {name:u?.display_name||u?.username||`Roster ${r.roster_id}`,team:teamName(u,r.roster_id),flagged,hasLineup:!!m};
-    }).sort((a,b)=>b.flagged.length-a.flagged.length||a.name.localeCompare(b.name));
-    const flaggedCount=rows.filter(r=>r.flagged.length).length;
-    summary.textContent=`Week ${week} · ${flaggedCount} manager${flaggedCount===1?'':'s'} flagged for review · Checked ${checked}`;
-    board.innerHTML=rows.map(r=>`<article class="strike-card ${r.flagged.length?'flagged':''}"><div class="strike-card-head"><h2>${esc(r.name)}</h2><span class="strike-count">${r.flagged.length?'REVIEW':'0 VERIFIED'}</span></div><div class="strike-sub">${esc(r.team)} · Week ${week}</div><div class="strike-meter"><span></span><span></span></div>${r.flagged.length?`<div class="strike-alert"><strong>${r.flagged.length} potential inactive starter${r.flagged.length===1?'':'s'} · max 1 strike this week</strong>${r.flagged.map(({id,p})=>`<div>${esc(playerName(id))} — ${esc(p.injury_status||p.status||'Unknown')} <small>(current status; kickoff timing unverified)</small></div>`).join('')}<small>Observed ${esc(checked)}. Verify the designation preceded kickoff before assigning a strike.</small></div>`:`<div class="strike-alert">${r.hasLineup?'No currently flagged starters.':'No lineup returned for this week.'}<br><small>Historical strike total not available from this live feed.</small></div>`}</article>`).join('');
-  }catch(e){console.warn('Strikes unavailable',e);summary.textContent='Strikes data unavailable';board.innerHTML='<div class="callout danger">Could not load live player availability or weekly lineups. No strikes have been assigned.</div>';}
-  finally{strikeRefreshInProgress=false;}
+    const currentWeek=Math.max(1,Number(state.nflState?.week||1));
+    const completedWeek=Math.max(0,currentWeek-1);
+    // A verified strike with unknown week remains visible, but no future or
+    // unverified week is ever inspected or assigned a strike.
+    const records=CONFIRMED_STRIKES.filter(x=>x.week==null || (Number.isInteger(x.week)&&x.week>=1&&x.week<=completedWeek));
+    const grouped=new Map();
+    for(const entry of records){
+      const key=entry.username.toLowerCase();
+      if(!grouped.has(key)) grouped.set(key,{username:entry.username,entries:[]});
+      const row=grouped.get(key);
+      if(!row.entries.some(e=>e.week===entry.week)) row.entries.push(entry);
+    }
+    const rows=[...grouped.values()].sort((a,b)=>b.entries.length-a.entries.length||a.username.localeCompare(b.username));
+    summary.textContent=`${rows.length} manager${rows.length===1?'':'s'} with confirmed strikes · Through completed Week ${completedWeek}`;
+    board.innerHTML=rows.length?rows.map(r=>{
+      const count=Math.min(2,r.entries.length);
+      const user=state.users.find(u=>[u.username,u.display_name].some(n=>String(n||'').toLowerCase()===r.username.toLowerCase()));
+      const name=user?.display_name||user?.username||r.username;
+      return `<article class="strike-card ${count>=2?'flagged':''}"><div class="strike-card-head"><h2>${esc(name)}</h2><span class="strike-count">${count} / 2${count>=2?' · OUT':''}</span></div>${r.entries.map(e=>`<div class="strike-alert"><strong>${e.week==null?'Strike recorded':`Week ${e.week} · strike recorded`}</strong>${e.players.length?e.players.map(player=>`<div>${esc(player.name)}${player.designatedAt?` · Ruled out ${esc(player.designatedAt)}`:''}</div>`).join(''):`<small>${esc(e.note||'Player details not yet verified.')}</small>`}</div>`).join('')}</article>`;
+    }).join(''):'<div class="loading">No confirmed strikes yet.</div>';
+  }catch(e){console.warn('Strike ledger unavailable',e);summary.textContent='Confirmed strike record';board.innerHTML='<div class="callout danger">Could not load the strike record.</div>';}
 }
 
 async function boot(){
@@ -608,6 +612,4 @@ async function boot(){
 
 boot();
 
-// Refresh potential violations when the Strikes page is open; this does not
-// create a historical log or verify the designation time.
-setInterval(()=>{if($('#page-strikes')?.classList.contains('active'))loadStrikes();},300000);
+
