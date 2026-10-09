@@ -1,6 +1,6 @@
 const LEAGUE_ID = '1312063787448139776';
 const API = 'https://api.sleeper.app/v1';
-let state = { league:null, users:[], rosters:[], players:{}, transactions:[], ownerByRoster:{}, nflState:null, currentMatchups:[], previous:null };
+let state = { league:null, users:[], rosters:[], players:{}, transactions:[], ownerByRoster:{}, nflState:null, currentMatchups:[], previous:null, standings:null };
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -359,13 +359,51 @@ async function loadWeeklyScore(){
   }
 }
 
+// Calculate standings from completed matchup weeks, not potentially delayed roster totals.
+async function loadStandings(){
+  if(!state.nflState) state.nflState=await getJSON(`${API}/state/nfl`);
+  const currentWeek=Math.max(1,Number(state.nflState?.week||1));
+  const completedWeeks=Math.max(0,currentWeek-1);
+  const weeks=await Promise.all(Array.from({length:completedWeeks},(_,i)=>i+1).map(async week=>{
+    const matchups=await getJSON(`${API}/league/${LEAGUE_ID}/matchups/${week}`);
+    return {week,matchups};
+  }));
+  const standings=Object.fromEntries(state.rosters.map(r=>[r.roster_id,{wins:0,losses:0,ties:0,pf:0,pa:0}]));
+  for(const {week,matchups} of weeks){
+    const groups=new Map();
+    for(const m of matchups){
+      if(!standings[m.roster_id] || !Number.isFinite(Number(m.points))) continue;
+      const id=m.matchup_id;
+      if(id==null) continue;
+      if(!groups.has(id)) groups.set(id,[]);
+      groups.get(id).push(m);
+    }
+    // Only count a matchup once both opponents have a valid score.
+    for(const pair of groups.values()){
+      if(pair.length!==2 || pair[0].roster_id===pair[1].roster_id) continue;
+      const [a,b]=pair;
+      const aPts=Number(a.points),bPts=Number(b.points);
+      const A=standings[a.roster_id],B=standings[b.roster_id];
+      A.pf+=aPts; A.pa+=bPts; B.pf+=bPts; B.pa+=aPts;
+      if(aPts>bPts){A.wins++;B.losses++;}
+      else if(bPts>aPts){B.wins++;A.losses++;}
+      else {A.ties++;B.ties++;}
+    }
+  }
+  state.standings=standings;
+}
+function standing(r){
+  return state.standings?.[r.roster_id] || {
+    wins:Number(r.settings?.wins||0),losses:Number(r.settings?.losses||0),
+    ties:Number(r.settings?.ties||0),pf:pts(r.settings,'fpts'),pa:pts(r.settings,'fpts_against')
+  };
+}
 function sortedRosters(){
   return [...state.rosters].sort((a,b)=>{
-    const A=a.settings||{},B=b.settings||{};
-    return (B.wins||0)-(A.wins||0) || (A.losses||0)-(B.losses||0) || pts(B,'fpts')-pts(A,'fpts');
+    const A=standing(a),B=standing(b);
+    return B.wins-A.wins || A.losses-B.losses || B.pf-A.pf;
   });
 }
-
 
 function rosterTransactionCount(rosterId){
   const rid=Number(rosterId);
@@ -394,12 +432,11 @@ function rosterFaabLeft(roster){
 }
 
 function renderRankingsTable(rows=sortedRosters()){
-  $('#rankings-table').innerHTML=`<table><thead><tr><th>Rank</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Moves</th><th>FAAB Left</th></tr></thead><tbody>${rows.map((r,i)=>{const u=state.ownerByRoster[r.roster_id],s=r.settings||{};return `<tr><td><div class="rank-pill ${i===0?'top':''}">${i+1}</div></td><td><strong>${esc(teamName(u,r.roster_id))}</strong><div class="team-sub">${esc(u?.display_name||u?.username||'')}</div></td><td><strong>${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</strong></td><td>${pts(s,'fpts').toFixed(2)}</td><td>${pts(s,'fpts_against').toFixed(2)}</td><td>${rosterTransactionCount(r.roster_id)}</td><td>$${rosterFaabLeft(r)}</td></tr>`}).join('')}</tbody></table>`;
+  $('#rankings-table').innerHTML=`<table><thead><tr><th>Rank</th><th>Team</th><th>Record</th><th>PF</th><th>PA</th><th>Moves</th><th>FAAB Left</th></tr></thead><tbody>${rows.map((r,i)=>{const u=state.ownerByRoster[r.roster_id],s=standing(r);return `<tr><td><div class="rank-pill ${i===0?'top':''}">${i+1}</div></td><td><strong>${esc(teamName(u,r.roster_id))}</strong><div class="team-sub">${esc(u?.display_name||u?.username||'')}</div></td><td><strong>${s.wins}-${s.losses}${s.ties?`-${s.ties}`:''}</strong></td><td>${s.pf.toFixed(2)}</td><td>${s.pa.toFixed(2)}</td><td>${rosterTransactionCount(r.roster_id)}</td><td>$${rosterFaabLeft(r)}</td></tr>`}).join('')}</tbody></table>`;
 }
-
 function renderRankings(){
   const rows=sortedRosters();
-  $('#home-rankings').innerHTML=rows.slice(0,5).map((r,i)=>{const u=state.ownerByRoster[r.roster_id];const s=r.settings||{};return `<div class="rank-mini"><div class="rank-number">${i+1}</div><div><div class="team-name">${esc(teamName(u,r.roster_id))}</div><div class="team-sub">${pts(s,'fpts').toFixed(2)} PF</div></div><div class="record">${s.wins||0}-${s.losses||0}${s.ties?`-${s.ties}`:''}</div></div>`}).join('') || '<div class="loading">No standings yet.</div>';
+  $('#home-rankings').innerHTML=rows.slice(0,5).map((r,i)=>{const u=state.ownerByRoster[r.roster_id];const s=standing(r);return `<div class="rank-mini"><div class="rank-number">${i+1}</div><div><div class="team-name">${esc(teamName(u,r.roster_id))}</div><div class="team-sub">${s.pf.toFixed(2)} PF</div></div><div class="record">${s.wins}-${s.losses}${s.ties?`-${s.ties}`:''}</div></div>`}).join('') || '<div class="loading">No standings yet.</div>';
   renderRankingsTable(rows);
 }
 
@@ -566,11 +603,12 @@ async function loadStrikes(){
 async function boot(){
   try{
     await loadLeague();
-    renderRankings();
+    const standingsPromise=loadStandings().then(()=>renderRankings()).catch(e=>{console.warn('Matchup standings unavailable',e);renderRankings();});
     const allTimePromise=loadAllTime();
     const championPromise=loadChampion();
     const scorePromise=loadWeeklyScore();
     await Promise.all([loadPlayers(),loadTransactions()]);
+    await standingsPromise;
     renderRankingsTable();
     const awardsPromise=loadWeeklyAwards();
     const suckBoardPromise=loadYouSuckLeaderboard();
