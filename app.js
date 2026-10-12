@@ -39,10 +39,34 @@ async function loadLeague(){
 }
 
 async function loadTransactions(){
-  const weeks=[...Array(19)].map((_,i)=>i); // include preseason/leg 0 through week 18
-  const results=await Promise.all(weeks.map(w=>getJSON(`${API}/league/${LEAGUE_ID}/transactions/${w}`).catch(()=>[])));
-  const map=new Map(); results.flat().forEach(t=>map.set(t.transaction_id,t));
-  state.transactions=[...map.values()].filter(t=>t.status==='complete').sort((a,b)=>(b.status_updated||b.created)-(a.status_updated||a.created));
+  // Sleeper separates transactions by week, including week zero.
+  // Avoid cached responses and retry transient failures rather than silently
+  // treating a failed request as an empty transaction history.
+  const weeks=Array.from({length:19},(_,i)=>i);
+  const results=await Promise.all(weeks.map(async week=>{
+    for(let attempt=0;attempt<3;attempt++){
+      try{
+        return await getJSON(`${API}/league/${LEAGUE_ID}/transactions/${week}?refresh=${Date.now()}`);
+      }catch(error){
+        if(attempt===2){console.warn(`Transactions week ${week} unavailable`,error);return null;}
+        await new Promise(resolve=>setTimeout(resolve,300*(attempt+1)));
+      }
+    }
+  }));
+  const successful=results.filter(Array.isArray);
+  if(!successful.length) throw new Error('Unable to retrieve Sleeper transactions');
+  const byId=new Map(state.transactions.map(t=>[t.transaction_id,t]));
+  successful.flat().forEach(t=>byId.set(t.transaction_id,t));
+  state.transactions=[...byId.values()]
+    .filter(t=>t.status==='complete')
+    .sort((a,b)=>Number(b.status_updated||b.created||0)-Number(a.status_updated||a.created||0));
+}
+
+async function refreshTransactions(){
+  try{
+    await loadTransactions();
+    renderTrades();renderWaivers();renderHomeActivity();renderFeaturedTrade();
+  }catch(error){console.warn('Transaction refresh failed; retaining previous data',error);}
 }
 
 
@@ -649,5 +673,8 @@ async function boot(){
 })();
 
 boot();
+// Refresh the latest trade and activity while the site remains open.
+setInterval(()=>{if(!document.hidden) refreshTransactions();},60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) refreshTransactions();});
 
 
